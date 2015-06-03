@@ -9,6 +9,8 @@ var port = process.env.PORT || 3000;
 var database = require('./server/config/database');
 var db = database.connect();
 
+require("./server/controllers/rescueTime");
+
 httpServer.listen(port, function () {
     console.log('HTTP Server on ' + port);
 });
