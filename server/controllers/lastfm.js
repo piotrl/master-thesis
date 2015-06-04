@@ -1,6 +1,7 @@
 var lastfm = require('../config/lastfm').connect();
 var moment = require('moment');
-var trackModel = require('../models/lastfm/track')
+var Track = require('../models/lastfm/track')
+var Scrobble = require('../models/lastfm/scrobble')
 
 var username = 'grovman';
 var endDate = moment().unix();
@@ -24,17 +25,28 @@ var request = lastfm.request("user.getRecentTracks", {
     }
 });
 
-function saveTrackEntry(track) {
-    checkIfDataExistInDb(track);
-    if (track.mbid) {
-
-    } else {
-        track.name;
-        track.artist;
-    }
+function saveTrackEntry(scrobbleInfo) {
+    checkIfDataExistInDb(scrobbleInfo, function (trackInfo) {
+        var scrobble = convertToScrobbleModel(scrobbleInfo, trackInfo);
+        scrobble.save();
+    });
 }
 
-function checkIfDataExistInDb(track) {
+function convertToScrobbleModel(scrobbleInfo, trackInfo) {
+    var startTime = moment.unix(parseInt(scrobbleInfo.date.uts));
+    var endTime = moment(startTime).add(trackInfo.duration, 's');
+
+    return new Scrobble({
+        mbid: trackInfo.mbid,
+        name: trackInfo.name,
+        artist: trackInfo.artist,
+        startTime: startTime.toDate(),
+        endTime: endTime.toDate(),
+        spentTime: trackInfo.duration
+    });
+}
+
+function checkIfDataExistInDb(track, callback) {
     var queryBy = {};
     if (track.mbid.length) {
         queryBy.mbid = track.mbid;
@@ -43,31 +55,41 @@ function checkIfDataExistInDb(track) {
         queryBy.artist = track.artist;
     }
 
-    trackModel.find(queryBy, function(err, docs) {
+    Track.find(queryBy, function(err, docs) {
         if (docs.length) {
+            callback(docs[0]._doc)
         } else {
-            lastfm.info('track', {
-                handlers: {
-                    success: function(data) {
-                        console.log("Success: " + data);
-                    },
-                    error: function(error) {
-                        console.log("Error: " + error.message);
-                    }
-                },
-                track: track.name,
-                artist: track.artist['#text']
-            });
+            getTrackInfo(
+                track.name, track.artist['#text'], saveTrack
+            );
         }
     }).limit(1);
 
-    function saveTrack(trackInfo, scrobbled) {
-        new Track({
+    function getTrackInfo(trackName, artistName, callback) {
+        lastfm.info('track', {
+            track: trackName,
+            artist: artistName,
+            handlers: {
+                success: function(data) {
+                    callback(data);
+                },
+                error: function(error) {
+                    console.log("Error: " + error.message);
+                }
+            }
+        });
+    }
+
+    function saveTrack(trackInfo) {
+        var miliToSecondsDivider = 1000;
+        var track = new Track({
             lastfmId: trackInfo.id,
             mbid: trackInfo.mbid,
             name: trackInfo.name,
             artist: trackInfo.artist.mbid,
-            duration: trackInfo.duration
-        })
+            duration: trackInfo.duration / miliToSecondsDivider
+        });
+
+        track.save();
     }
 }
