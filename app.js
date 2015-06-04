@@ -2,14 +2,17 @@
 
 var app  = require("express")();
 var httpServer = require("http").Server(app);
+var routes = require("./server/routes/index");
 var io = require("socket.io")(httpServer);
 
 var port = process.env.PORT || 3000;
 
 var database = require('./server/config/database');
 var db = database.connect();
+routes(app);
 
-require("./server/controllers/rescueTime");
+require("./server/controllers/lastfm");
+//require("./server/controllers/rescueTime");
 
 httpServer.listen(port, function () {
     console.log('HTTP Server on ' + port);
