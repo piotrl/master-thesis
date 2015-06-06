@@ -4,32 +4,62 @@ var Track = require('../models/lastfm/track')
 var Scrobble = require('../models/lastfm/scrobble')
 
 var username = 'grovman';
-var endDate = moment().unix();
-var startDate = moment().subtract(1, 'day').unix();
+var endDate = moment();
+var startDate = moment().subtract(30, 'day');
 
-var pages = 1;
-
-var request = lastfm.request("user.getRecentTracks", {
-    user: username,
-    to: endDate,
-    from: startDate,
-    handlers: {
-        success: function(data) {
-            data.recenttracks.track.forEach(saveTrackEntry);
-            pages = parseInt(data.recenttracks['@attr'].totalPages);
-            console.log("Success: " + data);
-        },
-        error: function(error) {
-            console.log("Error: " + error.message);
-        }
+getRecentTracksFromPage(1, function(page, totalPages) {
+    while (page++ < totalPages) {
+        getRecentTracksFromPage(page, function(page) {
+            console.log("Aggregated [" + startDate.fromNow() + "] [Page " + page + " / " + totalPages + "]");
+        });
     }
 });
 
+function getRecentTracksFromPage(page, callback) {
+    return getRecentTracks(
+        startDate.unix(),
+        endDate.unix(),
+        page
+    );
+
+    function getRecentTracks(startDate, endDate, page) {
+        return lastfm.request("user.getRecentTracks", {
+            user: username,
+            to: endDate,
+            from: startDate,
+            page: page || 1,
+            limit: 200,
+            handlers: {
+                success: onDataLoaded,
+                error: logError
+            }
+        });
+    }
+
+    function onDataLoaded(data) {
+        var page = parseInt(data.recenttracks['@attr'].page);
+        var totalPages = parseInt(data.recenttracks['@attr'].totalPages);
+
+        callback && callback(page, totalPages);
+        data.recenttracks.track.forEach(saveTrackEntry);
+    }
+}
+
 function saveTrackEntry(scrobbleInfo) {
+    if (isPlayingNow(scrobbleInfo)) {
+        return;
+    }
     checkIfDataExistInDb(scrobbleInfo, function (trackInfo) {
         var scrobble = convertToScrobbleModel(scrobbleInfo, trackInfo);
-        scrobble.save();
+        var findDuplicatesBy = {
+            startTime: scrobble._doc.startTime,
+        };
+        runIfNotExistInDb(Scrobble, findDuplicatesBy, scrobble.save)
     });
+}
+
+function isPlayingNow(scrobbleInfo) {
+    return scrobbleInfo['@attr'] && scrobbleInfo['@attr'].nowplaying === "true";
 }
 
 function convertToScrobbleModel(scrobbleInfo, trackInfo) {
@@ -60,7 +90,10 @@ function checkIfDataExistInDb(track, callback) {
             callback(docs[0]._doc)
         } else {
             getTrackInfo(
-                track.name, track.artist['#text'], saveTrack
+                track.name, track.artist['#text'], function(trackInfo) {
+                    var trackModel = saveTrack(trackInfo);
+                    callback(trackModel._doc);
+                }
             );
         }
     }).limit(1);
@@ -70,12 +103,8 @@ function checkIfDataExistInDb(track, callback) {
             track: trackName,
             artist: artistName,
             handlers: {
-                success: function(data) {
-                    callback(data);
-                },
-                error: function(error) {
-                    console.log("Error: " + error.message);
-                }
+                success: callback,
+                error: logError
             }
         });
     }
@@ -90,6 +119,24 @@ function checkIfDataExistInDb(track, callback) {
             duration: trackInfo.duration / miliToSecondsDivider
         });
 
-        track.save();
+        var findDuplicatesBy = {
+            lastfmId: trackInfo.id
+        };
+
+        runIfNotExistInDb(Track, findDuplicatesBy, track.save);
+
+        return track;
     }
+}
+
+function runIfNotExistInDb(Model, queryBy, ifNotExist) {
+    Model.find(queryBy, function(err, docs) {
+        if (docs.length === 0) {
+            ifNotExist();
+        }
+    }).limit(1);
+}
+
+function logError(error) {
+    console.log("Error: " + error.message);
 }
