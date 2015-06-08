@@ -7,7 +7,13 @@ var schema = new Schema({
     artist: String,
     startTime: Date,
     endTime: Date,
-    spentTime: Number
+    spentTime: Number,
+    activities: Number,
+    productivity: {
+        productive: Number,
+        unproductive: Number,
+        neutral: Number
+    }
 });
 
 module.exports = mongoose.model("Scrobble", schema);

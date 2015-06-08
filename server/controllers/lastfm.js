@@ -52,7 +52,7 @@ function saveTrackEntry(scrobbleInfo) {
     checkIfDataExistInDb(scrobbleInfo, function (trackInfo) {
         var scrobble = convertToScrobbleModel(scrobbleInfo, trackInfo);
         var findDuplicatesBy = {
-            startTime: scrobble._doc.startTime,
+            startTime: scrobble._doc.startTime
         };
         runIfNotExistInDb(Scrobble, findDuplicatesBy, scrobble.save)
     });
@@ -72,7 +72,8 @@ function convertToScrobbleModel(scrobbleInfo, trackInfo) {
         artist: trackInfo.artist,
         startTime: startTime.toDate(),
         endTime: endTime.toDate(),
-        spentTime: trackInfo.duration
+        spentTime: trackInfo.duration,
+        productivity: initProductivity()
     });
 }
 
@@ -135,6 +136,14 @@ function runIfNotExistInDb(Model, queryBy, ifNotExist) {
             ifNotExist();
         }
     }).limit(1);
+}
+
+function initProductivity() {
+    return {
+        productive: 0,
+        unproductive: 0,
+        neutral: 0
+    };
 }
 
 function logError(error) {
