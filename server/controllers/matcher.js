@@ -63,7 +63,7 @@ function findListenedMusic(activity) {
 function addProductivityTime(activityProductivity, scrobble, seconds) {
     var type = productivityType[activityProductivity];
 
-    scrobble._doc.productivity[type] = seconds;
+    scrobble._doc.productivity[type] += seconds;
     if (scrobble._doc.activities) {
         scrobble._doc.activities += 1;
     } else {
