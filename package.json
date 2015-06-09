@@ -9,6 +9,7 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "array.prototype.find": "^1.0.0",
     "express": "^4.12.3",
     "lastfm": "^v0.9",
     "moment": "^2.10.3",

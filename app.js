@@ -9,21 +9,19 @@ var port = process.env.PORT || 3000;
 
 var database = require('./server/config/database');
 var db = database.connect();
+configureStaticServer(app);
 routes(app);
 
-require("./server/controllers/lastfm");
+//require("./server/controllers/lastfm");
 //require("./server/controllers/rescueTime");
+//require("./server/controllers/matcher")();
 
 httpServer.listen(port, function () {
     console.log('HTTP Server on ' + port);
 });
 
-function configureStaticServer() {
+function configureStaticServer(app) {
     var serveStatic = require('serve-static');
-    var oneDay = 86400000;
 
-    app.use('/img', serveStatic(__dirname + '/public/img', { maxAge: oneDay }));
-    app.use('/js/jquery.min.js', serveStatic(__dirname + '/bower_components/jquery/dist/jquery.min.js'));
-    app.use('/js/jquery.min.map', serveStatic(__dirname + '/bower_components/jquery/dist/jquery.min.map'));
-    app.use(serveStatic(__dirname + '/public'));
+    app.use(serveStatic(__dirname + '/client'));
 }
