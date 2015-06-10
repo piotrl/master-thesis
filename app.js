@@ -12,9 +12,18 @@ var db = database.connect();
 configureStaticServer(app);
 routes(app);
 
-//require("./server/controllers/lastfm");
-//require("./server/controllers/rescueTime");
-//require("./server/controllers/matcher")();
+var lastfmAggregator = require("./server/controllers/lastfm");
+var activityAggregator = require("./server/controllers/rescueTime");
+var matcher = require("./server/controllers/matcher");
+
+activityAggregator(function() {
+    console.log('Activities aggregation finished');
+    lastfmAggregator(function() {
+        console.log('Lastfm aggregation finished');
+        matcher();
+    });
+});
+
 
 httpServer.listen(port, function () {
     console.log('HTTP Server on ' + port);

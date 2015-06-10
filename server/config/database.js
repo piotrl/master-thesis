@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 module.exports = {
-    url: 'mongodb://localhost/appdb',
+    url: 'mongodb://localhost/music',
     connect: function() {
         return connectTo(this.url);
     }

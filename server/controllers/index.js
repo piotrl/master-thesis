@@ -5,6 +5,11 @@ require('array.prototype.find');
 var moment = require('moment');
 var Scrobble = require('../models/lastfm/scrobble');
 
+exports.mostProductive = function(req, res) {
+    var MAX_RESPONSE = 30;
+
+};
+
 exports.mostListened = function(req, res) {
     var MAX_RESPONSE = 30;
     var daysAgo = {

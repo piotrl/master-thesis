@@ -7,13 +7,30 @@ var username = 'grovman';
 var endDate = moment();
 var startDate = moment().subtract(30, 'day');
 
-getRecentTracksFromPage(1, function(page, totalPages) {
-    while (page++ < totalPages) {
-        getRecentTracksFromPage(page, function(page) {
-            console.log("Aggregated [" + startDate.fromNow() + "] [Page " + page + " / " + totalPages + "]");
-        });
-    }
-});
+module.exports = function(callback) {
+    getLastScrobble(function(err, docs) {
+        if (docs.length) {
+            startDate = moment(docs[0]._doc.endTime);
+        }
+        if (endDate.diff(startDate) < 0) {
+            getRecentTracksFromPage(1, function(page, totalPages) {
+                while (page++ < totalPages) {
+                    getRecentTracksFromPage(page, function(page) {
+                        console.log("Aggregated [" + startDate.fromNow() + "] [Page " + page + " / " + totalPages + "]");
+                    });
+                }
+            });
+        }
+        callback();
+    });
+};
+
+function getLastScrobble(callback) {
+    Scrobble
+        .find({}, callback)
+        .sort({ endTime: -1 })
+        .limit(1);
+}
 
 function getRecentTracksFromPage(page, callback) {
     return getRecentTracks(
@@ -30,13 +47,15 @@ function getRecentTracksFromPage(page, callback) {
             page: page || 1,
             limit: 200,
             handlers: {
-                success: onDataLoaded,
-                error: logError
+                success: onDataLoaded
             }
         });
     }
 
     function onDataLoaded(data) {
+        if (!data.recenttracks['@attr']) {
+            return;
+        }
         var page = parseInt(data.recenttracks['@attr'].page);
         var totalPages = parseInt(data.recenttracks['@attr'].totalPages);
 

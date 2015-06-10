@@ -31,7 +31,7 @@ function findListenedMusic(activity) {
     };
 
     Scrobble.find(byStartTime, function (err, docs) {
-        console.log(docs.length + " scrobbles in " + activity.Activity);
+        //console.log(docs.length + " scrobbles in " + activity.Activity);
         docs.forEach(calcProductivityProcentage);
     });
 
@@ -73,6 +73,6 @@ function addProductivityTime(activityProductivity, scrobble, seconds) {
     Scrobble.update({
         _id: scrobble._doc._id
     }, scrobble._doc, {multi: false}, function(err, nr) {
-        console.log(nr);
+        //console.log(nr);
     });
 }

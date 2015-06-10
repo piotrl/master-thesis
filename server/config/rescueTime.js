@@ -15,7 +15,8 @@ module.exports = {
     apiKey: apiKey,
     dataUrl: function(params) {
         var url = this.urls.data;
-        return url + prepareQuery(params)
+        console.log(url + prepareQuery(params));
+        return url + prepareQuery(params);
     }
 };
 
