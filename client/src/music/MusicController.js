@@ -9,22 +9,41 @@
         var vm = this;
         vm.menu = makeNavigation();
         vm.music = {};
-        vm.getPopularMusic = getPopularMusic;
+        vm.getPopularMusic = getPopular;
+        vm.getProductiveMusic = getProductive;
         vm.showDetails = showDetails;
+        getPopular();
 
-        getPopularMusic('day');
-        getPopularMusic('week');
-        getPopularMusic('month');
+        function getPopular() {
+            clear();
+            getPopularMusic('day');
+            getPopularMusic('week');
+            getPopularMusic('month');
+        }
+
+        function getProductive() {
+            clear();
+            getMusic('day', 'getProductiveFrom');
+            getMusic('week', 'getProductiveFrom');
+            getMusic('month', 'getProductiveFrom');
+        }
 
         function getPopularMusic(timeAgo) {
-            return MusicService.getPopularFrom(timeAgo)
+            getMusic(timeAgo, 'getPopularFrom');
+        }
+
+        function getMusic(timeAgo, method) {
+            return MusicService[method](timeAgo)
                 .then(function (music) {
-                    console.log(music);
                     vm.music[timeAgo] = {
                         data: music.data,
                         header: timeAgo
                     };
                 });
+        }
+
+        function clear() {
+            vm.music = {};
         }
 
         function showDetails(track) {
@@ -50,8 +69,12 @@
         return {
             items: [
                 {
-                    name: "last month",
-                    key: "month"
+                    name: "Popular music",
+                    method: "getPopularMusic"
+                },
+                {
+                    name: "Productive music",
+                    method: "getProductiveMusic"
                 }
             ]
         };

@@ -25,7 +25,7 @@
 
     <md-list>
         <md-list-item ng-repeat="item in vm.menu.items">
-            <md-button ng-click="vm.getPopularMusic(item.key)" ng-class="{ 'selected' : item === vm.menu.selected }">
+            <md-button ng-click="vm[item.method]()" ng-class="{ 'selected' : item === vm.menu.selected }">
                 {{ item.name }}
             </md-button>
         </md-list-item>

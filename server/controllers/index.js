@@ -8,10 +8,32 @@ var Scrobble = require('../models/lastfm/scrobble');
 exports.mostProductive = function(req, res) {
     var MAX_RESPONSE = 30;
 
+    getFrom(req, mostProductive);
+
+    function mostProductive(summedItems) {
+        var response = summedItems.sort(function (a, b) {
+            return b.productivity.productive - a.productivity.productive;
+        }).slice(0, MAX_RESPONSE);
+
+        res.json(response);
+    }
 };
 
 exports.mostListened = function(req, res) {
     var MAX_RESPONSE = 30;
+
+    getFrom(req, mostListened);
+
+    function mostListened(summedItems) {
+        var response = summedItems.sort(function (a, b) {
+            return b.scrobbled - a.scrobbled;
+        }).slice(0, MAX_RESPONSE);
+
+        res.json(response);
+    }
+};
+
+function getFrom(req, callback) {
     var daysAgo = {
         day: 1,
         week: 7,
@@ -32,13 +54,10 @@ exports.mostListened = function(req, res) {
         var groupedItems = groupBy(docs, "name");
         var summedItems = sum(groupedItems);
 
-        var response = summedItems.sort(function (a, b) {
-            return b.scrobbled - a.scrobbled;
-        }).slice(0, MAX_RESPONSE);
+        callback(summedItems);
 
-        res.json(response);
     });
-};
+}
 
 
 function sum(groupedItems) {

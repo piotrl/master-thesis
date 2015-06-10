@@ -9,6 +9,7 @@ var port = process.env.PORT || 3000;
 
 var database = require('./server/config/database');
 var db = database.connect();
+
 configureStaticServer(app);
 routes(app);
 
