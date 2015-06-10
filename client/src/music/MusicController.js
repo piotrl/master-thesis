@@ -8,15 +8,19 @@
     function MusicController(MusicService, $mdBottomSheet, $log) {
         var vm = this;
         vm.menu = makeNavigation();
-        vm.music = [];
+        vm.music = {};
         vm.getPopularMusic = getPopularMusic;
         vm.showDetails = showDetails;
+
+        getPopularMusic('day');
+        getPopularMusic('week');
+        getPopularMusic('month');
 
         function getPopularMusic(timeAgo) {
             return MusicService.getPopularFrom(timeAgo)
                 .then(function (music) {
                     console.log(music);
-                    vm.music = music.data;
+                    vm.music[timeAgo] = music.data;
                 });
         }
 
