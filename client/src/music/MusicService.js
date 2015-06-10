@@ -10,7 +10,9 @@
 
         return {
             getPopularFrom: getPopularFrom,
-            getProductiveFrom: getProductiveFrom
+            getProductiveFrom: getProductiveFrom,
+            getUnProductive: getUnProductive,
+            getNeutral: getNeutral
         };
 
         function getPopularFrom(ago) {
@@ -21,6 +23,17 @@
 
         function getProductiveFrom(ago) {
             var url = baseUrl + 'music/' + ago + '/productive';
+
+            return $http.get(url);
+        }
+
+        function getUnProductive(ago) {
+            var url = baseUrl + 'music/' + ago + '/unproductive';
+
+            return $http.get(url);
+        }
+        function getNeutral(ago) {
+            var url = baseUrl + 'music/' + ago + '/neutral';
 
             return $http.get(url);
         }

@@ -7,29 +7,31 @@
 
     function MusicController(MusicService, $mdBottomSheet, $log) {
         var vm = this;
-        vm.menu = makeNavigation();
+
+        vm.menu = buildNavigation();
         vm.music = {};
-        vm.getPopularMusic = getPopular;
-        vm.getProductiveMusic = getProductive;
+
+        vm.getPopular = buildLoader('getPopularFrom');
+        vm.getProductive = buildLoader('getProductiveFrom');
+        vm.getUnProductive = buildLoader('getUnProductive');
+        vm.getNeutral = buildLoader('getNeutral');
+
         vm.showDetails = showDetails;
-        getPopular();
 
-        function getPopular() {
-            clear();
-            getPopularMusic('day');
-            getPopularMusic('week');
-            getPopularMusic('month');
+        vm.getPopular();
+
+        function buildLoader(method) {
+            return function() {
+                clear();
+                loadMuiscSection(method);
+            }
         }
 
-        function getProductive() {
+        function loadMuiscSection(method) {
             clear();
-            getMusic('day', 'getProductiveFrom');
-            getMusic('week', 'getProductiveFrom');
-            getMusic('month', 'getProductiveFrom');
-        }
-
-        function getPopularMusic(timeAgo) {
-            getMusic(timeAgo, 'getPopularFrom');
+            getMusic('day', method);
+            getMusic('week', method);
+            getMusic('month', method);
         }
 
         function getMusic(timeAgo, method) {
@@ -65,16 +67,24 @@
         }
     }
 
-    function makeNavigation() {
+    function buildNavigation() {
         return {
             items: [
                 {
                     name: "Popular music",
-                    method: "getPopularMusic"
+                    method: "getPopular"
                 },
                 {
                     name: "Productive music",
-                    method: "getProductiveMusic"
+                    method: "getProductive"
+                },
+                {
+                    name: "Unproductive music",
+                    method: "getUnProductive"
+                },
+                {
+                    name: "Neutral music",
+                    method: "getNeutral"
                 }
             ]
         };

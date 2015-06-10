@@ -5,33 +5,43 @@ require('array.prototype.find');
 var moment = require('moment');
 var Scrobble = require('../models/lastfm/scrobble');
 
+exports.mostNeutral = function(req, res) {
+    buildResponse(req, res, function (a, b) {
+        return b.productivity.neutral - a.productivity.neutral;
+    });
+};
+
+exports.mostUnProductive = function(req, res) {
+    buildResponse(req, res, function (a, b) {
+        return b.productivity.unproductive - a.productivity.unproductive;
+    });
+};
+
 exports.mostProductive = function(req, res) {
-    var MAX_RESPONSE = 30;
-
-    getFrom(req, mostProductive);
-
-    function mostProductive(summedItems) {
-        var response = summedItems.sort(function (a, b) {
-            return b.productivity.productive - a.productivity.productive;
-        }).slice(0, MAX_RESPONSE);
-
-        res.json(response);
-    }
+    buildResponse(req, res, function (a, b) {
+        return b.productivity.productive - a.productivity.productive;
+    });
 };
 
 exports.mostListened = function(req, res) {
+    buildResponse(req, res, function (a, b) {
+        return b.scrobbled - a.scrobbled;
+    });
+};
+
+function buildResponse(req, res, sortFunction) {
     var MAX_RESPONSE = 30;
 
-    getFrom(req, mostListened);
+    getFrom(req, onDataReady);
 
-    function mostListened(summedItems) {
-        var response = summedItems.sort(function (a, b) {
-            return b.scrobbled - a.scrobbled;
-        }).slice(0, MAX_RESPONSE);
+    function onDataReady(summedItems) {
+        var response = summedItems
+            .sort(sortFunction)
+            .slice(0, MAX_RESPONSE);
 
         res.json(response);
     }
-};
+}
 
 function getFrom(req, callback) {
     var daysAgo = {
