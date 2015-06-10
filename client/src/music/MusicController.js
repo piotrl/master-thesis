@@ -20,7 +20,10 @@
             return MusicService.getPopularFrom(timeAgo)
                 .then(function (music) {
                     console.log(music);
-                    vm.music[timeAgo] = music.data;
+                    vm.music[timeAgo] = {
+                        data: music.data,
+                        header: timeAgo
+                    };
                 });
         }
 

@@ -35,18 +35,15 @@
 <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">
 
     <md-toolbar layout="row" class="md-whiteframe-z1">
-        <md-button class="menu" hide-gt-sm>
-            <md-icon md-svg-icon="menu"></md-icon>
-        </md-button>
         <h1>Music vs Productivity</h1>
     </md-toolbar>
 
     <md-content flex layout="row" id="content">
         <div ng-repeat="item in vm.music" ng-if="item">
             <md-toolbar layout="row" class="md-whiteframe-z1">
-                <h1>7 days</h1>
+                <h1>{{ item.header }}</h1>
             </md-toolbar>
-            <md-list-item class="md-2-line" ng-repeat="track in item">
+            <md-list-item class="md-2-line" ng-repeat="track in item.data">
                 <!--<img ng-src="{{track.img}}" class="md-avatar" />-->
                 <md-button class="md-list-item-text" ng-click="vm.showDetails(track)">
                     <h3>{{ track.name }}</h3>
