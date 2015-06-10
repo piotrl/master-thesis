@@ -31,6 +31,16 @@
             </md-button>
         </md-list-item>
     </md-list>
+    <md-divider></md-divider>
+    <md-list>
+        <md-list-item class="md-2-line" ng-if="vm.currentTrack.nowPlaying">
+            <md-button ng-click="vm[item.method]()">
+                <h3>{{ vm.currentTrack.track.name }}</h3>
+                <h4>{{ vm.currentTrack.track.artist['#text'] }}</h4>
+            </md-button>
+        </md-list-item>
+    </md-list>
+
 </md-sidenav>
 
 <div flex layout="column" tabIndex="-1" role="main" class="md-whiteframe-z2">

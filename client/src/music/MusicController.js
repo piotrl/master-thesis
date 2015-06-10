@@ -10,6 +10,10 @@
 
         vm.menu = buildNavigation();
         vm.music = {};
+        vm.currentTrack = {
+            nowPlaying: false,
+            track: {}
+        };
 
         vm.getPopular = buildLoader('getPopularFrom');
         vm.getProductive = buildLoader('getProductiveFrom');
@@ -23,16 +27,25 @@
 
         function listenSocket() {
             mySocket.emit('test');
-            mySocket.on('nowPlaying', function() {
-                console.log('nowPlaying');
+            mySocket.on('nowPlaying', function(track) {
+                vm.currentTrack.nowPlaying = true;
+                vm.currentTrack.scrobbled = false;
+                vm.currentTrack.track = track;
+                console.log('nowPlaying', track);
+                console.log('vm.currentTrack', vm.currentTrack);
             });
-            mySocket.on('scrobbled', function() {
-                console.log('scrobbled');
+            mySocket.on('scrobbled', function(track) {
+                vm.currentTrack.nowPlaying = false;
+                vm.currentTrack.scrobbled = true;
+                vm.currentTrack.track = track;
+                console.log('scrobbled', track);
             });
             mySocket.on('stoppedPlaying', function() {
+                vm.currentTrack.nowPlaying = false;
+                vm.currentTrack.scrobbled = false;
+                vm.currentTrack.track = null;
                 console.log('stoppedPlaying');
             });
-
         }
 
         function buildLoader(method) {

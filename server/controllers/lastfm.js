@@ -73,7 +73,8 @@ function getRecentTracksFromPage(page, callback) {
             page: page || 1,
             limit: 200,
             handlers: {
-                success: onDataLoaded
+                success: onDataLoaded,
+                error: logError
             }
         });
     }
