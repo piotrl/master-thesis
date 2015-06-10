@@ -4,9 +4,14 @@ var moment = require('moment');
 var rescueTimeConfig = require('../config/rescueTime');
 var Activity = require('../models/activities');
 
+var endTime = new moment().subtract(30, 'd').toDate();
+
 module.exports = function(callback) {
     getLastActivity(function(err, docs) {
-        aggregateActivities(docs[0]._doc.endTime)
+        if (docs.length) {
+            endTime = docs[0]._doc.endTime
+        }
+        aggregateActivities(endTime)
             .then(callback);
     });
 };
@@ -20,7 +25,7 @@ function getLastActivity(callback) {
 
 function aggregateActivities(last) {
     var from = new moment(last).add(1, 'd');
-    var to = new moment();
+    var to = new moment().add(1, 'd');
 
     var promise = rest(rescueTimeConfig.dataUrl({
         restrict_begin: from.format('YYYY-MM-DD'),

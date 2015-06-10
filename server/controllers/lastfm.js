@@ -4,8 +4,8 @@ var Track = require('../models/lastfm/track')
 var Scrobble = require('../models/lastfm/scrobble')
 
 var username = 'grovman';
-var endDate = moment();
-var startDate = moment().subtract(30, 'day');
+var endDate = moment().add(1, 'd');
+var startDate = moment().subtract(30, 'd');
 
 module.exports = {
     aggregator: aggregator,
@@ -38,7 +38,7 @@ function aggregator(callback) {
         if (docs.length) {
             startDate = moment(docs[0]._doc.endTime);
         }
-        if (endDate.diff(startDate) < 0) {
+        if (endDate.diff(startDate) > 0) {
             getRecentTracksFromPage(1, function(page, totalPages) {
                 while (page++ < totalPages) {
                     getRecentTracksFromPage(page, function(page) {
