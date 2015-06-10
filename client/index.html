@@ -11,6 +11,7 @@
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
     <link rel="stylesheet" href="./components/angular-material/angular-material.css"/>
     <link rel="stylesheet" href="assets/app.css"/>
+    <link rel="stylesheet" href="assets/custom.css"/>
 </head>
 
 <body ng-app="app" layout="row" ng-controller="MusicController as vm">
@@ -39,7 +40,7 @@
     </md-toolbar>
 
     <md-content flex layout="row" id="content">
-        <div ng-repeat="item in vm.music" ng-if="item">
+        <div ng-repeat="item in vm.music" ng-if="item" class="column">
             <md-toolbar layout="row" class="md-whiteframe-z1">
                 <h1>{{ item.header }}</h1>
             </md-toolbar>

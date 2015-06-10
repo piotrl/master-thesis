@@ -1,0 +1,4 @@
+.column {
+    overflow-y: auto;
+    max-width: 30%;
+}

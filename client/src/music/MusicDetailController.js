@@ -15,17 +15,17 @@
         vm.productivity = [
             {
                 name: 'productive',
-                procentage: Math.floor(productivity.productive / maxValue),
+                procentage: productivity.productive / maxValue,
                 minutes: toSpentMinutes(productivity.productive)
             },
             {
                 name: 'neutral',
-                procentage: Math.floor(productivity.neutral / maxValue),
+                procentage: productivity.neutral / maxValue,
                 minutes: toSpentMinutes(productivity.neutral)
             },
             {
                 name: 'unproductive',
-                procentage: Math.floor(productivity.unproductive / maxValue),
+                procentage: productivity.unproductive / maxValue,
                 minutes: toSpentMinutes(productivity.unproductive)
             }];
 
