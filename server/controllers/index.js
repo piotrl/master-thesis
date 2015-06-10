@@ -6,13 +6,14 @@ var moment = require('moment');
 var Scrobble = require('../models/lastfm/scrobble');
 
 exports.mostListened = function(req, res) {
+    var MAX_RESPONSE = 30;
     var daysAgo = {
         day: 1,
         week: 7,
         month: 30
     };
 
-    var daysAgo = daysAgo[req.params.ago] || 30;
+    daysAgo = daysAgo[req.params.ago] || 30;
     var fromDate = moment().subtract(daysAgo, 'days');
 
     var findBy = {
@@ -26,9 +27,11 @@ exports.mostListened = function(req, res) {
         var groupedItems = groupBy(docs, "name");
         var summedItems = sum(groupedItems);
 
-        res.json(summedItems.sort(function(a, b) {
+        var response = summedItems.sort(function (a, b) {
             return b.scrobbled - a.scrobbled;
-        }));
+        }).slice(0, MAX_RESPONSE);
+
+        res.json(response);
     });
 };
 
