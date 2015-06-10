@@ -5,7 +5,7 @@
         .module('music')
         .controller('MusicController', MusicController);
 
-    function MusicController(MusicService, $mdBottomSheet, $log) {
+    function MusicController(MusicService, mySocket, $mdBottomSheet) {
         var vm = this;
 
         vm.menu = buildNavigation();
@@ -19,6 +19,21 @@
         vm.showDetails = showDetails;
 
         vm.getPopular();
+        listenSocket();
+
+        function listenSocket() {
+            mySocket.emit('test');
+            mySocket.on('nowPlaying', function() {
+                console.log('nowPlaying');
+            });
+            mySocket.on('scrobbled', function() {
+                console.log('scrobbled');
+            });
+            mySocket.on('stoppedPlaying', function() {
+                console.log('stoppedPlaying');
+            });
+
+        }
 
         function buildLoader(method) {
             return function() {
@@ -61,8 +76,6 @@
                         return track;
                     }
                 }
-            }).then(function (clickedItem) {
-                clickedItem && $log.debug(clickedItem.name + ' clicked!');
             });
         }
     }

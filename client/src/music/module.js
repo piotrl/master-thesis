@@ -1,7 +1,7 @@
 (function(){
   'use strict';
 
-  angular.module('music', [ 'ngMaterial' ]);
+  angular.module('music', [ 'ngMaterial', 'common' ]);
 
 
 })();

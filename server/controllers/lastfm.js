@@ -7,7 +7,33 @@ var username = 'grovman';
 var endDate = moment();
 var startDate = moment().subtract(30, 'day');
 
-module.exports = function(callback) {
+module.exports = {
+    aggregator: aggregator,
+    streamer: streamer
+};
+
+function streamer(io, socket) {
+    var trackStream = lastfm.stream(username);
+
+    trackStream.on('nowPlaying', function(track) {
+        io.sockets.emit('nowPlaying', track);
+        console.log('Now playing: ' + track.name);
+    });
+
+    trackStream.on('scrobbled', function(track) {
+        io.sockets.emit('scrobbled', track);
+        console.log('Scrobbled: ' + track.name);
+    });
+
+    trackStream.on('stoppedPlaying', function(track) {
+        io.sockets.emit('stoppedPlaying', track);
+        console.log('Stopped playing: ' + track.name);
+    });
+
+    return trackStream;
+}
+
+function aggregator(callback) {
     getLastScrobble(function(err, docs) {
         if (docs.length) {
             startDate = moment(docs[0]._doc.endTime);

@@ -13,18 +13,22 @@ var db = database.connect();
 configureStaticServer(app);
 routes(app);
 
-var lastfmAggregator = require("./server/controllers/lastfm");
+var lastfm = require("./server/controllers/lastfm");
 var activityAggregator = require("./server/controllers/rescueTime");
 var matcher = require("./server/controllers/matcher");
 
 activityAggregator(function() {
     console.log('Activities aggregation finished');
-    lastfmAggregator(function() {
+    lastfm.aggregator(function() {
         console.log('Lastfm aggregation finished');
         matcher();
     });
 });
 
+io.sockets.on("connection", function (socket) {
+    console.log("[Socket] connection");
+    lastfm.streamer(io, socket).start();
+});
 
 httpServer.listen(port, function () {
     console.log('HTTP Server on ' + port);
