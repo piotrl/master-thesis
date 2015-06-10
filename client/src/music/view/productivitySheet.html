@@ -5,11 +5,11 @@
     </md-subheader>
 
     <md-list>
-      <md-item ng-repeat="item in vm.track.productivity">
-        <md-button>
-
-        </md-button>
-          <md-progress-linear md-mode="query" value="{{item}}"></md-progress-linear>
+      <md-item ng-repeat="item in vm.productivity">
+        <md-subheader>
+            {{ item.name }} - {{ item.minutes }}min
+        </md-subheader>
+        <md-progress-linear md-mode="determinate" value="{{item.procentage * 100}}"></md-progress-linear>
       </md-item>
     </md-list>
 
