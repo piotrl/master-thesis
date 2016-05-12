@@ -1,8 +1,20 @@
-## Analiza wpływu rodzaju muzyki na produktywność
-#### Aplikacja agregująca dane z zewnętrznych API i wykorzystująca techniki machine learning
+## Aplikacja analizująca wpływ rodzaju muzyki na produktywność
 
+#### Piotr Lewandowski
+
+### Słowa Kluczowe:
+Agregacja, Machine learning, Wizualizacja, JavaScript, Python, NodeJS, MongoDB, last.fm, RescueTime
+
+### Streszczenie
+// TODO
+
+### Spis treści
+// TODO
+
+### Wstęp do pracy
 - [Wstęp do pracy](docs/01_PREFACE.md)
-- Słowa kluczowe: Agregacja, Machine learning, Wizualizacja, JavaScript, Python, NodeJS, MongoDB, last.fm, RescueTime
+
+### Literatura
 
 Libraries:
 - lastfm client library
