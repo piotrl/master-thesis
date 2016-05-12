@@ -1,8 +1,8 @@
 ## Analiza wpływu rodzaju muzyki na produktywność
-#### Aplikacja z wykorzystaniem AngularJS i Material Design oraz agregacji danych z popularnych API.
+#### Aplikacja agregująca dane z zewnętrznych API i wykorzystująca techniki machine learning
 
 - [Wstęp do pracy](docs/01_PREFACE.md)
-- Słowa kluczowe: NodeJS, AngularJS, MongoDB, last.fm, RescueTime, Agregacja danych
+- Słowa kluczowe: Agregacja, Machine learning, Wizualizacja, JavaScript, Python, NodeJS, MongoDB, last.fm, RescueTime
 
 Libraries:
 - lastfm client library
