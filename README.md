@@ -1,9 +1,9 @@
-## Aplikacja analizująca wpływ rodzaju muzyki na produktywność
+## Analiza wpływu rodzaju muzyki na aktywności wykonywane przy komputerze
 
 #### Piotr Lewandowski
 
 ### Słowa Kluczowe:
-Agregacja, Machine learning, Wizualizacja, JavaScript, Python, NodeJS, MongoDB, last.fm, RescueTime
+Attention span, Data analysis, Machine learning, Visualisation, JavaScript, Python, MongoDB, last.fm, RescueTime
 
 ### Streszczenie
 // TODO
@@ -16,9 +16,10 @@ Agregacja, Machine learning, Wizualizacja, JavaScript, Python, NodeJS, MongoDB, 
 
 ### Literatura
 
+Books:
+- Applied Predictive Modeling, by Kjell Johnson and Max Kuhn
+
 Libraries:
-- lastfm client library
-- rest http client package
 - mongoose: http://mongoosejs.com/docs/
 - Angular docs: https://docs.angularjs.org/api
 - Angular-Material docs: https://material.angularjs.org/latest/
