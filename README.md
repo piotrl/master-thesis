@@ -9,7 +9,21 @@ Attention span, Data mining, Machine learning, Visualisation, JavaScript, Python
 // TODO
 
 ### Spis treści
-// TODO
+1. Wstęp
+2. Rodział I - Analiza problemu
+  1. Przedstawienie problemu
+  2. Opis źródeł danych
+3. Rozdział II - Opis proponowanego rozwiązania
+  1. Opis użytych technologii
+  2. Diagram architektury aplikacji
+  3. Problem łączenia danych w czasie
+4. Rozdział III - Eksperymenty na podstawie zebranych danych
+  1. Zastosowanie prostych mechanizmów statystycznych
+  2. Zastosowanie algorytmów klasyfikacji machine learning
+5. Rozdział IV - Prezentacja efektów
+  1. Prezentacja aplikacji
+  2. Prezentacja zgromadzonych wykresów
+6. Zakończenie
 
 ### Wstęp do pracy
 - [Wstęp do pracy](docs/01_PREFACE.md)
