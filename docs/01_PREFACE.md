@@ -3,10 +3,9 @@
 >“Without deviation from the norm, progress is not possible.” 
 >― Frank Zappa
 
-Muzyka ma bardzo duży wpływ na to jak się czujemy, potrafi wprowazdić w nastrój i pobudzić.
-Zdarza się też, że nie pozwala się skupić i wprowadza w stan rozkojarzenia.
+Muzyka ma bardzo duży wpływ na to, jak się czujemy, potrafi wprowadzić w nastrój i pobudzić. Zdarza się też, że nie pozwala się skupić i wprowadza w stan rozkojarzenia.
 
-Celem pracy jest stworzenie aplikacji analizującej dane z różnych źródeł by odpowiedzieć na pytanie:
+Celem pracy jest stworzenie aplikacji analizującej dane z różnych źródeł, by odpowiedzieć na pytanie: 
 *Czy rodzaj słuchanej muzyki wpływa na czynności wykonywane przy komputerze?*
 
 ### Zawartość pracy
@@ -15,12 +14,12 @@ Praca będzie składała się z aplikacji internetowej podzielonej na trzy czę�
 
     Jedna aplikacja zbiera dane, łączy je i analizuje.
     Muzykę na kilka predefiniowanych kategorii,
-    które będą wykorzystane w badaniu i przydzielanie im ilości spędzonego produktywnie czasu
+    które będą wykorzystane w badaniu i przydzielanie im ilości spędzonego produktywnie czasu.
 
 - **API**
 
-   Służące bezpośrednio do komunikacji z front-endem, przetwarza już przeanalizowane dane przez back-end.
-   Dzieli dane na konkretnych użytkoników systemu.
+    Służące bezpośrednio do komunikacji z front-endem, przetwarza już przeanalizowane dane przez back-end.
+    Dzieli dane na konkretnych użytkowników systemu.
 
 - **front-end**:
 
@@ -37,10 +36,10 @@ Praca ma zaoferować narzędzie pozwalające mierzyć jeden z wielu współczynn
 ## Dodatkowe informacje
 #### Podział muzyki na kategorie
 Na podstawie prezentacji [TED](https://www.youtube.com/watch?v=BBCjijl105I)
-stwierdziłem kilka potencjalnych gatunków muzyki na które warto zwrócić uwagę w badaniu.
+stwierdziłem kilka potencjalnych gatunków muzyki, na które warto zwrócić uwagę w badaniu.
 
 - Potencjalnie złe
-  - Wokal
+  - Zawierające wokal
   - Instrumenty brzmiące jak ludzki głos
     - wiolonczela
     - saksofon
