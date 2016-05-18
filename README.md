@@ -3,7 +3,7 @@
 #### Piotr Lewandowski
 
 ### Słowa Kluczowe:
-Attention span, Data analysis, Machine learning, Visualisation, JavaScript, Python, MongoDB, last.fm, RescueTime
+Attention span, Data mining, Machine learning, Visualisation, JavaScript, Python, MongoDB, last.fm, RescueTime
 
 ### Streszczenie
 // TODO
