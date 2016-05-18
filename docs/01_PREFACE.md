@@ -1,5 +1,8 @@
 ## Wstęp do pracy
 
+>“Without deviation from the norm, progress is not possible.” 
+>― Frank Zappa
+
 Muzyka ma bardzo duży wpływ na to jak się czujemy, potrafi wprowazdić w nastrój i pobudzić.
 Zdarza się też, że nie pozwala się skupić i wprowadza w stan rozkojarzenia.
 
