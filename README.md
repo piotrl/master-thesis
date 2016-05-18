@@ -35,14 +35,15 @@ Dodatkowo autor przeprowadzi badanie na samym sobie, celem potwierdzenia ogólni
 
 ### Literatura
 
-Books:
+**Books**:
 - Applied Predictive Modeling, by Kjell Johnson and Max Kuhn
 
-Libraries:
-- mongoose: http://mongoosejs.com/docs/
-- Angular docs: https://docs.angularjs.org/api
-- Angular-Material docs: https://material.angularjs.org/latest/
+**API documentations**:
+- [Last.fm](http://www.last.fm/api) - Music agregation service
+- [RescueTime](https://www.rescuetime.com/anapi/setup/documentation) - Follows computer activities and rates their productivity score
 
-API documentations:
-- Last.fm: http://www.last.fm/api
-- RescueTime: https://www.rescuetime.com/anapi/setup/documentation
+**Libraries**:
+- [scikit-learn](http://scikit-learn.org/stable/index.html) - data mining and data analysis in Python
+- [D3.js](https://d3js.org/) - JavaScript data visualisation library
+- [AngularJS](https://docs.angularjs.org/api) - JavaScript front-end framework
+- [NodeJS](https://nodejs.org/) - JavaScript back-end framework
