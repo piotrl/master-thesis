@@ -1,4 +1,4 @@
-## Analiza wpływu rodzaju muzyki na aktywności wykonywane przy komputerze
+## Analiza wpływu nawyków muzycznych na aktywności wykonywane przy komputerze
 
 #### Piotr Lewandowski
 
