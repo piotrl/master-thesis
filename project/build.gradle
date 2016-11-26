@@ -25,12 +25,12 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-security')
 
     compile 'de.u-mass:lastfm-java:0.1.2'
+    compile 'com.google.code.gson:gson:2.8.0'
 	compileOnly "org.projectlombok:lombok:1.16.10"
 
 	runtime('org.springframework.boot:spring-boot-devtools')

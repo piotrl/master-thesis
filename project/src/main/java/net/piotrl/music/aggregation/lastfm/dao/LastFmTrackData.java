@@ -10,10 +10,10 @@ import javax.persistence.*;
 @Data
 public class LastFmTrackData {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int id;
 
     @Column
-    private Object api_data;
+    private String api_data;
 }
