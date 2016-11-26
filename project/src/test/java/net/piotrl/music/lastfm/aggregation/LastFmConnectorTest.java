@@ -1,8 +1,10 @@
-package net.piotrl.music.aggregation.lastfm;
+package net.piotrl.music.lastfm.aggregation;
 
 import de.umass.lastfm.PaginatedResult;
 import de.umass.lastfm.Track;
 import de.umass.lastfm.User;
+import net.piotrl.music.lastfm.aggregation.LastFmAuthProperties;
+import net.piotrl.music.lastfm.aggregation.LastFmConnector;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

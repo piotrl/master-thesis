@@ -1,4 +1,4 @@
-package net.piotrl.music.aggregation.lastfm;
+package net.piotrl.music.lastfm.aggregation;
 
 import de.umass.lastfm.PaginatedResult;
 import de.umass.lastfm.Track;
