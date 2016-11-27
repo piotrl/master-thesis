@@ -1,8 +1,8 @@
 package net.piotrl.music.lastfm.scrobble;
 
 import de.umass.lastfm.Track;
-import net.piotrl.music.lastfm.scrobble.TrackService;
-import net.piotrl.music.lastfm.scrobble.TrackLoader;
+import net.piotrl.music.lastfm.track.TrackService;
+import net.piotrl.music.lastfm.track.TrackLoader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
