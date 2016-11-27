@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '1.4.1.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '1.4.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -15,27 +15,32 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
 
 jar {
-	baseName = 'music'
-	version = '0.0.1-SNAPSHOT'
+    baseName = 'music'
+    version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-security')
+    // Spring dependencies
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-security')
 
+    // Project specific libraries
     compile 'de.u-mass:lastfm-java:0.1.2'
-    compile 'com.google.code.gson:gson:2.8.0'
-	compileOnly "org.projectlombok:lombok:1.16.10"
 
-	runtime('org.springframework.boot:spring-boot-devtools')
-	runtime('com.h2database:h2')
-	runtime('org.postgresql:postgresql')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.assertj:assertj-core:3.5.2')
+    // General use libraries
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.google.guava:guava:20.0'
+    compileOnly "org.projectlombok:lombok:1.16.10"
+
+    runtime('org.springframework.boot:spring-boot-devtools')
+    runtime('com.h2database:h2')
+    runtime('org.postgresql:postgresql')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.assertj:assertj-core:3.5.2')
 }
