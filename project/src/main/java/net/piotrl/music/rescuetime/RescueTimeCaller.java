@@ -2,7 +2,7 @@ package net.piotrl.music.rescuetime;
 
 import net.piotrl.music.rescuetime.api.RescueTimeRequest;
 import net.piotrl.music.rescuetime.api.RescueTimeResponse;
-import net.piotrl.music.shared.rest.RestUtil;
+import net.piotrl.music.shared.RestUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;

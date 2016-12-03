@@ -37,6 +37,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.google.guava:guava:20.0'
     compileOnly "org.projectlombok:lombok:1.16.10"
+    testCompileOnly  "org.projectlombok:lombok:1.16.10"
 
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('com.h2database:h2')

@@ -52,6 +52,7 @@ public class RescueTimeCallerTest {
 
     private RescueTimeRequest buildRequest(String apiKey) {
         RescueTimeQueryParameters queryParameters = RescueTimeQueryParameters.builder()
+                .perspective("interval")
                 .restrict_begin("2016-12-01")
                 .restrict_end("2016-12-01")
                 .build();

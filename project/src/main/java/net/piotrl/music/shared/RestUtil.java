@@ -1,4 +1,4 @@
-package net.piotrl.music.shared.rest;
+package net.piotrl.music.shared;
 
 import com.google.gson.Gson;
 import lombok.experimental.UtilityClass;

@@ -1,4 +1,4 @@
-package net.piotrl.music.shared.rest;
+package net.piotrl.music.shared;
 
 import net.piotrl.music.rescuetime.api.RescueTimeQueryParameters;
 import org.junit.Test;
