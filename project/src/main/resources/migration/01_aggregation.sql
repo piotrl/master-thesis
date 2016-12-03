@@ -24,13 +24,14 @@ CREATE TABLE public.lastfm_scrobble
   CONSTRAINT lastfm_scrobbles_lastfm_track_id_fk FOREIGN KEY (track_id) REFERENCES lastfm_track (id)
 );
 
-CREATE TABLE public.rescuetime_activity
+CREATE TABLE rescuetime_activity
 (
   id SERIAL PRIMARY KEY,
   start_time TIMESTAMP NOT NULL,
-  spent_time INT NOT NULL,
+  end_time TIMESTAMP NOT NULL,
+  productivity INTEGER NOT NULL,
   activity_name TEXT NOT NULL,
-  category_name TEXT NOT NULL,
-  productivity INT
+  category_name TEXT,
+  spent_time INTEGER NOT NULL
 );
-COMMENT ON COLUMN public.rescuetime_activity.productivity IS '-2, -1, 0, 1, 2';
+COMMENT ON COLUMN rescuetime_activity.productivity IS '-2, -1, 0, 1, 2';

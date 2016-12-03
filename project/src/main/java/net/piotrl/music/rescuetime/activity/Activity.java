@@ -19,6 +19,8 @@ public class Activity {
     @Column
     private Date startTime;
     @Column
+    private Date endTime;
+    @Column
     private Integer spentTime;
     @Column
     private String activityName;

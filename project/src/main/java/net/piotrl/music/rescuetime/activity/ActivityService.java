@@ -6,6 +6,7 @@ import net.piotrl.music.shared.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,10 +32,13 @@ public class ActivityService {
         String categoryValue = getValue("Category", columnNames, values);
         String productivityValue = getValue("Productivity", columnNames, values);
 
+        Integer time = Ints.tryParse(timeValue);
+        LocalDateTime endTime = LocalDateTime.parse(dateValue).plusSeconds(time);
         return Activity.builder()
                 .activityName(activityValue)
                 .startTime(DateUtil.toDate(dateValue))
-                .spentTime(Ints.tryParse(timeValue))
+                .endTime(DateUtil.toDate(endTime))
+                .spentTime(time)
                 .categoryName(categoryValue)
                 .productivity(Ints.tryParse(productivityValue))
                 .build();

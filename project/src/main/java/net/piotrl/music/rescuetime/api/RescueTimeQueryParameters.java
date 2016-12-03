@@ -13,6 +13,7 @@ public class RescueTimeQueryParameters {
      * - member: ???
      */
     private String perspective = "interval";
+    private String interval = "minute";
     private String resolution_time;
     private String restrict_group;
 

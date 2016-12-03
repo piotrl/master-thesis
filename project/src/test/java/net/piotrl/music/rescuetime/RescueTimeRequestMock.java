@@ -24,6 +24,7 @@ public class RescueTimeRequestMock {
     private static RescueTimeQueryParameters buildParameters(String start, String to) {
         return RescueTimeQueryParameters.builder()
                     .perspective("interval")
+                    .interval("minute")
                     .restrict_begin(start)
                     .restrict_end(to)
                     .build();
