@@ -15,5 +15,5 @@ public class RescueTimeRequest {
 
     private String key;
 
-    private RescueTimeQueryParameters queryParameters;
+    private RescueTimeQueryParameters queryParameters = RescueTimeQueryParameters.builder().build();
 }

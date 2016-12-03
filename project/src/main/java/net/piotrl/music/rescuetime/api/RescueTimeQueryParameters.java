@@ -1,8 +1,10 @@
 package net.piotrl.music.rescuetime.api;
 
 import lombok.Builder;
+import lombok.Data;
 
 @Builder
+@Data
 public class RescueTimeQueryParameters {
     /**
      * Possible values:
