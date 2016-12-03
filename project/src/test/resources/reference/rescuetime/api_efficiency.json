@@ -1,0 +1,47 @@
+{
+  "notes":"data is an array of arrays (rows), column names for rows in row_headers",
+  "row_headers":[
+    "Date",
+    "Time Spent (seconds)",
+    "Number of People",
+    "Efficiency (-2:2)",
+    "Efficiency (percent)"
+  ],
+  "rows":[
+    [
+      "2016-12-02T00:00:00",
+      177,
+      1,
+      0.14,
+      53.53
+    ],
+    [
+      "2016-12-02T07:00:00",
+      387,
+      1,
+      -0.97,
+      25.71
+    ],
+    [
+      "2016-12-02T18:00:00",
+      792,
+      1,
+      -0.72,
+      31.94
+    ],
+    [
+      "2016-12-02T19:00:00",
+      1347,
+      1,
+      -0.92,
+      26.95
+    ],
+    [
+      "2016-12-02T20:00:00",
+      2122,
+      1,
+      1.01,
+      75.31
+    ]
+  ]
+}

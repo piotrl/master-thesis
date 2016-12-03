@@ -1,0 +1,309 @@
+{
+  "notes": "data is an array of arrays (rows), column names for rows in row_headers",
+  "row_headers": [
+    "Rank",
+    "Time Spent (seconds)",
+    "Number of People",
+    "Activity",
+    "Category",
+    "Productivity"
+  ],
+  "rows": [
+    [
+      1,
+      859,
+      1,
+      "github.com",
+      "General Software Development",
+      2
+    ],
+    [
+      2,
+      628,
+      1,
+      "twitter.com",
+      "General Social Networking",
+      -2
+    ],
+    [
+      3,
+      569,
+      1,
+      "spotify",
+      "Music",
+      -2
+    ],
+    [
+      4,
+      310,
+      1,
+      "linkedin.com",
+      "Professional Networking",
+      1
+    ],
+    [
+      5,
+      301,
+      1,
+      "outlook.office.com",
+      "Email",
+      0
+    ],
+    [
+      6,
+      222,
+      1,
+      "facebook.com",
+      "General Social Networking",
+      -2
+    ],
+    [
+      7,
+      219,
+      1,
+      "idea",
+      "Editing & IDEs",
+      2
+    ],
+    [
+      8,
+      165,
+      1,
+      "smashingmagazine.com",
+      "Graphic Design",
+      2
+    ],
+    [
+      9,
+      158,
+      1,
+      "instagram.com",
+      "General Social Networking",
+      -2
+    ],
+    [
+      10,
+      137,
+      1,
+      "messenger.com",
+      "Instant Message",
+      -1
+    ],
+    [
+      11,
+      112,
+      1,
+      "analytics.twitter.com",
+      "General Social Networking",
+      -2
+    ],
+    [
+      12,
+      110,
+      1,
+      "wunderlist",
+      "Project Management",
+      2
+    ],
+    [
+      13,
+      108,
+      1,
+      "endomondo.com",
+      "Health & Medicine",
+      1
+    ],
+    [
+      14,
+      95,
+      1,
+      "Google Chrome",
+      "Browsers",
+      0
+    ],
+    [
+      15,
+      93,
+      1,
+      "rekrutacyjny.blogspot.com",
+      "General Business",
+      2
+    ],
+    [
+      16,
+      89,
+      1,
+      "Windows Explorer",
+      "General Utilities",
+      0
+    ],
+    [
+      17,
+      66,
+      1,
+      "trello.com",
+      "Project Management",
+      2
+    ],
+    [
+      18,
+      65,
+      1,
+      "nozbe.com",
+      "Intelligence",
+      2
+    ],
+    [
+      19,
+      63,
+      1,
+      "youtube.com",
+      "Video",
+      -2
+    ],
+    [
+      20,
+      63,
+      1,
+      "nafrontendzie.pl",
+      "Uncategorized",
+      0
+    ],
+    [
+      21,
+      62,
+      1,
+      "shellexperiencehost",
+      "General Utilities",
+      1
+    ],
+    [
+      22,
+      60,
+      1,
+      "Google+",
+      "General Social Networking",
+      -2
+    ],
+    [
+      23,
+      50,
+      1,
+      "blog.gutek.pl",
+      "Engineering & Technology",
+      1
+    ],
+    [
+      24,
+      34,
+      1,
+      "npmjs.com",
+      "General Software Development",
+      2
+    ],
+    [
+      25,
+      28,
+      1,
+      "play.google.com",
+      "General Entertainment",
+      -2
+    ],
+    [
+      26,
+      28,
+      1,
+      "windowscamera",
+      "Photos",
+      -2
+    ],
+    [
+      27,
+      26,
+      1,
+      "webmastah.pl",
+      "Uncategorized",
+      0
+    ],
+    [
+      28,
+      25,
+      1,
+      "inf.ug.edu.pl",
+      "General Reference & Learning",
+      1
+    ],
+    [
+      29,
+      21,
+      1,
+      "piotrl.net",
+      "Project Management",
+      2
+    ],
+    [
+      30,
+      21,
+      1,
+      "translate.google.com",
+      "Search",
+      0
+    ],
+    [
+      31,
+      14,
+      1,
+      "codepen.io",
+      "General Software Development",
+      2
+    ],
+    [
+      32,
+      9,
+      1,
+      "system idle process",
+      "Other",
+      0
+    ],
+    [
+      33,
+      5,
+      1,
+      "google.pl",
+      "Search",
+      0
+    ],
+    [
+      34,
+      4,
+      1,
+      "mobile - znaj",
+      "Uncategorized",
+      0
+    ],
+    [
+      35,
+      3,
+      1,
+      "clover",
+      "General Utilities",
+      1
+    ],
+    [
+      36,
+      2,
+      1,
+      "80.79.203.65:8080",
+      "Systems Operations",
+      2
+    ],
+    [
+      37,
+      1,
+      1,
+      "mail.goyello.com",
+      "Intelligence",
+      2
+    ]
+  ]
+}
