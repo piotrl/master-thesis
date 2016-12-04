@@ -1,3 +1,13 @@
+CREATE TABLE public.account
+(
+  id SERIAL PRIMARY KEY,
+  email TEXT NOT NULL,
+  password TEXT NOT NULL,
+  role TEXT NOT NULL,
+  created TIMESTAMP NOT NULL
+);
+CREATE UNIQUE INDEX account_email_uindex ON public.account (email);
+
 CREATE TABLE public.lastfm_track
 (
   id SERIAL PRIMARY KEY NOT NULL,
