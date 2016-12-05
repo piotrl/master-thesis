@@ -6,12 +6,13 @@
 API, Aggregation, Data Integration, Data Visualisation, Attention span, PostgreSQL, JavaScript, Java
 
 ### Streszczenie
-Istnieją serwisy, które pozwalają na odtwarzanie muzyki wspomagającej koncentrację i ogólną produktywność.
-Bazują one na badaniach naukowych wskazujących sprzyjające temu gatunki muzyki, lecz playlisty są zawsze predefiniowane z określonego zbioru.
+Istnieją badania, które starają się wskazać wpływ muzyki na aktywność naszego mózgu. Wskazują one konkretne cechy utworów wpływające na nasz nastrój. Wiele serwisów internetowych na podstawie tych badań proponuje tematyczne playlisty — na relaksujący wieczór z herbatą, pozytywny poranek, pozwalające się mocniej skupić.
 
-Celem pracy jest stworzenie aplikacji, która będzie w stanie wspomóc użytkownika w określeniu jego nawyków muzycznych i wskazania muzyki, która pozytywnie wpływa na produktywność wykonywanych aktywności. Aplikacja analizuje dane agregowane z zewnętrznych API.
+Motyw przewodni aplikacji łączy się z ostatnią wymienioną grupą utworów — Muzyka wpływająca na naszą produktywność. Na podstawie historii odtwarzanych utworów oraz aktywności na komputerze, wizualizuję produktywne okresy naszych działań oraz powiązane z nimi gatunki muzyczne.
 
-Dodatkowo autor przeprowadzi badanie na samym sobie, celem potwierdzenia ogólnie przyjętych gatunków muzycznych jako produktywne. Badanie będzie podzielone na aktywności wykonywane na komputerze domowym i firmowym, skutkiem czego będzie stwierdzenie czy muzyka zawsze wpływa na jakość wykonywanych zadań.
+Celem pracy jest przedstawienie oraz uzasadnienie rozwiązań problemów, których trzeba być świadomym podczas budowania serwisów z dużą ilością danych, które w dużej mierze pochodzą z zewnętrznych API. Między innymi zadanie agregacji oraz przetworzenia danych w celu ich wizualizacji.
+
+Jako przykład działania aplikacji, przedstawiam przykładowe badanie własnych aktywności, podzielone na czas spędzony w domu oraz w pracy.
 
 ### Spis treści
 1. Wstęp
@@ -36,7 +37,7 @@ Dodatkowo autor przeprowadzi badanie na samym sobie, celem potwierdzenia ogólni
 ### Literatura
 
 **Books**:
-- 
+Not yet. 
 
 **API documentations**:
 - [Last.fm](http://www.last.fm/api) - Music agregation service
