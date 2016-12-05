@@ -3,7 +3,7 @@
 #### Piotr Lewandowski
 
 ### Słowa Kluczowe:
-Attention span, Data mining, Machine learning, Visualisation, JavaScript, Python, MongoDB, last.fm, RescueTime
+API, Aggregation, Data Integration, Data Visualisation, Attention span, PostgreSQL, JavaScript, Java
 
 ### Streszczenie
 Istnieją serwisy, które pozwalają na odtwarzanie muzyki wspomagającej koncentrację i ogólną produktywność.
@@ -36,14 +36,14 @@ Dodatkowo autor przeprowadzi badanie na samym sobie, celem potwierdzenia ogólni
 ### Literatura
 
 **Books**:
-- Applied Predictive Modeling, by Kjell Johnson and Max Kuhn
+- 
 
 **API documentations**:
 - [Last.fm](http://www.last.fm/api) - Music agregation service
 - [RescueTime](https://www.rescuetime.com/anapi/setup/documentation) - Follows computer activities and rates their productivity score
 
 **Libraries**:
-- [scikit-learn](http://scikit-learn.org/stable/index.html) - data mining and data analysis in Python
 - [D3.js](https://d3js.org/) - JavaScript data visualisation library
-- [AngularJS](https://docs.angularjs.org/api) - JavaScript front-end framework
-- [NodeJS](https://nodejs.org/) - JavaScript back-end framework
+- [Vue.js](http://vuejs.org/) - Component based JavaScript framework
+- [Spring Framework](http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/) - Java web framework
+- [PostgreSQL](https://www.postgresql.org/docs/) - Object-relational database system
