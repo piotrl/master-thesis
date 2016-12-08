@@ -49,20 +49,5 @@ Aplikację dzielę na trzy części
 ### Wstęp do pracy
 - [Wstęp do pracy](docs/01_PREFACE.md)
 
-### Literatura
-
-**Książki**:
-- Do uzupełnienia 
-
-**Inne źródła**:
-- [Lista stron i artykułów](./docs/00_RESOURCES.md)
-
-**Dokumentacja API**:
-- [Last.fm](http://www.last.fm/api) - Music agregation service
-- [RescueTime](https://www.rescuetime.com/anapi/setup/documentation) - Follows computer activities and rates their productivity score
-
-**Użyte biblioteki**:
-- [D3.js](https://d3js.org/) - JavaScript data visualisation library
-- [Vue.js](http://vuejs.org/) - Component based JavaScript framework
-- [Spring Framework](http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/) - Java web framework
-- [PostgreSQL](https://www.postgresql.org/docs/) - Object-relational database system
+### Źródła
+- [Źródła](docs/00_RESOURCES.md)

@@ -1,3 +1,7 @@
+### Książki
+
+- Do uzupełnienia 
+
 ### Pojęcia
 
 1. **Attention Span**
@@ -17,3 +21,15 @@
     - [Product website](https://www.focusatwill.com/app/pages/v7)
 2. **Zenobase** - Generic service for aggregating and visualising data
     - [Product website](https://zenobase.com/#/)
+   
+
+### Dokumentacja źródeł danych
+
+- [Last.fm](http://www.last.fm/api) - Music agregation service
+- [RescueTime](https://www.rescuetime.com/anapi/setup/documentation) - Follows computer activities and rates their productivity score
+
+### Użyte biblioteki
+- [D3.js](https://d3js.org/) - JavaScript data visualisation library
+- [Vue.js](http://vuejs.org/) - Component based JavaScript framework
+- [Spring Framework](http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/) - Java web framework
+- [PostgreSQL](https://www.postgresql.org/docs/) - Object-relational database system
