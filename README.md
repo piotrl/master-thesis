@@ -16,7 +16,7 @@ Jako przykład działania aplikacji, przedstawiam przykładowe badanie własnych
 
 ### Spis treści
 1. Wstęp
-  1. Problem wpływu muzyki na produktywność
+  1. Wpływu muzyki na produktywność
   2. Przepływ danych w aplikacji
 2. Agregacja danych
   1. Wybór dostawców danych
@@ -25,7 +25,7 @@ Jako przykład działania aplikacji, przedstawiam przykładowe badanie własnych
     2. Ciągłość
     3. Powtarzalność
   3. Powszechne problemy przy komunikacji z API
-    1. Limity
+    1. Orgraniczenia
     2. Autoryzacja
     3. Braki dostępu    
 3. Analiza danych
@@ -45,14 +45,17 @@ Jako przykład działania aplikacji, przedstawiam przykładowe badanie własnych
 
 ### Literatura
 
-**Books**:
-Not yet. 
+**Książki**:
+- Do uzupełnienia 
 
-**API documentations**:
+**Inne źródła**:
+- [Lista stron i artykułów](./docs/00_RESOURCES.md)
+
+**Dokumentacja API**:
 - [Last.fm](http://www.last.fm/api) - Music agregation service
 - [RescueTime](https://www.rescuetime.com/anapi/setup/documentation) - Follows computer activities and rates their productivity score
 
-**Libraries**:
+**Użyte biblioteki**:
 - [D3.js](https://d3js.org/) - JavaScript data visualisation library
 - [Vue.js](http://vuejs.org/) - Component based JavaScript framework
 - [Spring Framework](http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/) - Java web framework
