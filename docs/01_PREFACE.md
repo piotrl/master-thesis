@@ -21,17 +21,11 @@ Aplikacja internetowa, którą stworzyłem, pozwala na weryfikację tych założ
 Użytkownik może zobaczyć wizualizację danych o odtwarzanych utworach oraz własnych aktywnościach wykonywanych na komputerze
 na przestrzeni miesięcy.
 
-Oprócz motywu przewodniego, czyli analizy wpływu nawyków muzycznych na produktywność, 
-aplikacja posłuży mi za przykład opisu problemów, 
-na jakie można się natknąć przy budowaniu produktu bazującego na danych z zewnętrznych serwisów.
+Z uwagi na to, że w dużej mierze opieram działanie aplikacji o zewnętrzne źródła danych,  
+w tej pracy opisuje wiele problemów, 
+na jakie można się natknąć przy budowaniu produktu bazującego na danych z API.
 
 Ostatecznie przedstawię wyniki działania na własnych danych z dwóch środowisk — pracy oraz domu.
-
-### Zakończenie badania
-Sukcesem można nazwać wynik, po którym można stwierdzić, jaka muzyka koreluje z *attention span<sub>[1]</sub>*.
-
-Nie ma na celu udowodnienia wyniku, tym bardziej sprawdzać go na dużej populacji ludzi.
-Praca ma zaoferować narzędzie, pozwalające mierzyć jeden z wielu współczynników mogących mieć wpływ na produktywność oraz przedstawić przykładowe badanie autora na jego własnych nawykach. 
 
 #### Żródła danych
 Dane muzyczne agregowane będą z API serwisu [last.fm](http://www.last.fm/), natomiast aktywności wykonywane na komputerze będą pobierane z serwisu [RescueTime](https://www.rescuetime.com/).

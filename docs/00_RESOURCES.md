@@ -23,7 +23,7 @@
     - [Product website](https://zenobase.com/#/)
    
 
-### Dokumentacja źródeł danych
+### Dokumentacja API
 
 - [Last.fm](http://www.last.fm/api) - Music agregation service
 - [RescueTime](https://www.rescuetime.com/anapi/setup/documentation) - Follows computer activities and rates their productivity score
