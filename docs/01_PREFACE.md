@@ -3,52 +3,36 @@
 >“Without deviation from the norm, progress is not possible.” 
 >― Frank Zappa
 
-Muzyka ma wpływ na to jak się czujemy, potrafi wprowadzić w nastrój i pobudzić. 
-Zdarza się, że nie pozwala się skupić i wprowadza w stan rozkojarzenia.
+Obecny styl życia i pracy idzie w kierunku coraz większej dynamiki. 
+Nadmiar ogólnodostępnej informacji sprzyja coraz krótszemu *attention span<sub>[1]</sub>*.
+Powszechnie uważa się, że obecnie jest on na poziomie 8 sekund.
 
-Celem pracy jest stworzenie aplikacji analizującej dane muzyczne z różnych źródeł, by odpowiedzieć na pytanie: 
-*Czy rodzaj słuchanej muzyki wpływa na aktywności wykonywane przy komputerze?*
+Często na problem z utrzymaniem dłuższego skupienia szuka się pomocy w muzyce. 
+Świadczą o tym liczne publikacje, proponujące gatunki muzyki lub konkretne playlisty
+mające sprzyjać produktywności i skupieniu.
 
-### Architektura aplikacji
+Na ich podstawie można zwrócić uwagę na potencjalnie sprzyjające produktywności gatunki muzyczne:
+- Muzyka klasyczna, Elektro.
 
-Praca będzie składała się z aplikacji internetowej podzielonej na trzy części:
-- **back-end**
+Oraz na te, które przeciwnie, sprzyjające rozkojarzeniu:
+ - Zawierające wokal lub instrumenty brzmiące jak ludzki głos (wiolonczela, saksofon), elektroniczna gitara.
 
-    Jedna aplikacja która zbiera dane, łączy je i analizuje.
-    Muzykę na kilka predefiniowanych kategorii,
-    które będą wykorzystane w badaniu i przydzielanie im ilości spędzonego produktywnie czasu.
+Aplikacja internetowa, którą stworzyłem, pozwala na weryfikację tych założeń.
+Użytkownik może zobaczyć wizualizację danych o odtwarzanych utworach oraz własnych aktywnościach wykonywanych na komputerze
+na przestrzeni miesięcy.
 
-- **API**
+Oprócz motywu przewodniego, czyli analizy wpływu nawyków muzycznych na produktywność, 
+aplikacja posłuży mi za przykład opisu problemów, 
+na jakie można się natknąć przy budowaniu produktu bazującego na danych z zewnętrznych serwisów.
 
-    Służące bezpośrednio do komunikacji z front-endem, przetwarza już przeanalizowane dane przez back-end oraz łączy je w żądany sposób.
-    Dzieli dane na konkretnych użytkowników systemu.
-
-- **front-end**:
-
-    Druga aplikacja zapewni wizualizację danych w postaci statystyk,
-    pomagając badaczowi szukanie wzorców.
+Ostatecznie przedstawię wyniki działania na własnych danych z dwóch środowisk — pracy oraz domu.
 
 ### Zakończenie badania
-Sukcesem można nazwać wynik, po którym można stwierdzić, jaka muzyka koreluje z tzw. *attention span<sub>[1]</sub>*.
+Sukcesem można nazwać wynik, po którym można stwierdzić, jaka muzyka koreluje z *attention span<sub>[1]</sub>*.
 
-Praca nie ma na celu udowodnienia wyniku, tym bardziej sprawdzać go na dużej populacji ludzi.
+Nie ma na celu udowodnienia wyniku, tym bardziej sprawdzać go na dużej populacji ludzi.
 Praca ma zaoferować narzędzie, pozwalające mierzyć jeden z wielu współczynników mogących mieć wpływ na produktywność oraz przedstawić przykładowe badanie autora na jego własnych nawykach. 
 
-## Dodatkowe informacje
-#### Podział muzyki na kategorie
-Na podstawie prezentacji [TED](https://www.youtube.com/watch?v=BBCjijl105I), stwierdzam kilka potencjalnych gatunków muzyki, na które warto zwrócić uwagę przy badaniu.
-
-- **Potencjalnie złe**
-  - Zawierające wokal
-  - Instrumenty brzmiące jak ludzki głos
-    - wiolonczela
-    - saksofon
-  - Elektryczna gitara
-  
-- **Potencjalnie dobre**
-  - Elektro
-  - Muzyka klasyczna
-  
 #### Żródła danych
 Dane muzyczne agregowane będą z API serwisu [last.fm](http://www.last.fm/), natomiast aktywności wykonywane na komputerze będą pobierane z serwisu [RescueTime](https://www.rescuetime.com/).
 Do przeprowadzenia badania, wymagane jest zainstalowanie programów do obsługi wyżej wymienionych serwisów.

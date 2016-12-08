@@ -8,11 +8,17 @@ API, Aggregation, Data Integration, Data Visualisation, Attention span, PostgreS
 ### Streszczenie
 Istnieją badania, które starają się wskazać wpływ muzyki na aktywność naszego mózgu. Wskazują one konkretne cechy utworów wpływające na nasz nastrój. Wiele serwisów internetowych na podstawie tych badań proponuje tematyczne playlisty — na relaksujący wieczór z herbatą, pozytywny poranek, pozwalające się mocniej skupić.
 
-Motyw przewodni aplikacji łączy się z ostatnią wymienioną grupą utworów — Muzyka wpływająca na naszą produktywność. Na podstawie historii odtwarzanych utworów oraz aktywności na komputerze, wizualizuję produktywne okresy naszych działań oraz powiązane z nimi gatunki muzyczne.
+Motyw przewodni tej pracy łączy się z ostatnią wymienioną grupą utworów — Muzyka wpływająca na naszą produktywność. Na podstawie historii odtwarzanych utworów oraz aktywności na komputerze, wizualizuję produktywne okresy naszych działań oraz powiązane z nimi gatunki muzyczne.
 
 Celem pracy jest przedstawienie oraz uzasadnienie rozwiązań problemów, których trzeba być świadomym podczas budowania serwisów z dużą ilością danych, które w dużej mierze pochodzą z zewnętrznych API. Między innymi zadanie agregacji oraz przetworzenia danych w celu ich wizualizacji.
 
 Jako przykład działania aplikacji, przedstawiam przykładowe badanie własnych aktywności, podzielone na czas spędzony w domu oraz w pracy.
+
+Aplikację dzielę na trzy części
+    
+- front-endową w modelu MVC, która komunikuje się z serwerem WebAPI, która wizualizuje dane na wykresach
+- WebAPI — Stworzone w Javie z użyciem lekkiego frameworka ``Spring boot``, przystosowująca dane pod wymagania prezentacji
+- Aggregation service — Główny mechanizm pobierania danych, zapisywanych w relatywnej bazie danych PostgreSQL
 
 ### Spis treści
 1. Wstęp
