@@ -30,8 +30,8 @@ public class AccountService implements UserDetailsService {
 
     @PostConstruct
     protected void initialize() {
-        save(new Account("user", "demo", "ROLE_USER"));
-        save(new Account("admin", "admin", "ROLE_ADMIN"));
+//        save(new Account("user", "demo", "ROLE_USER"));
+//        save(new Account("admin", "admin", "ROLE_ADMIN"));
     }
 
     public Account save(Account account) {
