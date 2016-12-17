@@ -2,7 +2,7 @@
 
 #### Piotr Lewandowski
 
-### Słowa Kluczowe:
+### Słowa Kluczowe
 API, Aggregation, Data Integration, Data Visualisation, Attention span, PostgreSQL, JavaScript, Java
 
 ### Streszczenie
@@ -39,7 +39,7 @@ Aplikację dzielę na trzy części
   2. Data fusion - Łączenie danych w czasie
     1. Korekta
     2. Integracja dwóch źródeł danych
-  2. Budowa raportów na podstawie metod statystycznych
+  2. Budowa raportów na podstawie szeregów czasowych
 4. Wizualizacja danych
   1. Jeden zbiór danych - wiele interpretacji
   2. Wybór odpowiednich metod wizualizacji danych
