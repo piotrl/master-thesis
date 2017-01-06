@@ -25,6 +25,23 @@ CREATE TABLE public.lastfm_track
   image_url_extra_large TEXT
 );
 
+CREATE TABLE public.lastfm_artist
+(
+  id SERIAL PRIMARY KEY,
+  name TEXT,
+  mbid TEXT,
+  image_url TEXT
+);
+COMMENT ON COLUMN public.lastfm_artist.mbid IS 'LastFm artist id';
+
+ALTER TABLE public.lastfm_artist
+  ADD CONSTRAINT lastfm_artist_mbid_name_pk UNIQUE (mbid, name);
+
+ALTER TABLE public.lastfm_track ADD artist_id INT NULL;
+ALTER TABLE public.lastfm_track
+  ADD CONSTRAINT lastfm_track_lastfm_artist_id_fk
+FOREIGN KEY (artist_id) REFERENCES lastfm_artist (id);
+
 CREATE TABLE public.lastfm_scrobble
 (
   id SERIAL PRIMARY KEY NOT NULL,
@@ -33,6 +50,13 @@ CREATE TABLE public.lastfm_scrobble
   api_data TEXT,
   CONSTRAINT lastfm_scrobbles_lastfm_track_id_fk FOREIGN KEY (track_id) REFERENCES lastfm_track (id)
 );
+
+CREATE TABLE public.lastfm_tag
+(
+  id SERIAL PRIMARY KEY NOT NULL,
+  name TEXT NOT NULL
+);
+CREATE UNIQUE INDEX lastfm_tag_name_uindex ON public.lastfm_tag (name);
 
 CREATE TABLE rescuetime_activity
 (
