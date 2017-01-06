@@ -17,6 +17,23 @@ public class TrackLoader {
 
     private LastFmAuthProperties lastFmProperties = new LastFmConnector().properties();
 
+    public List<Track> getRecentTracks() {
+        LocalDateTime tenDaysAgo = LocalDateTime.now().minusDays(RECENT_DAYS);
+        return getTracks(tenDaysAgo);
+    }
+
+    public List<Track> getTracks(LocalDateTime since) {
+        PaginatedResult<Track> trackPaginatedResult = getScrobblesFrom(since);
+        Stream<Track> trackStream = streamOf(trackPaginatedResult);
+
+        for (int i = 2; i <= trackPaginatedResult.getTotalPages(); i++) {
+            PaginatedResult<Track> pageTracks = getScrobblesFrom(i, since);
+            trackStream = Stream.concat(trackStream, streamOf(pageTracks));
+        }
+
+        return trackStream.collect(Collectors.toList());
+    }
+
     public List<Track> fillTrackInfo(Collection<Track> tracks) {
         return tracks.stream()
                 .map(track -> {
@@ -31,21 +48,8 @@ public class TrackLoader {
                 .collect(Collectors.toList());
     }
 
-    public Track getTrackInfo(String artist, String trackNameOrMbid) {
+    private Track getTrackInfo(String artist, String trackNameOrMbid) {
         return Track.getInfo(artist, trackNameOrMbid, lastFmProperties.getApi_key());
-    }
-
-    public List<Track> getRecentTracks() {
-        LocalDateTime tenDaysAgo = LocalDateTime.now().minusDays(RECENT_DAYS);
-        PaginatedResult<Track> trackPaginatedResult = getScrobblesFrom(tenDaysAgo);
-        Stream<Track> trackStream = streamOf(trackPaginatedResult);
-
-        for (int i = 2; i <= trackPaginatedResult.getTotalPages(); i++) {
-            PaginatedResult<Track> pageTracks = getScrobblesFrom(i, tenDaysAgo);
-            trackStream = Stream.concat(trackStream, streamOf(pageTracks));
-        }
-
-        return trackStream.collect(Collectors.toList());
     }
 
     private PaginatedResult<Track> getScrobblesFrom(LocalDateTime dateTime) {

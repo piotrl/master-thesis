@@ -13,6 +13,9 @@ public class TrackData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
+
+    @Column
+    private Long artistId;
     @Column
     private String name;
     @Column

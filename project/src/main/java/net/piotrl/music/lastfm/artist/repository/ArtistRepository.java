@@ -1,11 +1,11 @@
 package net.piotrl.music.lastfm.artist.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 public class ArtistRepository {
 
@@ -20,28 +20,13 @@ public class ArtistRepository {
     }
 
     public void insertIfExists(ArtistData artistData) {
-        SqlParameterSource sqlParameter = new MapSqlParameterSource()
-                .addValue("name", artistData.getName())
-                .addValue("mbid", artistData.getMbid())
-                .addValue("imageUrl", artistData.getImageUrl());
-
-        String query = "INSERT INTO lastfm_artist" +
-                "   (name, mbid, image_url) " +
-                "   VALUES " +
-                "   (:name, :mbid, :imageUrl) " +
-                "  " +
-                " ON CONFLICT DO NOTHING" +
-                " RETURNING id";
-
-        Integer id = jdbcTemplate.queryForObject(query, sqlParameter, Integer.class);
-
-        if (id == null) {
-            ArtistData existingArtist = artistCrudRepository.findFirstByMbidOrNameOrderByMbid(
-                    artistData.getMbid(), artistData.getName()
-            );
-            id = existingArtist.getId();
+        ArtistData existingArtist = artistCrudRepository.findFirstByMbidOrNameOrderByMbid(
+                artistData.getMbid(), artistData.getName()
+        );
+        if (existingArtist == null) {
+            existingArtist = artistCrudRepository.save(artistData);
         }
 
-        artistData.setId(id);
+        artistData.setId(existingArtist.getId());
     }
 }
