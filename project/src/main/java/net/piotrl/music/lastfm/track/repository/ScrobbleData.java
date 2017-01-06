@@ -18,5 +18,5 @@ public class ScrobbleData {
     @Column
     private Date playedWhen;
     @Column
-    private String api_data;
+    private String apiData;
 }

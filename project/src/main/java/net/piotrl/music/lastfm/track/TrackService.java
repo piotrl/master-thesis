@@ -45,7 +45,7 @@ public class TrackService {
     private Function<Track, ScrobbleData> convertToScrobbleData() {
         return track -> {
             ScrobbleData scrobbleData = new ScrobbleData();
-            scrobbleData.setApi_data(gson.toJson(track));
+            scrobbleData.setApiData(gson.toJson(track));
             scrobbleData.setPlayedWhen(track.getPlayedWhen());
             scrobbleData.setTrackId(null);
 

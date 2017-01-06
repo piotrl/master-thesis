@@ -13,6 +13,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class TrackLoader {
+    public static final int RECENT_DAYS = 10;
+
     private LastFmAuthProperties lastFmProperties = new LastFmConnector().properties();
 
     public List<Track> fillTrackInfo(Collection<Track> tracks) {
@@ -34,7 +36,7 @@ public class TrackLoader {
     }
 
     public List<Track> getRecentTracks() {
-        LocalDateTime tenDaysAgo = LocalDateTime.now().minusDays(10);
+        LocalDateTime tenDaysAgo = LocalDateTime.now().minusDays(RECENT_DAYS);
         PaginatedResult<Track> trackPaginatedResult = getScrobblesFrom(tenDaysAgo);
         Stream<Track> trackStream = streamOf(trackPaginatedResult);
 
@@ -56,7 +58,7 @@ public class TrackLoader {
     }
 
     private static PaginatedResult<Track> getRecentTracks(String user, int page, long unixTimestamp, String apiKey) {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put("user", user);
         params.put("limit", String.valueOf(100));
         params.put("page", String.valueOf(page));

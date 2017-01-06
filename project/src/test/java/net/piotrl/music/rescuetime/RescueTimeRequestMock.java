@@ -13,7 +13,7 @@ public class RescueTimeRequestMock {
     }
 
     public RescueTimeRequest buildRequest(String apiKey) {
-        RescueTimeQueryParameters queryParameters = buildParameters("2016-12-01", "2016-12-01");
+        RescueTimeQueryParameters queryParameters = buildParameters("2016-12-01", "2016-12-03");
 
         return RescueTimeRequest.builder()
                 .key(apiKey)
@@ -24,7 +24,7 @@ public class RescueTimeRequestMock {
     private static RescueTimeQueryParameters buildParameters(String start, String to) {
         return RescueTimeQueryParameters.builder()
                     .perspective("interval")
-                    .interval("minute")
+                    .resolution_time("minute")
                     .restrict_begin(start)
                     .restrict_end(to)
                     .build();
