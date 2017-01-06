@@ -7,6 +7,6 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface ScrobbleRepository extends CrudRepository<ScrobbleEntity, Integer> {
+public interface ScrobbleCrudRepository extends CrudRepository<ScrobbleEntity, Integer> {
 
 }

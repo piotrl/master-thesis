@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface TrackRepository extends CrudRepository<TrackEntity, Integer> {
+public interface TrackCrudRepository extends CrudRepository<TrackEntity, Integer> {
+
+    TrackEntity findFirstByMbidOrNameOrderByMbid(String mbid, String name);
 
 }

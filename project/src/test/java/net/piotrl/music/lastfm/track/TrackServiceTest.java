@@ -1,8 +1,6 @@
 package net.piotrl.music.lastfm.track;
 
 import de.umass.lastfm.Track;
-import net.piotrl.music.lastfm.track.TrackService;
-import net.piotrl.music.lastfm.track.TrackLoader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,6 @@ public class TrackServiceTest {
     public void testSavingTrackTo() throws Exception {
         TrackLoader trackLoader = new TrackLoader();
         List<Track> recentTracks = trackLoader.getRecentTracks();
-        lastFmService.saveTracks(recentTracks);
+        lastFmService.saveNewTracks(recentTracks);
     }
 }

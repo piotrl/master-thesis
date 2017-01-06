@@ -12,9 +12,9 @@ public class ScrobbleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer id;
+    private Long id;
     @Column
-    private Integer trackId;
+    private Long trackId;
     @Column
     private Date playedWhen;
     @Column

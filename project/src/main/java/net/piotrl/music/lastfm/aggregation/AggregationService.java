@@ -29,8 +29,8 @@ public class AggregationService {
     public void startAggregation(LocalDate since) {
         List<Track> tracksWithoutDuration = trackLoader.getTracks(LocalDateTime.of(since, LocalTime.MIDNIGHT));
         List<Track> tracks = trackLoader.fillTrackInfo(tracksWithoutDuration);
-        trackService.saveScrobbles(tracks);
-        List<TrackEntity> trackEntities = trackService.saveTracks(tracks);
+        List<TrackEntity> trackEntities = trackService.saveNewTracks(tracks);
+        trackService.saveScrobbles(tracksWithoutDuration, trackEntities);
         artistLoader.saveArtistsFromTracks(trackEntities);
     }
 }
