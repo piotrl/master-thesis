@@ -7,6 +7,6 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface ActivityRepository extends CrudRepository<Activity, Integer> {
+public interface ActivityRepository extends CrudRepository<ActivityEntity, Integer> {
 
 }

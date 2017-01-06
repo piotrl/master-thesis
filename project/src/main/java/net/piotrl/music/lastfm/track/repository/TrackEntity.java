@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "lastfm_track")
 @Data
-public class TrackData {
+public class TrackEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column

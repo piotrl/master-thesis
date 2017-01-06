@@ -10,7 +10,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "rescuetime_activity")
-public class Activity {
+public class ActivityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column

@@ -7,6 +7,6 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface TrackRepository extends CrudRepository<TrackData, Integer> {
+public interface TrackRepository extends CrudRepository<TrackEntity, Integer> {
 
 }

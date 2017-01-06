@@ -1,14 +1,13 @@
 package net.piotrl.music.lastfm.track;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
 import lombok.extern.slf4j.Slf4j;
-import net.piotrl.music.lastfm.track.repository.ScrobbleData;
+import net.piotrl.music.lastfm.track.repository.ScrobbleEntity;
 import net.piotrl.music.lastfm.track.repository.ScrobbleRepository;
-import net.piotrl.music.lastfm.track.repository.TrackData;
+import net.piotrl.music.lastfm.track.repository.TrackEntity;
 import net.piotrl.music.lastfm.track.repository.TrackRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,45 +32,45 @@ public class TrackService {
         this.scrobbleRepository = scrobbleRepository;
     }
 
-    public List<ScrobbleData> saveScrobbles(Collection<Track> tracks) {
-        List<ScrobbleData> list = tracks.stream()
+    public List<ScrobbleEntity> saveScrobbles(Collection<Track> tracks) {
+        List<ScrobbleEntity> list = tracks.stream()
                 .map(convertToScrobbleData())
                 .collect(Collectors.toList());
 
-        Iterable<ScrobbleData> savedEntities = scrobbleRepository.save(list);
+        Iterable<ScrobbleEntity> savedEntities = scrobbleRepository.save(list);
         return Lists.newArrayList(savedEntities);
     }
 
-    public List<TrackData> saveTracks(Collection<Track> tracks) {
-        List<TrackData> list = tracks.stream()
+    public List<TrackEntity> saveTracks(Collection<Track> tracks) {
+        List<TrackEntity> list = tracks.stream()
                 .map(convertToTrackData())
                 .collect(Collectors.toList());
 
-        Iterable<TrackData> savedEntities = trackRepository.save(list);
+        Iterable<TrackEntity> savedEntities = trackRepository.save(list);
         return Lists.newArrayList(savedEntities);
     }
 
-    private Function<Track, ScrobbleData> convertToScrobbleData() {
+    private Function<Track, ScrobbleEntity> convertToScrobbleData() {
         return track -> {
-            ScrobbleData scrobbleData = new ScrobbleData();
-            scrobbleData.setApiData(gson.toJson(track));
-            scrobbleData.setPlayedWhen(track.getPlayedWhen());
-            scrobbleData.setTrackId(null);
+            ScrobbleEntity scrobbleEntity = new ScrobbleEntity();
+            scrobbleEntity.setApiData(gson.toJson(track));
+            scrobbleEntity.setPlayedWhen(track.getPlayedWhen());
+            scrobbleEntity.setTrackId(null);
 
-            return scrobbleData;
+            return scrobbleEntity;
         };
     }
 
-    private Function<Track, TrackData> convertToTrackData() {
+    private Function<Track, TrackEntity> convertToTrackData() {
         return track -> {
-            TrackData trackData = new TrackData();
-            BeanUtils.copyProperties(track, trackData);
+            TrackEntity trackEntity = new TrackEntity();
+            BeanUtils.copyProperties(track, trackEntity);
 
-            trackData.setImageUrlSmall(track.getImageURL(ImageSize.SMALL));
-            trackData.setImageUrlMedium(track.getImageURL(ImageSize.MEDIUM));
-            trackData.setImageUrlLarge(track.getImageURL(ImageSize.LARGE));
-            trackData.setImageUrlExtraLarge(track.getImageURL(ImageSize.EXTRALARGE));
-            return trackData;
+            trackEntity.setImageUrlSmall(track.getImageURL(ImageSize.SMALL));
+            trackEntity.setImageUrlMedium(track.getImageURL(ImageSize.MEDIUM));
+            trackEntity.setImageUrlLarge(track.getImageURL(ImageSize.LARGE));
+            trackEntity.setImageUrlExtraLarge(track.getImageURL(ImageSize.EXTRALARGE));
+            return trackEntity;
         };
     }
 }

@@ -4,7 +4,7 @@ import de.umass.lastfm.Track;
 import net.piotrl.music.lastfm.artist.ArtistLoader;
 import net.piotrl.music.lastfm.track.TrackLoader;
 import net.piotrl.music.lastfm.track.TrackService;
-import net.piotrl.music.lastfm.track.repository.TrackData;
+import net.piotrl.music.lastfm.track.repository.TrackEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class AggregationService {
         List<Track> tracksWithoutDuration = trackLoader.getTracks(LocalDateTime.of(since, LocalTime.MIDNIGHT));
         List<Track> tracks = trackLoader.fillTrackInfo(tracksWithoutDuration);
         trackService.saveScrobbles(tracks);
-        List<TrackData> trackEntities = trackService.saveTracks(tracks);
+        List<TrackEntity> trackEntities = trackService.saveTracks(tracks);
         artistLoader.saveArtistsFromTracks(trackEntities);
     }
 }

@@ -8,7 +8,7 @@ import java.util.Date;
 @Entity
 @Table(name = "lastfm_scrobble")
 @Data
-public class ScrobbleData {
+public class ScrobbleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column

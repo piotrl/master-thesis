@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface ArtistCrudRepository extends CrudRepository<ArtistData, Integer> {
+public interface ArtistCrudRepository extends CrudRepository<ArtistEntity, Integer> {
 
-    ArtistData findFirstByMbidOrNameOrderByMbid(String mbid, String name);
+    ArtistEntity findFirstByMbidOrNameOrderByMbid(String mbid, String name);
 }

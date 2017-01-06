@@ -19,14 +19,14 @@ public class ArtistRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void insertIfExists(ArtistData artistData) {
-        ArtistData existingArtist = artistCrudRepository.findFirstByMbidOrNameOrderByMbid(
-                artistData.getMbid(), artistData.getName()
+    public void insertIfExists(ArtistEntity artistEntity) {
+        ArtistEntity existingArtist = artistCrudRepository.findFirstByMbidOrNameOrderByMbid(
+                artistEntity.getMbid(), artistEntity.getName()
         );
         if (existingArtist == null) {
-            existingArtist = artistCrudRepository.save(artistData);
+            existingArtist = artistCrudRepository.save(artistEntity);
         }
 
-        artistData.setId(existingArtist.getId());
+        artistEntity.setId(existingArtist.getId());
     }
 }

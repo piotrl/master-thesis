@@ -17,16 +17,16 @@ public class ArtistCrudRepositoryTest {
 
     @Test
     public void priorityMbidOverNameSearch() throws Exception {
-        ArtistData artistData = artistCrudRepository.findFirstByMbidOrNameOrderByMbid("1232345", "test1");
-        ArtistData artistData1 = artistCrudRepository.findFirstByMbidOrNameOrderByMbid("12345", null);
-        ArtistData artistData2 = artistCrudRepository.findFirstByMbidOrNameOrderByMbid("123", "test");
+        ArtistEntity artistEntity = artistCrudRepository.findFirstByMbidOrNameOrderByMbid("1232345", "test1");
+        ArtistEntity artistEntity1 = artistCrudRepository.findFirstByMbidOrNameOrderByMbid("12345", null);
+        ArtistEntity artistEntity2 = artistCrudRepository.findFirstByMbidOrNameOrderByMbid("123", "test");
 
-        assertThat(artistData).isNull();
+        assertThat(artistEntity).isNull();
 
-        assertThat(artistData1).isNotNull();
-        assertThat(artistData1.getMbid()).isSameAs("12345");
+        assertThat(artistEntity1).isNotNull();
+        assertThat(artistEntity1.getMbid()).isSameAs("12345");
 
-        assertThat(artistData2).isNotNull();
-        assertThat(artistData2.getMbid()).isSameAs("123");
+        assertThat(artistEntity2).isNotNull();
+        assertThat(artistEntity2.getMbid()).isSameAs("123");
     }
 }

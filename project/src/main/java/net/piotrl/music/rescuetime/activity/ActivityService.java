@@ -18,23 +18,23 @@ public class ActivityService {
 
 
     public void saveAggregationResult(RescueTimeResponse activityApiResponse) {
-        List<Activity> activities = activityApiResponse.getRows().stream()
+        List<ActivityEntity> activities = activityApiResponse.getRows().stream()
                 .map(row -> mapActivityTime(activityApiResponse.getRow_headers(), row))
                 .collect(Collectors.toList());
 
         repository.save(activities);
     }
 
-    private Activity mapActivityTime(List<String> columnNames, List<String> values) {
+    private ActivityEntity mapActivityTime(List<String> columnNames, List<String> values) {
         String dateValue = getValue("Date", columnNames, values);
         String timeValue = getValue("Time Spent (seconds)", columnNames, values);
-        String activityValue = getValue("Activity", columnNames, values);
+        String activityValue = getValue("ActivityEntity", columnNames, values);
         String categoryValue = getValue("Category", columnNames, values);
         String productivityValue = getValue("Productivity", columnNames, values);
 
         Integer time = Ints.tryParse(timeValue);
         LocalDateTime endTime = LocalDateTime.parse(dateValue).plusSeconds(time);
-        return Activity.builder()
+        return ActivityEntity.builder()
                 .activityName(activityValue)
                 .startTime(DateUtil.toDate(dateValue))
                 .endTime(DateUtil.toDate(endTime))
