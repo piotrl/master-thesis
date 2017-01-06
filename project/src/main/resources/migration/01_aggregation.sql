@@ -69,3 +69,27 @@ CREATE TABLE rescuetime_activity
   spent_time INTEGER NOT NULL
 );
 COMMENT ON COLUMN rescuetime_activity.productivity IS '-2, -1, 0, 1, 2';
+
+ALTER TABLE public.lastfm_scrobble ADD account_id INT NULL;
+ALTER TABLE public.lastfm_scrobble
+  ADD CONSTRAINT lastfm_scrobble_account_id_fk
+FOREIGN KEY (account_id) REFERENCES account (id);
+
+CREATE TABLE public.lastfm_tag_artist
+(
+  artist_id INT,
+  tag_id INT,
+  CONSTRAINT lastfm_artist_tag_artist_id_tag_id_pk PRIMARY KEY (artist_id, tag_id),
+  CONSTRAINT lastfm_artist_tag_lastfm_artist_id_fk FOREIGN KEY (artist_id) REFERENCES lastfm_artist (id),
+  CONSTRAINT lastfm_artist_tag_lastfm_tag_id_fk FOREIGN KEY (tag_id) REFERENCES lastfm_tag (id)
+);
+
+CREATE TABLE public.lastfm_tag_track
+(
+  track_id INT,
+  tag_id INT,
+  CONSTRAINT lastfm_artist_tag_track_id_tag_id_pk PRIMARY KEY (track_id, tag_id),
+  CONSTRAINT lastfm_artist_tag_lastfm_track_id_fk FOREIGN KEY (track_id) REFERENCES lastfm_artist (id),
+  CONSTRAINT lastfm_artist_tag_lastfm_tag_id_fk FOREIGN KEY (tag_id) REFERENCES lastfm_tag (id)
+);
+
