@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TrackLoaderTest {
 
-    TrackLoader trackLoader = new TrackLoader();
+    private TrackLoader trackLoader = new TrackLoader();
 
     @Test
     public void getTrackInfo() throws Exception {

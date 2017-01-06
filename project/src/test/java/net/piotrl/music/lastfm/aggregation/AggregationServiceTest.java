@@ -17,7 +17,7 @@ public class AggregationServiceTest {
 
     @Test
     public void startAggregation() throws Exception {
-        LocalDate recentDate = LocalDate.now().minusDays(10);
+        LocalDate recentDate = LocalDate.now().minusDays(1);
         aggregationService.startAggregation(recentDate);
     }
 }

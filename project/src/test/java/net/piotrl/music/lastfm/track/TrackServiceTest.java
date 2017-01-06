@@ -20,6 +20,6 @@ public class TrackServiceTest {
     public void testSavingTrackTo() throws Exception {
         TrackLoader trackLoader = new TrackLoader();
         List<Track> recentTracks = trackLoader.getRecentTracks();
-        lastFmService.saveNewTracks(recentTracks);
+//        lastFmService.saveNewTracks(recentTracks, artists);
     }
 }

@@ -2,6 +2,7 @@ package net.piotrl.music.lastfm.aggregation;
 
 import de.umass.lastfm.Track;
 import net.piotrl.music.lastfm.artist.ArtistLoader;
+import net.piotrl.music.lastfm.artist.repository.ArtistEntity;
 import net.piotrl.music.lastfm.track.TrackLoader;
 import net.piotrl.music.lastfm.track.TrackService;
 import net.piotrl.music.lastfm.track.repository.TrackEntity;
@@ -27,10 +28,13 @@ public class AggregationService {
     }
 
     public void startAggregation(LocalDate since) {
-        List<Track> tracksWithoutDuration = trackLoader.getTracks(LocalDateTime.of(since, LocalTime.MIDNIGHT));
-        List<Track> tracks = trackLoader.fillTrackInfo(tracksWithoutDuration);
-        List<TrackEntity> trackEntities = trackService.saveNewTracks(tracks);
-        trackService.saveScrobbles(tracksWithoutDuration, trackEntities);
-        artistLoader.saveArtistsFromTracks(trackEntities);
+        List<Track> tracksWithTimePlayed = trackLoader.getTracks(LocalDateTime.of(since, LocalTime.MIDNIGHT));
+        List<Track> tracksWithDuration = trackLoader.fillTrackInfo(tracksWithTimePlayed);
+
+        List<ArtistEntity> tracksArtists = artistLoader.saveArtistsFromTracks(tracksWithDuration);
+        List<TrackEntity> trackEntities = trackService.saveNewTracks(tracksWithDuration, tracksArtists);
+
+        trackService.saveScrobbles(tracksWithTimePlayed, trackEntities);
+
     }
 }
