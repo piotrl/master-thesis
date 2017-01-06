@@ -36,9 +36,8 @@ public class ArtistRepository {
         Integer id = jdbcTemplate.queryForObject(query, sqlParameter, Integer.class);
 
         if (id == null) {
-            ArtistData existingArtist = artistCrudRepository.findByNameOrMbid(
-                    artistData.getName(),
-                    artistData.getMbid()
+            ArtistData existingArtist = artistCrudRepository.findFirstByMbidOrNameOrderByMbid(
+                    artistData.getMbid(), artistData.getName()
             );
             id = existingArtist.getId();
         }

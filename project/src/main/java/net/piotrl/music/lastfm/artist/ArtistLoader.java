@@ -21,7 +21,7 @@ public class ArtistLoader {
 
     public void saveArtistsFromTracks(Collection<Track> tracks) {
         tracks.forEach(track -> {
-                    String artistSearchString = getArtistIdentificator(track);
+                    String artistSearchId = getArtistSearchId(track);
 
                     ArtistData artistData = new ArtistData();
                     artistData.setName(track.getArtist());
@@ -31,7 +31,7 @@ public class ArtistLoader {
                 });
     }
 
-    private String getArtistIdentificator(Track track) {
+    private String getArtistSearchId(Track track) {
         String mbid = track.getArtistMbid();
         String artistName = track.getArtist();
         if (!Strings.isNullOrEmpty(mbid)) {

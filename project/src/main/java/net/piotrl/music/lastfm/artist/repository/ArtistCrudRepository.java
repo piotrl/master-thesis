@@ -9,5 +9,5 @@ import javax.transaction.Transactional;
 @Transactional
 public interface ArtistCrudRepository extends CrudRepository<ArtistData, Integer> {
 
-    ArtistData findByNameOrMbid(String name, String mbid);
+    ArtistData findFirstByMbidOrNameOrderByMbid(String mbid, String name);
 }
