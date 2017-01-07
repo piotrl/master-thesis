@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class TrackLoader {
-    public static final int RECENT_DAYS = 10;
+    public static final int RECENT_DAYS = 1;
 
     private LastFmAuthProperties lastFmProperties = new LastFmConnector().properties();
 

@@ -20,9 +20,4 @@ public class TrackLoaderTest {
         assertThat(tracks).hasSameSizeAs(recentTracks);
     }
 
-    @Test
-    public void getRecentTracks() throws Exception {
-
-    }
-
 }
