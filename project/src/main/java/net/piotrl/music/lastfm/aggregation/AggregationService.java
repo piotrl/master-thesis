@@ -3,6 +3,7 @@ package net.piotrl.music.lastfm.aggregation;
 import de.umass.lastfm.Track;
 import net.piotrl.music.lastfm.artist.ArtistService;
 import net.piotrl.music.lastfm.artist.repository.ArtistEntity;
+import net.piotrl.music.lastfm.tag.TagService;
 import net.piotrl.music.lastfm.track.TrackLoader;
 import net.piotrl.music.lastfm.track.TrackService;
 import net.piotrl.music.lastfm.track.repository.TrackEntity;
@@ -19,12 +20,14 @@ public class AggregationService {
 
     private final ArtistService artistService;
     private final TrackService trackService;
+    private final TagService tagService;
     private final TrackLoader trackLoader = new TrackLoader();
 
     @Autowired
-    public AggregationService(ArtistService artistService, TrackService trackService) {
+    public AggregationService(ArtistService artistService, TrackService trackService, TagService tagService) {
         this.artistService = artistService;
         this.trackService = trackService;
+        this.tagService = tagService;
     }
 
     public void startAggregation(LocalDate since) {
