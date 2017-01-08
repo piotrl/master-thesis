@@ -93,3 +93,30 @@ CREATE TABLE public.lastfm_tag_track
   CONSTRAINT lastfm_artist_tag_lastfm_tag_id_fk FOREIGN KEY (tag_id) REFERENCES lastfm_tag (id)
 );
 
+CREATE TABLE public.rescuetime_category
+(
+  id SERIAL PRIMARY KEY NOT NULL,
+  name TEXT
+);
+
+CREATE TABLE public.rescuetime_action
+(
+  id SERIAL PRIMARY KEY NOT NULL,
+  name TEXT,
+  category_id INT NOT NULL,
+  CONSTRAINT rescuetime_action_rescuetime_category_id_fk FOREIGN KEY (category_id) REFERENCES rescuetime_category (id)
+);
+
+ALTER TABLE public.rescuetime_activity ADD account_id INT NOT NULL;
+ALTER TABLE public.rescuetime_activity
+  ADD CONSTRAINT rescuetime_activity_account_id_fk
+FOREIGN KEY (account_id) REFERENCES account (id);
+
+ALTER TABLE public.rescuetime_activity ADD action_id INT NOT NULL;
+ALTER TABLE public.rescuetime_activity
+  ADD CONSTRAINT rescuetime_activity_rescuetime_action_id_fk
+FOREIGN KEY (action_id) REFERENCES rescuetime_action (id);
+ALTER TABLE public.rescuetime_activity ADD category_id INT NOT NULL;
+ALTER TABLE public.rescuetime_activity
+  ADD CONSTRAINT rescuetime_activity_rescuetime_category_id_fk
+FOREIGN KEY (category_id) REFERENCES rescuetime_category (id);

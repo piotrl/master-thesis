@@ -2,9 +2,7 @@ package net.piotrl.music.shared;
 
 import lombok.experimental.UtilityClass;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Date;
 
 @UtilityClass
@@ -18,5 +16,13 @@ public class DateUtil {
     public Date toDate(LocalDateTime dateTime) {
         Instant instant = dateTime.atZone(ZoneId.systemDefault()).toInstant();
         return Date.from(instant);
+    }
+
+    public LocalDate toLocalDate(Date date) {
+        return toZonedDateTime(date).toLocalDate();
+    }
+
+    private ZonedDateTime toZonedDateTime(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault());
     }
 }

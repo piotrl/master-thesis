@@ -26,6 +26,11 @@ public class Account {
     @Column(nullable = false)
     private Instant created;
 
+    @Column
+    private String rescuetimeApiKey;
+    @Column
+    private String lastfmApiKey;
+
     public Account(String email, String password, String role) {
         this.email = email;
         this.password = password;

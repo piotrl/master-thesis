@@ -1,4 +1,4 @@
-package net.piotrl.music.rescuetime.activity;
+package net.piotrl.music.rescuetime.activity.repository;
 
 import lombok.Builder;
 import lombok.Data;
@@ -16,16 +16,30 @@ public class ActivityEntity {
     @Column
     private Integer id;
 
-    @Column
+    @Column(nullable = false)
     private Date startTime;
-    @Column
+
+    @Column(nullable = false)
     private Date endTime;
-    @Column
+
+    @Column(nullable = false)
     private Integer spentTime;
+
     @Column
     private String activityName;
+
     @Column
     private String categoryName;
-    @Column
+
+    @Column(nullable = false)
     private Integer productivity;
+
+    @Column(nullable = false)
+    private Long accountId;
+
+    @Column(nullable = false)
+    private Long actionId;
+
+    @Column(nullable = false)
+    private Long categoryId;
 }

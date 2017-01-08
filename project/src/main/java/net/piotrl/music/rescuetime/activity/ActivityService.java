@@ -1,6 +1,8 @@
 package net.piotrl.music.rescuetime.activity;
 
 import com.google.common.primitives.Ints;
+import net.piotrl.music.rescuetime.activity.repository.ActivityEntity;
+import net.piotrl.music.rescuetime.activity.repository.ActivityRepository;
 import net.piotrl.music.rescuetime.api.RescueTimeResponse;
 import net.piotrl.music.shared.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class ActivityService {
     @Autowired
     private ActivityRepository repository;
 
+    public ActivityEntity getLastAggregatedActivity() {
+        return repository.findFirstOrderByEndTime();
+    }
 
     public void saveAggregationResult(RescueTimeResponse activityApiResponse) {
         List<ActivityEntity> activities = activityApiResponse.getRows().stream()
