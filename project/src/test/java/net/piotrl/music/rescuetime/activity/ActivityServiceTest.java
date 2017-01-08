@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ActivityEntityServiceTest {
+public class ActivityServiceTest {
 
     @Autowired
     private ActivityService activityService;
@@ -24,12 +24,12 @@ public class ActivityEntityServiceTest {
     public void saveActivitiesToDatabase() throws Exception {
         String apiKey = "B63GlNCu7IsRAFFodBfxqPeJvzAZjOTyWwqKSJFe";
         LocalDate to = LocalDate.now();
-        LocalDate since = to.minusMonths(3);
+        LocalDate since = to.minusDays(7);
 
         RescueTimeRequest rescueTimeRequest = RescueTimeRequestUtil.buildRequest(apiKey, since, to);
         RescueTimeCaller rescueTimeCaller = new RescueTimeCaller();
 
         ResponseEntity<RescueTimeResponse> call = rescueTimeCaller.call(rescueTimeRequest);
-        activityService.saveAggregationResult(call.getBody());
+        activityService.saveAggregationResult(null, call.getBody());
     }
 }

@@ -6,13 +6,20 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "rescuetime_activity")
-public class ActivityCategoryEntity {
+@Table(name = "rescuetime_category")
+public class CategoryEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer id;
+    private Long id;
 
     @Column
     private String name;
+
+    public CategoryEntity() {}
+
+    public CategoryEntity(String name) {
+        this.name = name;
+    }
 }
