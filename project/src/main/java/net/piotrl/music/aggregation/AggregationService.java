@@ -36,7 +36,7 @@ public class AggregationService {
         startLastfmAggregation(account);
     }
 
-    public void startRescueTimeAggregation(Account account) {
+    private void startRescueTimeAggregation(Account account) {
         LocalDateTime startingPoint = lastAggregation(account.getId(), AggregationType.RESCUE_TIME);
         AggregationEntity entity = aggregationStatusInProgress(account, AggregationType.RESCUE_TIME);
         try {
@@ -46,7 +46,7 @@ public class AggregationService {
         }
     }
 
-    public void startLastfmAggregation(Account account) {
+    private void startLastfmAggregation(Account account) {
         LocalDateTime startingPoint = lastAggregation(account.getId(), AggregationType.LAST_FM);
         AggregationEntity entity = aggregationStatusInProgress(account, AggregationType.LAST_FM);
         try {
