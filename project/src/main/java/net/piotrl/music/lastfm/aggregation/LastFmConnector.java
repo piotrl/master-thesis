@@ -1,43 +1,28 @@
 package net.piotrl.music.lastfm.aggregation;
 
-import de.umass.lastfm.*;
-import org.springframework.beans.factory.annotation.Value;
+import de.umass.lastfm.Artist;
+import de.umass.lastfm.PaginatedResult;
+import de.umass.lastfm.Track;
+import de.umass.lastfm.User;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.Map;
-
-@Component
 public class LastFmConnector {
 
-    // TODO: @Value doesn't work in tests
-    @Value("${aggregation.lastfm.api_key}")
-    private String api_key = "5f062176c25b0c3570a65bca887188f8";
+    private final LastFmAuthProperties authProperties;
 
-    @Value("${aggregation.lastfm.secure}")
-    private String secure = "680127560c4190a9ce1c1785fb82d684";
-
-    @Value("${aggregation.lastfm.username}")
-    private String username = "grovman";
-
-    public LastFmConnector() {}
-
-    public LastFmConnector(String username, String api_key) {
-        this.username = username;
-        this.api_key = api_key;
-    }
-
-    public LastFmAuthProperties properties() {
-        return new LastFmAuthProperties(api_key, secure, username);
+    public LastFmConnector(LastFmAuthProperties authProperties) {
+        this.authProperties = authProperties;
     }
 
     public User getUserInfo() {
-        return User.getInfo(this.username, this.api_key);
+        return User.getInfo(this.authProperties.getUsername(), this.authProperties.getApiKey());
     }
 
     public PaginatedResult<Track> getUserTracksFromLastDay() {
-        return User.getRecentTracks(this.username, this.api_key);
+        return User.getRecentTracks(this.authProperties.getUsername(), this.authProperties.getApiKey());
+    }
+
+    public Artist getArtistInfo(String mbid) {
+        return Artist.getInfo(mbid, this.authProperties.getApiKey());
     }
 }

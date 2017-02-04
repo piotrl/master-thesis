@@ -3,14 +3,12 @@ package net.piotrl.music.lastfm.aggregation;
 import de.umass.lastfm.PaginatedResult;
 import de.umass.lastfm.Track;
 import de.umass.lastfm.User;
-import net.piotrl.music.lastfm.aggregation.LastFmAuthProperties;
-import net.piotrl.music.lastfm.aggregation.LastFmConnector;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -22,40 +20,45 @@ public class LastFmConnectorTest {
     public static final String FAKE_USERNAME = "grovman1233211";
 
     @Test
-    public void testPropertiesParams() throws Exception {
-        LastFmConnector connector = new LastFmConnector(CORRECT_USERNAME, API_KEY);
-        LastFmAuthProperties lastFmAuthProperties = connector.properties();
-
-        assertThat(lastFmAuthProperties.getUsername()).isEqualTo(CORRECT_USERNAME);
-    }
-
-    @Test
     public void testGettingUserInfoForExistingUser() throws Exception {
-        LastFmConnector connector = new LastFmConnector("grovman", API_KEY);
+        LastFmConnector connector = connector("grovman", API_KEY);
+
         User userInfo = connector.getUserInfo();
+
         assertThat(userInfo).isNotNull();
         assertThat(userInfo.getName()).isEqualTo("grovman");
     }
 
     @Test
     public void testGettingUserInfoForNotExistingUser() throws Exception {
-        LastFmConnector connector = new LastFmConnector(FAKE_USERNAME, API_KEY);
+        LastFmConnector connector = connector(FAKE_USERNAME, API_KEY);
+
         User userInfo = connector.getUserInfo();
+
         assertThat(userInfo).isNull();
     }
 
     @Test
     public void testGettingUserInfoWithFakeApiKey() throws Exception {
-        LastFmConnector connector = new LastFmConnector(CORRECT_USERNAME, FAKE_API_KEY);
+        LastFmConnector connector = connector(CORRECT_USERNAME, FAKE_API_KEY);
+
         User userInfo = connector.getUserInfo();
+
         assertThat(userInfo).isNull();
     }
 
     @Test
     public void testLoadingRecentTracks() throws Exception {
-        LastFmConnector connector = new LastFmConnector(CORRECT_USERNAME, API_KEY);
+        LastFmConnector connector = connector(CORRECT_USERNAME, API_KEY);
+
         PaginatedResult<Track> userTracksFromLastDay = connector.getUserTracksFromLastDay();
+
         assertThat(userTracksFromLastDay).isNotNull();
     }
 
+    private LastFmConnector connector(String username, String apiKey) {
+        LastFmAuthProperties lastFmAuthProperties = new LastFmAuthProperties(username, apiKey);
+
+        return new LastFmConnector(lastFmAuthProperties);
+    }
 }

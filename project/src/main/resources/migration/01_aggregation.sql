@@ -133,3 +133,14 @@ CREATE TABLE public.aggregation
 
 ALTER TABLE public.aggregation ADD status TEXT NOT NULL;
 ALTER TABLE public.aggregation ADD details TEXT NULL;
+
+CREATE TABLE public.aggregation_userdata
+(
+  account_id INT PRIMARY KEY NOT NULL,
+  lastfm_username TEXT,
+  lastfm_api_key TEXT,
+  lastfm_secure_key TEXT,
+  rescuetime_api_key TEXT,
+  CONSTRAINT aggregation_userdata_account_id_fk FOREIGN KEY (account_id) REFERENCES account (id)
+);
+CREATE UNIQUE INDEX aggregation_userdata_account_id_uindex ON public.aggregation_userdata (account_id);

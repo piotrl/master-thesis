@@ -1,6 +1,7 @@
 package net.piotrl.music.lastfm.artist;
 
 import de.umass.lastfm.Artist;
+import net.piotrl.music.mocks.AggregationPropertiesMock;
 import org.junit.Before;
 import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,7 +12,7 @@ public class ArtistLoaderTest {
 
     @Before
     public void setUp() throws Exception {
-        artistLoader = new ArtistLoader();
+        artistLoader = new ArtistLoader(AggregationPropertiesMock.lastfmProperties());
     }
 
     @Test

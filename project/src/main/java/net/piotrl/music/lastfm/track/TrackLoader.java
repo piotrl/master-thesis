@@ -2,8 +2,8 @@ package net.piotrl.music.lastfm.track;
 
 import com.google.common.base.Strings;
 import de.umass.lastfm.*;
+import net.piotrl.music.aggregation.AggregationContext;
 import net.piotrl.music.lastfm.aggregation.LastFmAuthProperties;
-import net.piotrl.music.lastfm.aggregation.LastFmConnector;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,7 +15,11 @@ import java.util.stream.StreamSupport;
 public class TrackLoader {
     public static final int RECENT_DAYS = 1;
 
-    private LastFmAuthProperties lastFmProperties = new LastFmConnector().properties();
+    private final LastFmAuthProperties lastFmProperties;
+
+    public TrackLoader(AggregationContext context) {
+        this.lastFmProperties = context.getLastfmProperties();
+    }
 
     public List<Track> getRecentTracks() {
         LocalDateTime tenDaysAgo = LocalDateTime.now().minusDays(RECENT_DAYS);
@@ -49,7 +53,7 @@ public class TrackLoader {
     }
 
     private Track getTrackInfo(String artist, String trackNameOrMbid) {
-        return Track.getInfo(artist, trackNameOrMbid, lastFmProperties.getApi_key());
+        return Track.getInfo(artist, trackNameOrMbid, lastFmProperties.getApiKey());
     }
 
     private PaginatedResult<Track> getScrobblesFrom(LocalDateTime dateTime) {
@@ -58,7 +62,7 @@ public class TrackLoader {
 
     private PaginatedResult<Track> getScrobblesFrom(int page, LocalDateTime dateTime) {
         long unixTimestamp = dateTime.atZone(ZoneId.systemDefault()).toEpochSecond();
-        return getRecentTracks(lastFmProperties.getUsername(), page, unixTimestamp, lastFmProperties.getApi_key());
+        return getRecentTracks(lastFmProperties.getUsername(), page, unixTimestamp, lastFmProperties.getApiKey());
     }
 
     private static PaginatedResult<Track> getRecentTracks(String user, int page, long unixTimestamp, String apiKey) {

@@ -1,6 +1,7 @@
 package net.piotrl.music.rescuetime.aggregation;
 
 import net.piotrl.music.account.Account;
+import net.piotrl.music.aggregation.AggregationContext;
 import net.piotrl.music.rescuetime.RescueTimeCaller;
 import net.piotrl.music.rescuetime.activity.ActivityService;
 import net.piotrl.music.rescuetime.api.RescueTimeRequest;
@@ -21,11 +22,11 @@ public class RescueTimeAggregation {
         this.activityService = activityService;
     }
 
-    public void startAggregation(Account account, LocalDate since) {
-        RescueTimeRequest rescueTimeRequest = RescueTimeRequestUtil.buildRequest(account.getRescuetimeApiKey(), since, LocalDate.now());
+    public void startAggregation(AggregationContext context, LocalDate since) {
+        RescueTimeRequest rescueTimeRequest = RescueTimeRequestUtil.buildRequest(context.getRescuetimeApiKey(), since, LocalDate.now());
         RescueTimeCaller rescueTimeCaller = new RescueTimeCaller();
 
         ResponseEntity<RescueTimeResponse> call = rescueTimeCaller.call(rescueTimeRequest);
-        activityService.saveAggregationResult(account, call.getBody());
+        activityService.saveAggregationResult(context, call.getBody());
     }
 }

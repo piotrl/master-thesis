@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AggregationCrudRepository extends CrudRepository<AggregationEntity, Integer> {
+public interface AggregationCrudRepository extends CrudRepository<AggregationEntity, Long> {
     Optional<AggregationEntity> findOneByAccountIdAndType(long accountId, String type);
 }

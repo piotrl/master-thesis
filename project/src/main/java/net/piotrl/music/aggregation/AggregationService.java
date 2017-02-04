@@ -1,6 +1,6 @@
 package net.piotrl.music.aggregation;
 
-import net.piotrl.music.account.Account;
+import lombok.extern.slf4j.Slf4j;
 import net.piotrl.music.aggregation.repository.AggregationCrudRepository;
 import net.piotrl.music.aggregation.repository.AggregationEntity;
 import net.piotrl.music.lastfm.aggregation.LastfmAggregationService;
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AggregationService {
 
@@ -31,26 +32,27 @@ public class AggregationService {
         this.lastfmAggregationService = lastfmAggregationService;
     }
 
-    public void startAggregation(Account account) {
-        startRescueTimeAggregation(account);
-        startLastfmAggregation(account);
+    public void startAggregation(AggregationContext context) {
+        startRescueTimeAggregation(context);
+        startLastfmAggregation(context);
     }
 
-    private void startRescueTimeAggregation(Account account) {
-        LocalDateTime startingPoint = lastAggregation(account.getId(), AggregationType.RESCUE_TIME);
-        AggregationEntity entity = aggregationStatusInProgress(account, AggregationType.RESCUE_TIME);
+    private void startRescueTimeAggregation(AggregationContext context) {
+        LocalDateTime startingPoint = lastAggregation(context.getAccountId(), AggregationType.RESCUE_TIME);
+        AggregationEntity entity = aggregationStatusInProgress(context, AggregationType.RESCUE_TIME);
         try {
-            rescueTimeAggregation.startAggregation(account, startingPoint.toLocalDate());
+            rescueTimeAggregation.startAggregation(context, startingPoint.toLocalDate());
         } catch (Exception e) {
             aggregationStatusFailed(entity, e);
         }
     }
 
-    private void startLastfmAggregation(Account account) {
-        LocalDateTime startingPoint = lastAggregation(account.getId(), AggregationType.LAST_FM);
-        AggregationEntity entity = aggregationStatusInProgress(account, AggregationType.LAST_FM);
+    private void startLastfmAggregation(AggregationContext context) {
+        LocalDateTime startingPoint = lastAggregation(context.getAccountId(), AggregationType.LAST_FM);
+        AggregationEntity entity = aggregationStatusInProgress(context, AggregationType.LAST_FM);
         try {
-            lastfmAggregationService.startAggregation(account, startingPoint.toLocalDate());
+            lastfmAggregationService.startAggregation(context, startingPoint.toLocalDate());
+            aggregationStatusFinished(entity);
         } catch (Exception e) {
             aggregationStatusFailed(entity, e);
         }
@@ -61,15 +63,27 @@ public class AggregationService {
         entity.setFinishTime(new Date());
         entity.setDetails(e.getMessage());
         aggregationCrudRepository.save(entity);
+
+        log.error("Aggregation {} failed for Account {}", entity.getType(), entity.getAccountId());
+        log.error("Aggregation failure exception", e);
     }
 
-    private AggregationEntity aggregationStatusInProgress(Account account, AggregationType type) {
+    private void aggregationStatusFinished(AggregationEntity entity) {
+        entity.setStatus(AggregationStatus.SUCCESS.toString());
+        entity.setFinishTime(new Date());
+        aggregationCrudRepository.save(entity);
+
+        log.info("Aggregation {} finished for Account {}", entity.getType(), entity.getAccountId());
+    }
+
+    private AggregationEntity aggregationStatusInProgress(AggregationContext context, AggregationType type) {
         AggregationEntity entity = new AggregationEntity();
         entity.setType(type.toString());
-        entity.setAccountId(account.getId());
+        entity.setAccountId(context.getAccountId());
         entity.setStartTime(new Date());
         entity.setStatus(AggregationStatus.IN_PROGRESS.toString());
 
+        log.info("Aggregation {} started for {}", type, context.getAccountId());
         return aggregationCrudRepository.save(entity);
     }
 

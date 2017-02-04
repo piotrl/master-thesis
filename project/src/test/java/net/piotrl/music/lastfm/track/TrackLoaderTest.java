@@ -1,6 +1,7 @@
 package net.piotrl.music.lastfm.track;
 
 import de.umass.lastfm.Track;
+import net.piotrl.music.mocks.AggregationPropertiesMock;
 import org.junit.Test;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TrackLoaderTest {
 
-    private TrackLoader trackLoader = new TrackLoader();
+    private TrackLoader trackLoader = new TrackLoader(AggregationPropertiesMock.globalContext());
 
     @Test
     public void getTrackInfo() throws Exception {

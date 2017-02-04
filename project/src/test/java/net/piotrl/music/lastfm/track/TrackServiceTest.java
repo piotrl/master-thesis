@@ -9,6 +9,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
+import static net.piotrl.music.mocks.AggregationPropertiesMock.globalContext;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TrackServiceTest {
@@ -18,8 +20,10 @@ public class TrackServiceTest {
 
     @Test
     public void testSavingTrackTo() throws Exception {
-        TrackLoader trackLoader = new TrackLoader();
+        TrackLoader trackLoader = new TrackLoader(globalContext());
+
         List<Track> recentTracks = trackLoader.getRecentTracks();
+
 //        lastFmService.saveNewTracks(recentTracks, artists);
     }
 }

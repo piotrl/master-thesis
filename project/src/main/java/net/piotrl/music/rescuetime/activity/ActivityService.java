@@ -2,7 +2,7 @@ package net.piotrl.music.rescuetime.activity;
 
 import com.google.common.primitives.Ints;
 import lombok.extern.slf4j.Slf4j;
-import net.piotrl.music.account.Account;
+import net.piotrl.music.aggregation.AggregationContext;
 import net.piotrl.music.rescuetime.activity.repository.*;
 import net.piotrl.music.rescuetime.api.RescueTimeResponse;
 import net.piotrl.music.shared.DateUtil;
@@ -30,13 +30,11 @@ public class ActivityService {
         this.actionCrudRepository = actionCrudRepository;
     }
 
-    public void saveAggregationResult(Account account, RescueTimeResponse activityApiResponse) {
+    public void saveAggregationResult(AggregationContext context, RescueTimeResponse activityApiResponse) {
         List<ActivityEntity> activities = activityApiResponse.getRows().stream()
                 .map(row -> mapActivityTime(activityApiResponse.getRow_headers(), row))
                 .map(activity -> {
-                    if (account != null) {
-                        activity.setAccountId(account.getId());
-                    }
+                    activity.setAccountId(context.getAccountId());
                     return activity;
                 })
                 .collect(Collectors.toList());
