@@ -1,6 +1,7 @@
 package net.piotrl.music.lastfm.aggregation;
 
 import de.umass.lastfm.Track;
+import net.piotrl.music.account.Account;
 import net.piotrl.music.lastfm.artist.ArtistService;
 import net.piotrl.music.lastfm.artist.repository.ArtistEntity;
 import net.piotrl.music.lastfm.tag.TagService;
@@ -16,7 +17,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
-public class AggregationService {
+public class LastfmAggregationService {
 
     private final ArtistService artistService;
     private final TrackService trackService;
@@ -24,13 +25,13 @@ public class AggregationService {
     private final TrackLoader trackLoader = new TrackLoader();
 
     @Autowired
-    public AggregationService(ArtistService artistService, TrackService trackService, TagService tagService) {
+    public LastfmAggregationService(ArtistService artistService, TrackService trackService, TagService tagService) {
         this.artistService = artistService;
         this.trackService = trackService;
         this.tagService = tagService;
     }
 
-    public void startAggregation(LocalDate since) {
+    public void startAggregation(Account account, LocalDate since) {
         List<Track> tracksWithTimePlayed = trackLoader.getTracks(LocalDateTime.of(since, LocalTime.MIDNIGHT));
         List<Track> tracksWithDuration = trackLoader.fillTrackInfo(tracksWithTimePlayed);
 

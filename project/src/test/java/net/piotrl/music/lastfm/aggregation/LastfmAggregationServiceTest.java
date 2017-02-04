@@ -10,14 +10,14 @@ import java.time.LocalDate;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class AggregationServiceTest {
+public class LastfmAggregationServiceTest {
 
     @Autowired
-    private AggregationService aggregationService;
+    private LastfmAggregationService lastfmAggregationService;
 
     @Test
     public void startAggregation() throws Exception {
         LocalDate recentDate = LocalDate.now().minusDays(1);
-        aggregationService.startAggregation(recentDate);
+        lastfmAggregationService.startAggregation(null, recentDate);
     }
 }

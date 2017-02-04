@@ -22,6 +22,11 @@ public class DateUtil {
         return toZonedDateTime(date).toLocalDate();
     }
 
+    public LocalDateTime toLocalDateTime(Date date) {
+        return toZonedDateTime(date).toLocalDateTime();
+    }
+
+
     private ZonedDateTime toZonedDateTime(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault());
     }

@@ -9,7 +9,6 @@ import net.piotrl.music.shared.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,11 +28,6 @@ public class ActivityService {
         this.activityCrudRepository = activityCrudRepository;
         this.categoryCrudRepository = categoryCrudRepository;
         this.actionCrudRepository = actionCrudRepository;
-    }
-
-    // TODO: Implement
-    public LocalDate getLastAggregatedActivity() {
-        return LocalDate.now().minusDays(1);
     }
 
     public void saveAggregationResult(Account account, RescueTimeResponse activityApiResponse) {

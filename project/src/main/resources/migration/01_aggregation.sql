@@ -120,3 +120,16 @@ ALTER TABLE public.rescuetime_activity ADD category_id INT NOT NULL;
 ALTER TABLE public.rescuetime_activity
   ADD CONSTRAINT rescuetime_activity_rescuetime_category_id_fk
 FOREIGN KEY (category_id) REFERENCES rescuetime_category (id);
+
+CREATE TABLE public.aggregation
+(
+  id SERIAL PRIMARY KEY NOT NULL,
+  account_id INT NOT NULL,
+  type TEXT NOT NULL,
+  start_time TIMESTAMP NOT NULL,
+  finish_time TIMESTAMP,
+  CONSTRAINT aggregation_account_id_fk FOREIGN KEY (account_id) REFERENCES account (id)
+);
+
+ALTER TABLE public.aggregation ADD status TEXT NOT NULL;
+ALTER TABLE public.aggregation ADD details TEXT NULL;
