@@ -16,6 +16,8 @@ public class ScrobbleEntity {
     @Column
     private Long trackId;
     @Column
+    private Long accountId;
+    @Column
     private Date playedWhen;
     @Column
     private String apiData;

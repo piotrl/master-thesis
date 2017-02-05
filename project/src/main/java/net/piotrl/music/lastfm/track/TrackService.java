@@ -35,8 +35,12 @@ public class TrackService {
         this.scrobbleCrudRepository = scrobbleCrudRepository;
     }
 
-    public void saveScrobble(Track track, TrackEntity trackEntity) {
-        ScrobbleEntity entity = convertToScrobbleData(track, trackEntity);
+    public void saveScrobble(Long accountId, Track track, TrackEntity trackEntity) {
+        if (track.getPlayedWhen() != null) {
+            log.warn("Track has no played time. Skipped | User: {} | Track: {}", accountId, track.getName());
+            return;
+        }
+        ScrobbleEntity entity = convertToScrobbleData(accountId, track, trackEntity);
         scrobbleCrudRepository.save(entity);
     }
 
@@ -63,11 +67,12 @@ public class TrackService {
         tagService.saveTagTrackRelation(savedTrack, tracksTags);
     }
 
-    private ScrobbleEntity convertToScrobbleData(Track track, TrackEntity entity) {
+    private ScrobbleEntity convertToScrobbleData(Long accountId, Track track, TrackEntity entity) {
         ScrobbleEntity scrobbleEntity = new ScrobbleEntity();
         scrobbleEntity.setApiData(new Gson().toJson(track));
         scrobbleEntity.setPlayedWhen(track.getPlayedWhen());
         scrobbleEntity.setTrackId(entity.getId());
+        scrobbleEntity.setAccountId(accountId);
 
         return scrobbleEntity;
     }

@@ -33,11 +33,12 @@ public class LastfmAggregationService {
     public void startAggregation(AggregationContext context, LocalDate since) {
         final TrackLoader trackLoader = new TrackLoader(context);
         List<Track> scrobbleDetails = trackLoader.getTracks(LocalDateTime.of(since, LocalTime.MIDNIGHT));
+        log.info("Lastfm aggregation scrobbles: {} | User: {}", scrobbleDetails.size(), context.getAccountId());
         List<Track> trackDetails = trackLoader.fillTrackInfo(scrobbleDetails);
 
         for (int i = 0; i < trackDetails.size(); i++) {
             try {
-                persistTrackResult(trackDetails.get(i), scrobbleDetails.get(i));
+                persistTrackResult(context, trackDetails.get(i), scrobbleDetails.get(i));
             } catch (Exception e) {
                 log.error("Saving track error | User {} | Track {}", context.getAccountId(), trackDetails.get(i).getMbid());
                 throw e;
@@ -45,9 +46,9 @@ public class LastfmAggregationService {
         }
     }
 
-    private void persistTrackResult(Track trackDetails, Track scrobbleDetails) {
+    private void persistTrackResult(AggregationContext context, Track trackDetails, Track scrobbleDetails) {
         ArtistEntity tracksArtist = artistService.saveArtist(trackDetails);
         TrackEntity trackEntities = trackService.saveUniqueTrack(trackDetails, tracksArtist);
-        trackService.saveScrobble(scrobbleDetails, trackEntities);
+        trackService.saveScrobble(context.getAccountId(), scrobbleDetails, trackEntities);
     }
 }
