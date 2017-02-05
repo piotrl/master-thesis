@@ -5,6 +5,8 @@ import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
 import lombok.extern.slf4j.Slf4j;
 import net.piotrl.music.lastfm.artist.repository.ArtistEntity;
+import net.piotrl.music.lastfm.tag.TagService;
+import net.piotrl.music.lastfm.tag.repository.TagEntity;
 import net.piotrl.music.lastfm.track.repository.ScrobbleCrudRepository;
 import net.piotrl.music.lastfm.track.repository.ScrobbleEntity;
 import net.piotrl.music.lastfm.track.repository.TrackCrudRepository;
@@ -13,57 +15,57 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
 @Slf4j
 public class TrackService {
 
-    private final Gson gson = new Gson();
+    private final TagService tagService;
     private final TrackCrudRepository trackCrudRepository;
     private final ScrobbleCrudRepository scrobbleCrudRepository;
 
     @Autowired
-    public TrackService(TrackCrudRepository trackCrudRepository, ScrobbleCrudRepository scrobbleCrudRepository) {
+    public TrackService(TagService tagService,
+                        TrackCrudRepository trackCrudRepository,
+                        ScrobbleCrudRepository scrobbleCrudRepository) {
         this.trackCrudRepository = trackCrudRepository;
+        this.tagService = tagService;
         this.scrobbleCrudRepository = scrobbleCrudRepository;
     }
 
-    public void saveScrobbles(List<Track> tracks, List<TrackEntity> trackEntities) {
-        for (int i = 0; i < tracks.size(); i++) {
-            ScrobbleEntity entity = convertToScrobbleData(tracks.get(i), trackEntities.get(i));
-            scrobbleCrudRepository.save(entity);
-        }
+    public void saveScrobble(Track track, TrackEntity trackEntity) {
+        ScrobbleEntity entity = convertToScrobbleData(track, trackEntity);
+        scrobbleCrudRepository.save(entity);
     }
 
-    public List<TrackEntity> saveNewTracks(List<Track> tracks, List<ArtistEntity> tracksArtists) {
-        ArrayList<TrackEntity> savedTracks = new ArrayList<>(tracks.size());
-        for (int i = 0; i < tracks.size(); i++) {
-            TrackEntity savedTrack = saveUniqueTrack(tracks.get(i), tracksArtists.get(i));
-            savedTracks.add(savedTrack);
-        }
-
-        return savedTracks;
-    }
-
-    private TrackEntity saveUniqueTrack(Track track, ArtistEntity artistEntity) {
-        log.debug("Saving track | Name: %s | Mbid: %s", track.getName(), track.getMbid());
+    public TrackEntity saveUniqueTrack(Track tracksDetails, ArtistEntity artistEntity) {
+        log.info("Saving track | Name: {} | Mbid: {}", tracksDetails.getName(), tracksDetails.getMbid());
         TrackEntity savedTrack = trackCrudRepository.findFirstByMbidOrNameOrderByMbid(
-                track.getMbid(), track.getName()
+                tracksDetails.getMbid(), tracksDetails.getName()
         );
 
         if (savedTrack == null) {
-            TrackEntity entity = convertToTrackData(track, artistEntity);
-            log.debug("Track not found. Creating new one");
+            log.info("Track not found | {} | Creating new entity", tracksDetails.getName());
+            TrackEntity entity = convertToTrackData(tracksDetails, artistEntity);
             savedTrack = trackCrudRepository.save(entity);
+
+            saveTags(savedTrack, tracksDetails.getTags());
         }
+
         return savedTrack;
+    }
+
+    private void saveTags(TrackEntity savedTrack, Collection<String> tags) {
+        log.info("Save tags for track | {} | Tags: {}", savedTrack.getId(), tags);
+        List<TagEntity> tracksTags = tagService.saveTags(tags);
+        tagService.saveTagTrackRelation(savedTrack, tracksTags);
     }
 
     private ScrobbleEntity convertToScrobbleData(Track track, TrackEntity entity) {
         ScrobbleEntity scrobbleEntity = new ScrobbleEntity();
-        scrobbleEntity.setApiData(gson.toJson(track));
+        scrobbleEntity.setApiData(new Gson().toJson(track));
         scrobbleEntity.setPlayedWhen(track.getPlayedWhen());
         scrobbleEntity.setTrackId(entity.getId());
 

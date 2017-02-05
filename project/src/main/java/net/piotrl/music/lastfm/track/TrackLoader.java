@@ -3,7 +3,7 @@ package net.piotrl.music.lastfm.track;
 import com.google.common.base.Strings;
 import de.umass.lastfm.*;
 import net.piotrl.music.aggregation.AggregationContext;
-import net.piotrl.music.lastfm.aggregation.LastFmAuthProperties;
+import net.piotrl.music.lastfm.aggregation.LastfmApiProperties;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
 public class TrackLoader {
     public static final int RECENT_DAYS = 1;
 
-    private final LastFmAuthProperties lastFmProperties;
+    private final LastfmApiProperties lastFmProperties;
 
     public TrackLoader(AggregationContext context) {
         this.lastFmProperties = context.getLastfmProperties();

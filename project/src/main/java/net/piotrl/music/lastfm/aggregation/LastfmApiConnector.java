@@ -4,13 +4,12 @@ import de.umass.lastfm.Artist;
 import de.umass.lastfm.PaginatedResult;
 import de.umass.lastfm.Track;
 import de.umass.lastfm.User;
-import org.springframework.stereotype.Component;
 
-public class LastFmConnector {
+public class LastfmApiConnector {
 
-    private final LastFmAuthProperties authProperties;
+    private final LastfmApiProperties authProperties;
 
-    public LastFmConnector(LastFmAuthProperties authProperties) {
+    public LastfmApiConnector(LastfmApiProperties authProperties) {
         this.authProperties = authProperties;
     }
 

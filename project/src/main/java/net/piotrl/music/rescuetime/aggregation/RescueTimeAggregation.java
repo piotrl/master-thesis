@@ -1,6 +1,5 @@
 package net.piotrl.music.rescuetime.aggregation;
 
-import net.piotrl.music.account.Account;
 import net.piotrl.music.aggregation.AggregationContext;
 import net.piotrl.music.rescuetime.RescueTimeCaller;
 import net.piotrl.music.rescuetime.activity.ActivityService;

@@ -1,4 +1,4 @@
-package net.piotrl.music.lastfm.tag;
+package net.piotrl.music.lastfm.tag.repository;
 
 import lombok.Data;
 
@@ -15,4 +15,11 @@ public class TagEntity {
     private Long id;
     @Column
     private String name;
+
+    public TagEntity() {
+    }
+
+    public TagEntity(String name) {
+        this.name = name;
+    }
 }

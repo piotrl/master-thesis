@@ -38,8 +38,9 @@ public class ActivityService {
                     return activity;
                 })
                 .collect(Collectors.toList());
-        mapRelations(activities);
+        log.info("RescueTime aggregation | User: {} | Records: {}", context.getAccountId(), activities.size());
 
+        mapRelations(activities);
         activityCrudRepository.save(activities);
     }
 

@@ -1,10 +1,10 @@
 package net.piotrl.music.lastfm.aggregation;
 
 import de.umass.lastfm.Track;
+import lombok.extern.slf4j.Slf4j;
 import net.piotrl.music.aggregation.AggregationContext;
 import net.piotrl.music.lastfm.artist.ArtistService;
 import net.piotrl.music.lastfm.artist.repository.ArtistEntity;
-import net.piotrl.music.lastfm.tag.TagService;
 import net.piotrl.music.lastfm.track.TrackLoader;
 import net.piotrl.music.lastfm.track.TrackService;
 import net.piotrl.music.lastfm.track.repository.TrackEntity;
@@ -16,29 +16,38 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+@Slf4j
 @Service
 public class LastfmAggregationService {
 
     private final ArtistService artistService;
     private final TrackService trackService;
-    private final TagService tagService;
 
     @Autowired
-    public LastfmAggregationService(ArtistService artistService, TrackService trackService, TagService tagService) {
+    public LastfmAggregationService(ArtistService artistService,
+                                    TrackService trackService) {
         this.artistService = artistService;
         this.trackService = trackService;
-        this.tagService = tagService;
     }
 
     public void startAggregation(AggregationContext context, LocalDate since) {
         final TrackLoader trackLoader = new TrackLoader(context);
-        List<Track> tracksWithTimePlayed = trackLoader.getTracks(LocalDateTime.of(since, LocalTime.MIDNIGHT));
-        List<Track> tracksWithDuration = trackLoader.fillTrackInfo(tracksWithTimePlayed);
+        List<Track> scrobbleDetails = trackLoader.getTracks(LocalDateTime.of(since, LocalTime.MIDNIGHT));
+        List<Track> trackDetails = trackLoader.fillTrackInfo(scrobbleDetails);
 
-        List<ArtistEntity> tracksArtists = artistService.saveArtistsFromTracks(tracksWithDuration);
-        List<TrackEntity> trackEntities = trackService.saveNewTracks(tracksWithDuration, tracksArtists);
+        for (int i = 0; i < trackDetails.size(); i++) {
+            try {
+                persistTrackResult(trackDetails.get(i), scrobbleDetails.get(i));
+            } catch (Exception e) {
+                log.error("Saving track error | User {} | Track {}", context.getAccountId(), trackDetails.get(i).getMbid());
+                throw e;
+            }
+        }
+    }
 
-        trackService.saveScrobbles(tracksWithTimePlayed, trackEntities);
-
+    private void persistTrackResult(Track trackDetails, Track scrobbleDetails) {
+        ArtistEntity tracksArtist = artistService.saveArtist(trackDetails);
+        TrackEntity trackEntities = trackService.saveUniqueTrack(trackDetails, tracksArtist);
+        trackService.saveScrobble(scrobbleDetails, trackEntities);
     }
 }

@@ -2,15 +2,15 @@ package net.piotrl.music.lastfm.artist;
 
 import com.google.common.base.Strings;
 import de.umass.lastfm.Artist;
-import net.piotrl.music.lastfm.aggregation.LastFmAuthProperties;
-import net.piotrl.music.lastfm.aggregation.LastFmConnector;
+import net.piotrl.music.lastfm.aggregation.LastfmApiProperties;
+import net.piotrl.music.lastfm.aggregation.LastfmApiConnector;
 
 public class ArtistLoader {
 
-    private final LastFmConnector connector;
+    private final LastfmApiConnector connector;
 
-    public ArtistLoader(LastFmAuthProperties properties) {
-        connector = new LastFmConnector(properties);
+    public ArtistLoader(LastfmApiProperties properties) {
+        connector = new LastfmApiConnector(properties);
     }
 
     public Artist getArtistFromApi(String mbid) {

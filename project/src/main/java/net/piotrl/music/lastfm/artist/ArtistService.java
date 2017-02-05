@@ -1,5 +1,6 @@
 package net.piotrl.music.lastfm.artist;
 
+import de.umass.lastfm.ImageSize;
 import de.umass.lastfm.Track;
 import lombok.extern.slf4j.Slf4j;
 import net.piotrl.music.lastfm.artist.repository.ArtistCrudRepository;
@@ -22,28 +23,26 @@ public class ArtistService {
         this.artistCrudRepository = artistCrudRepository;
     }
 
-    public List<ArtistEntity> saveArtistsFromTracks(Collection<Track> tracks) {
-        return tracks.stream()
-                .map(track -> {
-                    ArtistEntity artistEntity = new ArtistEntity();
-                    artistEntity.setName(track.getArtist());
-                    artistEntity.setMbid(track.getArtistMbid());
+    public ArtistEntity saveArtist(Track track) {
+        ArtistEntity artistEntity = new ArtistEntity();
+        artistEntity.setName(track.getArtist());
+        artistEntity.setMbid(track.getArtistMbid());
+        artistEntity.setImageUrl(track.getImageURL(ImageSize.LARGE));
 
-                    return insertIfExists(artistEntity);
-                })
-                .collect(Collectors.toList());
+        return insertIfExists(artistEntity);
     }
 
     private ArtistEntity insertIfExists(ArtistEntity artistEntity) {
+        log.info("Saving track | Name: {} | Mbid: {}", artistEntity.getName(), artistEntity.getMbid());
         ArtistEntity existingArtist = artistCrudRepository.findFirstByMbidOrNameOrderByMbid(
                 artistEntity.getMbid(), artistEntity.getName()
         );
+
         if (existingArtist == null) {
-            existingArtist = artistCrudRepository.save(artistEntity);
+            log.info("Artist not found | Name: {} | Mbid: {}", artistEntity.getName(), artistEntity.getMbid());
+            log.info("Create new artist");
+            return artistCrudRepository.save(artistEntity);
         }
-
-        artistEntity.setId(existingArtist.getId());
-
-        return artistEntity;
+        return existingArtist;
     }
 }
