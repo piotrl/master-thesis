@@ -42,6 +42,7 @@ public class AggregationService {
         AggregationEntity entity = aggregationStatusInProgress(context, AggregationType.RESCUE_TIME);
         try {
             rescueTimeAggregation.startAggregation(context, startingPoint.toLocalDate());
+            aggregationStatusFinished(entity);
         } catch (Exception e) {
             aggregationStatusFailed(entity, e);
         }
@@ -59,21 +60,21 @@ public class AggregationService {
     }
 
     private void aggregationStatusFailed(AggregationEntity entity, Exception e) {
+        log.error("Aggregation failed | {} | User: {}", entity.getType(), entity.getAccountId());
+        log.error("Aggregation failure exception", e);
+
         entity.setStatus(AggregationStatus.FAILED.toString());
         entity.setFinishTime(new Date());
         entity.setDetails(e.getMessage());
         aggregationCrudRepository.save(entity);
-
-        log.error("Aggregation {} failed for Account {}", entity.getType(), entity.getAccountId());
-        log.error("Aggregation failure exception", e);
     }
 
     private void aggregationStatusFinished(AggregationEntity entity) {
+        log.info("Aggregation {} finished for Account {}", entity.getType(), entity.getAccountId());
+
         entity.setStatus(AggregationStatus.SUCCESS.toString());
         entity.setFinishTime(new Date());
         aggregationCrudRepository.save(entity);
-
-        log.info("Aggregation {} finished for Account {}", entity.getType(), entity.getAccountId());
     }
 
     private AggregationEntity aggregationStatusInProgress(AggregationContext context, AggregationType type) {
@@ -83,13 +84,13 @@ public class AggregationService {
         entity.setStartTime(new Date());
         entity.setStatus(AggregationStatus.IN_PROGRESS.toString());
 
-        log.info("Aggregation {} started for {}", type, context.getAccountId());
+        log.info("Aggregation {} started | User: {}", type, context.getAccountId());
         return aggregationCrudRepository.save(entity);
     }
 
     private LocalDateTime lastAggregation(long accountId, AggregationType type) {
-        Optional<AggregationEntity> lastAggregation = aggregationCrudRepository.findOneByAccountIdAndType(
-                accountId, type.toString()
+        Optional<AggregationEntity> lastAggregation = aggregationCrudRepository.findFirstByAccountIdAndTypeAndStatusOrderByStartTimeDesc(
+                accountId, type.toString(), AggregationStatus.SUCCESS.toString()
         );
 
         if (!lastAggregation.isPresent()) {

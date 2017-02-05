@@ -5,7 +5,7 @@ import net.piotrl.music.account.Account;
 import net.piotrl.music.account.AccountRepository;
 import net.piotrl.music.aggregation.repository.AggregationMetadataCrudRepository;
 import net.piotrl.music.aggregation.repository.AggregationMetadataEntity;
-import net.piotrl.music.lastfm.aggregation.LastFmAuthProperties;
+import net.piotrl.music.lastfm.aggregation.LastfmApiProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -53,14 +53,14 @@ public class AggregationScheduler {
 
     private AggregationContext buildContext(Account account) {
         AggregationMetadataEntity metadata = metadataCrudRepository.findOne(account.getId());
-        LastFmAuthProperties lastFmAuthProperties = new LastFmAuthProperties(
+        LastfmApiProperties lastfmApiProperties = new LastfmApiProperties(
                 metadata.getLastfmUsername(), metadata.getLastfmApiKey(), metadata.getLastfmSecureKey()
         );
 
         AggregationContext context = new AggregationContext();
         context.setAccountId(account.getId());
         context.setRescuetimeApiKey(metadata.getRescuetimeApiKey());
-        context.setLastfmProperties(lastFmAuthProperties);
+        context.setLastfmProperties(lastfmApiProperties);
 
         return context;
     }

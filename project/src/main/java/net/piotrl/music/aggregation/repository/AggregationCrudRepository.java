@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface AggregationCrudRepository extends CrudRepository<AggregationEntity, Long> {
-    Optional<AggregationEntity> findOneByAccountIdAndType(long accountId, String type);
+    Optional<AggregationEntity> findFirstByAccountIdAndTypeAndStatusOrderByStartTimeDesc(long accountId, String type, String status);
 }

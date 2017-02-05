@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class LastFmConnectorTest {
+public class LastfmApiConnectorTest {
 
     private static final String API_KEY = "5f062176c25b0c3570a65bca887188f8";
     private static final String FAKE_API_KEY = "FAKE_5f062176c25b0c3570a65bca887188f8";
@@ -21,7 +21,7 @@ public class LastFmConnectorTest {
 
     @Test
     public void testGettingUserInfoForExistingUser() throws Exception {
-        LastFmConnector connector = connector("grovman", API_KEY);
+        LastfmApiConnector connector = connector("grovman", API_KEY);
 
         User userInfo = connector.getUserInfo();
 
@@ -31,7 +31,7 @@ public class LastFmConnectorTest {
 
     @Test
     public void testGettingUserInfoForNotExistingUser() throws Exception {
-        LastFmConnector connector = connector(FAKE_USERNAME, API_KEY);
+        LastfmApiConnector connector = connector(FAKE_USERNAME, API_KEY);
 
         User userInfo = connector.getUserInfo();
 
@@ -40,7 +40,7 @@ public class LastFmConnectorTest {
 
     @Test
     public void testGettingUserInfoWithFakeApiKey() throws Exception {
-        LastFmConnector connector = connector(CORRECT_USERNAME, FAKE_API_KEY);
+        LastfmApiConnector connector = connector(CORRECT_USERNAME, FAKE_API_KEY);
 
         User userInfo = connector.getUserInfo();
 
@@ -49,16 +49,16 @@ public class LastFmConnectorTest {
 
     @Test
     public void testLoadingRecentTracks() throws Exception {
-        LastFmConnector connector = connector(CORRECT_USERNAME, API_KEY);
+        LastfmApiConnector connector = connector(CORRECT_USERNAME, API_KEY);
 
         PaginatedResult<Track> userTracksFromLastDay = connector.getUserTracksFromLastDay();
 
         assertThat(userTracksFromLastDay).isNotNull();
     }
 
-    private LastFmConnector connector(String username, String apiKey) {
-        LastFmAuthProperties lastFmAuthProperties = new LastFmAuthProperties(username, apiKey);
+    private LastfmApiConnector connector(String username, String apiKey) {
+        LastfmApiProperties lastfmApiProperties = new LastfmApiProperties(username, apiKey);
 
-        return new LastFmConnector(lastFmAuthProperties);
+        return new LastfmApiConnector(lastfmApiProperties);
     }
 }
