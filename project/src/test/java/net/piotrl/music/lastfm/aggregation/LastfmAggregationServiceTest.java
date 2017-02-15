@@ -1,5 +1,6 @@
 package net.piotrl.music.lastfm.aggregation;
 
+import net.piotrl.music.mocks.AggregationPropertiesMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class LastfmAggregationServiceTest {
 
     @Test
     public void startAggregation() throws Exception {
-        LocalDate recentDate = LocalDate.now().minusDays(1);
-        lastfmAggregationService.startAggregation(null, recentDate);
+        LocalDate recentDate = LocalDate.now().minusDays(14);
+        lastfmAggregationService.startAggregation(AggregationPropertiesMock.globalContext(), recentDate);
     }
 }

@@ -40,16 +40,18 @@ public class TrackLoader {
 
     public List<Track> fillTrackInfo(Collection<Track> tracks) {
         return tracks.stream()
-                .map(track -> {
-                    String artist = track.getArtist();
-                    String mbid = track.getMbid();
-                    if (Strings.isNullOrEmpty(mbid)) {
-                        mbid = track.getName();
-                    }
-
-                    return getTrackInfo(artist, mbid);
-                })
+                .map(track -> getTrackDetails(track))
                 .collect(Collectors.toList());
+    }
+
+    public Track getTrackDetails(Track track) {
+        String artist = track.getArtist();
+        String mbid = track.getMbid();
+        if (Strings.isNullOrEmpty(mbid)) {
+            mbid = track.getName();
+        }
+
+        return getTrackInfo(artist, mbid);
     }
 
     private Track getTrackInfo(String artist, String trackNameOrMbid) {

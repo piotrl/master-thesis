@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @Slf4j
 public class TrackService {
@@ -36,9 +38,8 @@ public class TrackService {
     }
 
     public void saveScrobble(Long accountId, Track track, TrackEntity trackEntity) {
-        if (track.getPlayedWhen() != null) {
-            log.warn("Track has no played time. Skipped | User: {} | Track: {}", accountId, track.getName());
-            return;
+        if (track.getPlayedWhen() == null) {
+            log.warn("Scrobble has no played time. Skipped | User: {} | Track: {}", accountId, track.getName());
         }
         ScrobbleEntity entity = convertToScrobbleData(accountId, track, trackEntity);
         scrobbleCrudRepository.save(entity);
@@ -46,7 +47,7 @@ public class TrackService {
 
     public TrackEntity saveUniqueTrack(Track tracksDetails, ArtistEntity artistEntity) {
         log.info("Saving track | Name: {} | Mbid: {}", tracksDetails.getName(), tracksDetails.getMbid());
-        TrackEntity savedTrack = trackCrudRepository.findFirstByMbidOrNameOrderByMbid(
+        TrackEntity savedTrack = trackCrudRepository.findTrackByMbidThenByName(
                 tracksDetails.getMbid(), tracksDetails.getName()
         );
 
@@ -59,6 +60,28 @@ public class TrackService {
         }
 
         return savedTrack;
+    }
+
+    public List<TrackDto> fillTrackInfo(List<Track> tracks, TrackLoader loader) {
+        return tracks.stream()
+                .map(scrobble -> fillTrackInfo(scrobble, loader))
+                .collect(toList());
+    }
+
+    public TrackDto fillTrackInfo(Track scrobble, TrackLoader loader) {
+        TrackDto trackDto = new TrackDto();
+        trackDto.setScrobble(scrobble);
+        TrackEntity savedTrack = trackCrudRepository.findTrackByMbidThenByName(
+                scrobble.getMbid(), scrobble.getName()
+        );
+        if (savedTrack != null) {
+            trackDto.setDetails(savedTrack);
+        } else {
+            Track trackDetails = loader.getTrackDetails(scrobble);
+            trackDto.setLastfmTrackDetails(trackDetails);
+        }
+
+        return trackDto;
     }
 
     private void saveTags(TrackEntity savedTrack, Collection<String> tags) {
@@ -78,6 +101,13 @@ public class TrackService {
     }
 
     private TrackEntity convertToTrackData(Track track, ArtistEntity artistEntity) {
+        TrackEntity trackEntity = convertToTrackData(track);
+
+        trackEntity.setArtistId(artistEntity.getId());
+        return trackEntity;
+    }
+
+    private TrackEntity convertToTrackData(Track track) {
         TrackEntity trackEntity = new TrackEntity();
         BeanUtils.copyProperties(track, trackEntity);
 
@@ -85,7 +115,6 @@ public class TrackService {
         trackEntity.setImageUrlMedium(track.getImageURL(ImageSize.MEDIUM));
         trackEntity.setImageUrlLarge(track.getImageURL(ImageSize.LARGE));
         trackEntity.setImageUrlExtraLarge(track.getImageURL(ImageSize.EXTRALARGE));
-        trackEntity.setArtistId(artistEntity.getId());
         return trackEntity;
     }
 }
