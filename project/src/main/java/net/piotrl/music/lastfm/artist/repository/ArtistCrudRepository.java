@@ -1,5 +1,6 @@
 package net.piotrl.music.lastfm.artist.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +10,11 @@ import javax.transaction.Transactional;
 @Transactional
 public interface ArtistCrudRepository extends CrudRepository<ArtistEntity, Integer> {
 
-    ArtistEntity findFirstByMbidOrNameOrderByMbid(String mbid, String name);
+    @Query(" SELECT a FROM ArtistEntity a " +
+            "WHERE " +
+            "   (a.mbid IS NOT NULL AND a.mbid = ?1) " +
+            "OR " +
+            "   (a.mbid IS NULL AND a.name = ?2) "
+    )
+    ArtistEntity findArtistByMbidThenByName(String mbid, String name);
 }

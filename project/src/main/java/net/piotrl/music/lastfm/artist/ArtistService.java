@@ -8,10 +8,6 @@ import net.piotrl.music.lastfm.artist.repository.ArtistEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Slf4j
 @Repository
 public class ArtistService {
@@ -33,8 +29,8 @@ public class ArtistService {
     }
 
     private ArtistEntity insertIfExists(ArtistEntity artistEntity) {
-        log.info("Saving track | Name: {} | Mbid: {}", artistEntity.getName(), artistEntity.getMbid());
-        ArtistEntity existingArtist = artistCrudRepository.findFirstByMbidOrNameOrderByMbid(
+        log.info("Saving artist | Name: {} | Mbid: {}", artistEntity.getName(), artistEntity.getMbid());
+        ArtistEntity existingArtist = artistCrudRepository.findArtistByMbidThenByName(
                 artistEntity.getMbid(), artistEntity.getName()
         );
 

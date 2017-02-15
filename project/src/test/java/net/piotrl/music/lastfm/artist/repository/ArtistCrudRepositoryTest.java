@@ -17,9 +17,9 @@ public class ArtistCrudRepositoryTest {
 
     @Test
     public void priorityMbidOverNameSearch() throws Exception {
-        ArtistEntity artistEntity = artistCrudRepository.findFirstByMbidOrNameOrderByMbid("1232345", "test1");
-        ArtistEntity artistEntity1 = artistCrudRepository.findFirstByMbidOrNameOrderByMbid("12345", null);
-        ArtistEntity artistEntity2 = artistCrudRepository.findFirstByMbidOrNameOrderByMbid("123", "test");
+        ArtistEntity artistEntity = artistCrudRepository.findArtistByMbidThenByName("1232345", "test1");
+        ArtistEntity artistEntity1 = artistCrudRepository.findArtistByMbidThenByName("12345", null);
+        ArtistEntity artistEntity2 = artistCrudRepository.findArtistByMbidThenByName("123", "test");
 
         assertThat(artistEntity).isNull();
 
