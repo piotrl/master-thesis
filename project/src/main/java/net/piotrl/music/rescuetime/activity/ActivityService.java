@@ -75,7 +75,7 @@ public class ActivityService {
         String productivityValue = getValue("Productivity", columnNames, values);
 
         Integer time = Ints.tryParse(timeValue);
-        LocalDateTime endTime = LocalDateTime.parse(dateValue).plusSeconds(time);
+        LocalDateTime endTime = LocalDateTime.parse(dateValue).plusMinutes(5);
         return ActivityEntity.builder()
                 .activityName(activityValue)
                 .startTime(DateUtil.toDate(dateValue))
