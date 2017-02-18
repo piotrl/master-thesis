@@ -37,8 +37,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .eraseCredentials(true)
-                .userDetailsService(accountService)
-                .passwordEncoder(passwordEncoder());
+                .userDetailsService(accountService);
+//                .passwordEncoder(passwordEncoder()); TODO: Signup module to produce hashed passwords
     }
 
     @Override

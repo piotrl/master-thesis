@@ -26,6 +26,8 @@ public class Account {
     @Column(nullable = false)
     private Instant created;
 
+    public Account() {}
+
     public Account(String email, String password, String role) {
         this.email = email;
         this.password = password;
