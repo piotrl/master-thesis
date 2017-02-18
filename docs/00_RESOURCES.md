@@ -13,6 +13,8 @@
     - [Science paper](http://www.omicsonline.com/open-access/research-productivity-in-music-a-personal-perspective-2090-2719-1000112.php?aid=66271)
 2. **6 Science-Backed Playlists for Improving Your Productivity**
     - [Article](https://blog.hubspot.com/marketing/productivity-playlists)
+3. **Muzyka do programowania. Czego słuchają programiści?**
+    - [[PL] Article](https://bulldogjob.pl/news/137-muzyka-do-programowania-czego-sluchaja-programisci) (23-01-2017)
 
 ### 4. Strony internetowe
 
