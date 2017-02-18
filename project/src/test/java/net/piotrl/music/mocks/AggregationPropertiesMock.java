@@ -1,8 +1,8 @@
 package net.piotrl.music.mocks;
 
 
-import net.piotrl.music.aggregation.AggregationContext;
-import net.piotrl.music.lastfm.aggregation.LastfmApiProperties;
+import net.piotrl.music.modules.aggregation.AggregationContext;
+import net.piotrl.music.modules.lastfm.aggregation.LastfmApiProperties;
 
 public class AggregationPropertiesMock {
     public static AggregationContext globalContext() {

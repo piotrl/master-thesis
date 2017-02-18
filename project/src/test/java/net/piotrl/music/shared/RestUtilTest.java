@@ -1,6 +1,6 @@
 package net.piotrl.music.shared;
 
-import net.piotrl.music.rescuetime.api.RescueTimeQueryParameters;
+import net.piotrl.music.modules.rescuetime.api.RescueTimeQueryParameters;
 import org.junit.Test;
 
 import java.util.Map;
