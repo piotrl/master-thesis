@@ -45,6 +45,7 @@ dependencies {
     compile 'org.hibernate:hibernate-java8'
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4'
     compile 'org.thymeleaf.extras:thymeleaf-extras-java8time'
+    compile 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.google.guava:guava:20.0'
     compileOnly "org.projectlombok:lombok:1.16.10"
