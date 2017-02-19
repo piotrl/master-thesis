@@ -42,7 +42,11 @@ public class AggregationScheduler {
 
         for (Account account : accounts) {
             AggregationContext aggregationContext = buildContext(account);
-            aggregationService.startAggregation(aggregationContext);
+            if (isContextValid(aggregationContext)) {
+                aggregationService.startAggregation(aggregationContext);
+            } else {
+                log.warn("Context not valid | User: {}", account.getId());
+            }
         }
 
         Instant finishTime = Instant.now();
@@ -52,16 +56,40 @@ public class AggregationScheduler {
     }
 
     private AggregationContext buildContext(Account account) {
+        AggregationContext context = new AggregationContext();
+        context.setAccountId(account.getId());
+
         AggregationMetadataEntity metadata = metadataCrudRepository.findOne(account.getId());
+        if (metadata == null) {
+            return context;
+        }
         LastfmApiProperties lastfmApiProperties = new LastfmApiProperties(
                 metadata.getLastfmUsername(), metadata.getLastfmApiKey(), metadata.getLastfmSecureKey()
         );
 
-        AggregationContext context = new AggregationContext();
-        context.setAccountId(account.getId());
         context.setRescuetimeApiKey(metadata.getRescuetimeApiKey());
         context.setLastfmProperties(lastfmApiProperties);
 
         return context;
+    }
+
+    private boolean isContextValid(AggregationContext context) {
+        LastfmApiProperties lastfmProperties = context.getLastfmProperties();
+        if (lastfmProperties == null) {
+            log.warn("User metadata is empty | User: {}");
+            return false;
+        }
+        if (lastfmProperties.getApiKey() == null ||
+                lastfmProperties.getSecret() == null ||
+                lastfmProperties.getUsername() == null) {
+            log.warn("Lastfm key is not valid | User: {}", context.getAccountId());
+            return false;
+        }
+        if (context.getRescuetimeApiKey() == null) {
+            log.warn("Rescuetime key is empty | User: {}", context.getAccountId());
+            return false;
+        }
+
+        return true;
     }
 }
