@@ -1,6 +1,7 @@
 package net.piotrl.music.modules.lastfm.track.repository;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "lastfm_scrobble")
 @Data
+@NoArgsConstructor
 public class ScrobbleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

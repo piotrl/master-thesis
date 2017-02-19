@@ -2,12 +2,14 @@ package net.piotrl.music.modules.lastfm.track.repository;
 
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "lastfm_track")
 @Data
+@NoArgsConstructor
 public class TrackEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

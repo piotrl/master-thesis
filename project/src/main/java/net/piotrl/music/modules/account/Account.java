@@ -1,6 +1,7 @@
 package net.piotrl.music.modules.account;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -8,6 +9,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "account")
 @Data
+@NoArgsConstructor
 public class Account {
 
     @Id
@@ -25,8 +27,6 @@ public class Account {
 
     @Column(nullable = false)
     private Instant created;
-
-    public Account() {}
 
     public Account(String email, String password, String role) {
         this.email = email;

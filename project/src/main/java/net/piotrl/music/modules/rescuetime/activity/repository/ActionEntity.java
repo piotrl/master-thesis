@@ -1,10 +1,12 @@
 package net.piotrl.music.modules.rescuetime.activity.repository;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "rescuetime_action")
 public class ActionEntity {

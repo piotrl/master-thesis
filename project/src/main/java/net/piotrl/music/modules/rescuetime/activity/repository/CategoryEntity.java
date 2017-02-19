@@ -1,10 +1,12 @@
 package net.piotrl.music.modules.rescuetime.activity.repository;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "rescuetime_category")
 public class CategoryEntity {
@@ -16,8 +18,6 @@ public class CategoryEntity {
 
     @Column
     private String name;
-
-    public CategoryEntity() {}
 
     public CategoryEntity(String name) {
         this.name = name;
