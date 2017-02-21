@@ -8,29 +8,34 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
-@RequestMapping("raw")
+@RequestMapping("api/raw")
 public class RawDataController {
 
     @Autowired
     private RawDataRepository rawDataRepository;
 
-    @GetMapping("activities/from/{from}/to/{to}")
-    @ResponseStatus(value = HttpStatus.OK)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public void rawActivities(@PathVariable LocalDateTime from,
-                              @PathVariable LocalDateTime to,
+    @RequestMapping("activities/year/{year}/month/{month}")
+    public List<Integer> monthlyActivities(@PathVariable int year,
+                                           @PathVariable int month,
+                                           Principal principal) {
+        Assert.notNull(principal);
+        return rawDataRepository.monthlyActivities(year, month, 1l);
+    }
+
+    @RequestMapping("activities/from/{from}/to/{to}")
+    public void rawActivities(@PathVariable String from,
+                              @PathVariable String to,
                               Principal principal) {
         Assert.notNull(principal);
         rawDataRepository.rawActivities(from, to, 1l);
     }
 
-    @GetMapping("scrobbles/from/{from}/to/{to}")
-    @ResponseStatus(value = HttpStatus.OK)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public void rawScrobbles(@PathVariable LocalDateTime from,
-                             @PathVariable LocalDateTime to,
+    @RequestMapping("scrobbles/from/{from}/to/{to}")
+    public void rawScrobbles(@PathVariable String from,
+                             @PathVariable String to,
                              Principal principal) {
         Assert.notNull(principal);
         rawDataRepository.rawScrobbles(from, to, 1l);

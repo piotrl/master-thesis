@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
@@ -22,8 +22,8 @@ public class RawDataRepositoryTest {
 
     @Test
     public void rawActivities() throws Exception {
-        LocalDateTime from = LocalDateTime.of(2017, Month.FEBRUARY, 1, 0, 0);
-        LocalDateTime to = LocalDateTime.now();
+        LocalDate from = LocalDate.of(2017, Month.FEBRUARY, 1);
+        LocalDate to = LocalDate.now();
         long accountId = AggregationPropertiesMock.globalContext().getAccountId();
 
         List<RawActivity> rawActivities = rawDataRepository.rawActivities(from, to, accountId);

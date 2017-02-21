@@ -13,8 +13,7 @@ public class DateUtil {
     private DateTimeFormatter IsoDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public Date toDate(String stringDateTime) {
-        LocalDateTime dateTime = LocalDateTime.parse(stringDateTime);
-        return toDate(dateTime);
+        return toDate(toLocalDateTime(stringDateTime));
     }
 
     public Date toDate(LocalDateTime dateTime) {
@@ -22,8 +21,20 @@ public class DateUtil {
         return Date.from(instant);
     }
 
+    public Date toDate(LocalDate dateTime) {
+        return toDate(dateTime.atStartOfDay());
+    }
+
     public LocalDate toLocalDate(Date date) {
         return toZonedDateTime(date).toLocalDate();
+    }
+
+    public LocalDate toLocalDate(String dateString) {
+        return LocalDate.parse(dateString);
+    }
+
+    public LocalDateTime toLocalDateTime(String dateString) {
+        return LocalDateTime.parse(dateString);
     }
 
     public LocalDateTime toLocalDateTime(Date date) {
@@ -34,8 +45,12 @@ public class DateUtil {
         return dateTime.format(IsoDateTimeFormatter);
     }
 
-    public String formatDate(LocalDate dateTime) {
-        return dateTime.format(IsoDateFormatter);
+    public String formatDate(LocalDate date) {
+        return date.format(IsoDateFormatter);
+    }
+
+    public String formatDate(Date date) {
+        return formatDate(toLocalDate(date));
     }
 
     private ZonedDateTime toZonedDateTime(Date date) {

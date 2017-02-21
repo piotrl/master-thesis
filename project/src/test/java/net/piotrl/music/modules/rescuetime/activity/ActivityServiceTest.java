@@ -31,8 +31,8 @@ public class ActivityServiceTest {
         RescueTimeRequest rescueTimeRequest = RescueTimeRequestUtil.buildRequest(apiKey, since, to);
         RescueTimeCaller rescueTimeCaller = new RescueTimeCaller();
 
-        ResponseEntity<RescueTimeResponse> call = rescueTimeCaller.call(rescueTimeRequest);
-        // FIXME: context is null
-        activityService.saveAggregationResult(null, call.getBody());
+            ResponseEntity<RescueTimeResponse> call = rescueTimeCaller.call(rescueTimeRequest);
+            // FIXME: context is null
+            activityService.saveAggregationResult(null, call.getBody());
     }
 }

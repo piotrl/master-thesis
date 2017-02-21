@@ -13,9 +13,9 @@
             <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">
                 &nbsp;</div>
         </th:block>
-
-        <div class="mdl-card">
-            <div th:replace="dashboard/summary :: summary"></div>
+        <div class="mdl-grid">
+            <div th:replace="dashboard/summary :: summary-day"></div>
+            <div th:replace="dashboard/summary :: summary-month"></div>
         </div>
     </div>
     <div th:replace="fragments/layout :: footer"></div>
