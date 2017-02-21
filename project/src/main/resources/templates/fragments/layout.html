@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
     <title>Music and productivity</title>
-    <link rel="shortcut icon" href="images/favicon.png"/>
+    <link rel="shortcut icon" href="../../static/images/favicon.png" th:href="@{favicon.png}"/>
 
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 
-    <link rel="stylesheet" href="../../static/material/material.css" th:href="@{material/material.css}"/>
-    <link rel="stylesheet" href="../../static/dashboard.css" th:href="@{dashboard.css}"/>
+    <link rel="stylesheet" href="../../static/lib/c3/c3.min.css" th:href="@{lib/c3/c3.min.css}"/>
 
-    <!--<link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>-->
+    <link rel="stylesheet" href="../../static/lib/material/material.css" th:href="@{lib/material/material.css}"/>
+    <link rel="stylesheet" href="../../static/dashboard.css" th:href="@{dashboard.css}"/>
 </head>
 <body>
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header is-upgraded">
@@ -86,11 +86,15 @@
 
     <!-- Footer -->
     <div th:align="center">
-        &copy;&nbsp;<span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2016</span>
-        Master project <span th:text="${@environment.getProperty('app.version')}"></span>
+        &copy;&nbsp;<span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2017</span>
+        - Piotr Lewandowski - Master Thesis <span th:text="${@environment.getProperty('app.version')}"></span>
     </div>
 </div>
 
-<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<script src="../../static/lib/material/material.js" th:src="@{lib/material/material.js}"></script>
+<script src="../../static/lib/d3/d3.min.js" th:src="@{lib/d3/d3.min.js}"></script>
+<script src="../../static/lib/c3/c3.min.js" th:src="@{lib/c3/c3.min.js}"></script>
+
+<script src="../../static/charts/simple-chart.js" th:src="@{charts/simple-chart.js}"></script>
 </body>
 </html>
