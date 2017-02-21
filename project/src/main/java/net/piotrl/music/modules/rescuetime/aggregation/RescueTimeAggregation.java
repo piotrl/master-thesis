@@ -8,6 +8,7 @@ import net.piotrl.music.modules.rescuetime.api.RescueTimeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
 
@@ -25,7 +26,12 @@ public class RescueTimeAggregation {
         RescueTimeRequest rescueTimeRequest = RescueTimeRequestUtil.buildRequest(context.getRescuetimeApiKey(), since, LocalDate.now());
         RescueTimeCaller rescueTimeCaller = new RescueTimeCaller();
 
-        ResponseEntity<RescueTimeResponse> call = rescueTimeCaller.call(rescueTimeRequest);
-        activityService.saveAggregationResult(context, call.getBody());
+        try {
+            ResponseEntity<RescueTimeResponse> call = rescueTimeCaller.call(rescueTimeRequest);
+            activityService.saveAggregationResult(context, call.getBody());
+        } catch (HttpClientErrorException ex) {
+            context.getResult().addError("Http error: " + ex.getRawStatusCode(), ex.getResponseBodyAsString());
+            throw ex;
+        }
     }
 }

@@ -8,4 +8,6 @@ public class AggregationContext {
     private Long accountId;
     private String rescuetimeApiKey;
     private LastfmApiProperties lastfmProperties;
+
+    private AggregationResult result = new AggregationResult();
 }
