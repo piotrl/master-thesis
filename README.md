@@ -6,19 +6,15 @@
 API, Aggregation, Data Integration, Data Visualisation, Attention span, PostgreSQL, JavaScript, Java
 
 ### Streszczenie
-Istnieją badania, które starają się wskazać wpływ muzyki na aktywność naszego mózgu. Wskazują one konkretne cechy utworów wpływające na nasz nastrój. Wiele serwisów internetowych na podstawie tych badań proponuje tematyczne playlisty — na relaksujący wieczór z herbatą, pozytywny poranek, pozwalające się mocniej skupić.
+W ramach pracy magisterskiej, napisano aplikację internetową, wdrożoną w chmurze Digital Ocean pod adresem http://tbd.digitalocean.com/ z przygotowanymi danymi testowymi pod kontem (user: test, login: test). 
 
-Motyw przewodni tej pracy łączy się z ostatnią wymienioną grupą utworów — Muzyka wpływająca na naszą produktywność. Na podstawie historii odtwarzanych utworów oraz aktywności na komputerze, wizualizuję produktywne okresy naszych działań oraz powiązane z nimi gatunki muzyczne.
+Aplikacja umożliwia agregację danych użytkownika z dwóch serwisów, RescueTime - lista aktywności oraz Last.fm - lista odsłuchiwanych utworów.
 
-Celem pracy jest przedstawienie oraz uzasadnienie rozwiązań problemów, których trzeba być świadomym podczas budowania serwisów z dużą ilością danych, które w dużej mierze pochodzą z zewnętrznych API. Między innymi zadanie agregacji oraz przetworzenia danych w celu ich wizualizacji.
+Pobrane dane są połączone na wspólnej osi czasu i wizualizowane pod różnymi względami za pomocą wykresów oraz tabel.  
 
-Jako przykład działania aplikacji, przedstawiam przykładowe badanie własnych aktywności, podzielone na czas spędzony w domu oraz w pracy.
+Program jest napisany w języku Java i frameworku Spring, warstwa wizualna jest napisana w języka JavaScript oraz biblioteki C3.js generującej wykresy.
 
-Aplikację dzielę na trzy części
-    
-- front-endową w modelu MVC, która komunikuje się z serwerem WebAPI, która wizualizuje dane na wykresach
-- WebAPI — Stworzone w Javie z użyciem lekkiego frameworka ``Spring boot``, przystosowująca dane pod wymagania prezentacji
-- Aggregation service — Główny mechanizm pobierania danych, zapisywanych w relatywnej bazie danych PostgreSQL
+Kod znajduje się w prywatnym repozytorium GIT (pod adresem https://github.com/piotrl/master-thesis), pytania o dostęp lub o pracę proszę kierować na mail: poczta@piotrl.net. 
 
 ### Spis treści
 1. Wstęp
