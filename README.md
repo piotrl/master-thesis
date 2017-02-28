@@ -8,7 +8,7 @@ API, Aggregation, Data Integration, Data Visualisation, Attention span, PostgreS
 ### Streszczenie
 W ramach pracy magisterskiej napisano aplikację internetową, wdrożoną w chmurze Digital Ocean pod adresem http://tbd.digitalocean.com/ z przygotowanymi danymi testowymi pod kontem (user: test, login: test). 
 
-Aplikacja umożliwia agregację danych użytkownika z dwóch serwisów, RescueTime — lista aktywności oraz Last.fm — lista odsłuchiwanych utworów. Pobrane dane są połączone na wspólnej osi czasu i wizualizowane pod różnymi względami za pomocą wykresów oraz tabel.  
+Aplikacja umożliwia agregację danych użytkownika z dwóch serwisów, RescueTime — lista aktywności oraz Last.fm — lista odsłuchiwanych utworów. Pobrane dane są połączone na wspólnej osi czasu i wizualizowane w postaci raportów lub wykresów.  
 
 Mechanizm agregacji napisany jest w języku Java i frameworku Spring, dane przechowywane są w bazie danych PostgreSQL, a warstwa wizualna została stworzona w JavaScript, z użyciem biblioteki generującej wykresy — C3.js oraz frameworka Material Design.
 
