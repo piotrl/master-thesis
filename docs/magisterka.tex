@@ -5,11 +5,11 @@
 
 \usepackage{epigraph}
 
-%\defaultfontfeatures{Scale=MatchLowercase}
-%\setmainfont[Numbers=OldStyle,Ligatures=TeX]{Minion Pro}
-%\setsansfont[Numbers=OldStyle,Ligatures=TeX]{Myriad Pro}
+\defaultfontfeatures{Scale=MatchLowercase}
+\setmainfont[Numbers=OldStyle,Ligatures=TeX]{Minion Pro}
+\setsansfont[Numbers=OldStyle,Ligatures=TeX]{Myriad Pro}
 % for fontspec version < 2.0
-\setmainfont[Numbers=OldStyle,Mapping=tex-text]{Minion Pro}
+%\setmainfont[Numbers=OldStyle,Mapping=tex-text]{Minion Pro}
 \setsansfont[Numbers=OldStyle,Mapping=tex-text]{Myriad Pro}
 %\setmonofont[Scale=0.75]{Monaco}
 
@@ -75,238 +75,83 @@
 
 [Work in progress]
 
+Podczas pracy, często słucham muzyki by się odciąć od zewnętrznych dźwięków oraz odpowiednio nastroić.
 
-%\begin{itemize}
-%\item
-%jest to międzynarodowy
-%standard dostępny na wielu platformach sprzętowo\-systemowych;
-%\item
-%jest to
-%język opisu \emph{każdego\/} dokumentu, o~praktycznie nieograniczonych
-%możliwościach (\emph{rozszerzalność\/})
-%\item
-%umożliwia powtórne
-%wykorzystywanie dokumentów, także w sposób inny od poprzedniego
-%(np. tradycyjna książka i~dokument multimedialny utworzony z~tego
-%samego dokumentu SGML-owego).
-%\end{itemize}
+Spotyka się na artykuły twierdzące, że odpowiednio dobrana muzyka wpływa na lepszą koncentrację.
+Popularnym przykładem jest wystąpienie Willa Henshalla na konferencji TED: https://www.youtube.com/watch?v=BBCjijl105I
 
-Standard służy jedynie do opisywania logicznej struktury dokumentów,
-nie determinuje ostatecznej formy prezentacji informacji, która może
-być docelowo przekształcana w~najróżniejszy sposób. Dokument
-zakodowany z~wykorzystaniem SGML-a może służyć jako postać wyjściowa
-do formatowania tej samej informacji w~różny sposób i~prezentacji
-z~użyciem różnych mediów np. w~formie drukowanej na papierze,
-w~postaci hipertekstu albo tekstowej bazy danych. Pozwala to
-zminimalizować koszty\index{koszty}, cały cykl wydawniczy dokonuje się
-na jednym dokumencie -- pliku SGML-owym, a~nie na wielu.
+\chapter{Agregacja danych}
 
-\section{Elementy składowe systemu SGML}
+    \section{Wybór dostawców danych}
 
-Standard SGML to specyfikacja techniczna metajęzyka. Zaś systemem
-SGML nazywamy \emph{zestaw narzędzi i~środków niezbędnych do
-tworzenia, składowania i~obróbki dokumentów z~wykorzystaniem tego
-standardu}.  Typowy proces produkcji dokumentów w~standardzie SGML
-podzielony jest na kilka części. Najważniejszymi elementami tego
-procesu są~\cite[s.~45--47]{Eisenberg:2002:SXM}:
+    Podstawą działania aplikacji są dane z komputera użytkownika,
+    lista aktywności wykonywanych w danej jednostce czasu oraz odsłuchiwana muzyka.
+    Aby zdobyć te dane, postanowiłem nie pisać programu śledzącego procesy (daemon),
+    lecz skorzystać z gotowych rozwiazań.
 
-\begin{itemize}
-\item Klasyfikacja tworzonych dokumentów w~grupy i~wynikający z~tego
-  dobór definicji typu dokumentu\footnote{Definicja typu dokumentu DTD
-    to formalny opis pewnej klasy dokumentów, spis jej elementów
-    składowych (znaczników i~ich atrybutów) oraz zasad ich stosowania
-    (hierarchii występowania czy możliwości skracania).}
-  (por.~punkt~\ref{s:dtd}).
-\item Wybraniu odpowiednich narzędzi do tworzenia i~modyfikowania
-  dokumentów SGML (edytory, konwertery, por.~punkt~\ref{s:edytor},
-  s.~\pageref{s:edytor})\footnote{Wybrany edytor winien w~maksymalnym
-    stopniu ułatwiać proces tworzenie dokumentów strukturalnych,
-    różniący się od tego, jaki jest stosowany w~narzędziach biurowych
-    typu edytor Word.}.
-\item Sprawdzenie poprawności oznaczenia dokumentów
-  (walidacja\index{walidacja}).
-\item Ustalenie metod składowania zbiorów oznakowanych dokumentów.
-\item Ustalenie sposobu prezentacji oznaczonych dokumentów i~ich
-  formatów wyjściowych -- przygotowanie odpowiednich specyfikacji
-  konwersji formatów i~dobór właściwych do tego celu narzędzi
-  (por.~punkty~\ref{s:dsssl} i~\ref{s:xsl}).
-\end{itemize}
+        \subsection{RescueTime - zasada działania}
 
-Każdy z~wyżej wymienionych problemów stanowi pewne zadanie do
-wykonania, które może być w dużym stopniu lub całkowicie
-zautomatyzowane dzięki zastosowaniu odpowiednich narzędzi, co jest
-jednym z~celów i~korzyści stosowania systemu opartego na standardzie
-SGML.
+        RescueTime to program który działa w tle, nasłuchuje na aktualnie aktywne procesy
+        i raz na minutę wysyła te dane do serwisu internetowego RescueTime.com.
+        Podstawową cechą tego serwisu jest automatyczne kategoryzowanie aktywności oraz ustawienie produktywności w 5 punktowej skali:
+        „Bardzo produktywny”, „Produktywny”, „Neutralny”, „Rozpraszający” i „Bardzo rozpraszający”.
 
-\begin{figure}[!tbh]
-\centering
-\includegraphics[width=.8\hsize]{fig/schemat}
-\caption{Schemat archiwum\label{RYS.2}}
-\source{Opracowanie własne}
-\end{figure}
+        Dla przykładu, odtwarzacz wideo VLC jest przypisany do kategorii rozrywka ze statusem „Bardzo rozpraszający”,
+        natomiast przeglądanie plików programem Windows Explorer jest w kategorii „Pomocnicze” ze statusem „Neutralny”.
 
-\section{Opracowanie typu dokumentu\label{s:dtd}}
-Tworzenie DTD~\cite{Eisenberg:2002:SXM,Goldfarb:2002:CFG} powinno zacząć się
-od analizy posiadanych danych oraz potrzeb dotyczących dokumentów
-wynikowych i~informacji. Rezultatem analizy dokumentów jest
-wyspecyfikowanie słownika takich elementów oraz, dla każdego typu
-dokumentu, zależności między tymi elementami. Z~tego powodu stworzenie
-dobrego DTD jest zadaniem niełatwym. Ponadto DTD jest tylko częścią
-systemu SGML; oprócz niego potrzebne są narzędzia do formatowania
-dokumentów, takie jak arkusze stylów DSSSL czy też XSL/XSLT.
+        Dzięki temu, jesteśmy w stanie sprawdzić nasz codzienny współczynnik produktywności.
 
-Duże koszty implementacji przemawiają często za rozważeniem
-wykorzystania, czy też adaptacji w~systemie SGML udostępnionych
-publicznie gotowych DTD. W~omawianym projekcie postąpiono podobnie,
-ewentualne opracowanie własnego typu dokumentu odkładając na później.
-Rozważano wstępnie wykorzystanie trzech publicznie dostępnych typów
-dokumentów: \texttt{etd} zdefiniowanego na potrzeby projektu
-\textit{Electronic Theses and Dissertations} w~Virginia Polytechnic
-Institute and State University, \texttt{TEI} opracowanego w~ramach
-projektu \textit{Text Encoding Iniciative} oraz
-DocBook opracowany przez konsorcjum firm, głównie sektora IT,
-używających technologii SGML do tworzenia dokumentacji do swoich
-produktów.
+        Program jest w stanie rozpoznać nie tylko tytuły aktualnie otwartych okien,
+        ale również w przypadku przeglądarki – adresy odwiedzanych stron internetowych,
+        jest to bardzo ważne ze względu na dominującą ilość czasu spędzonego dziennie w samej przeglądarce.
 
-\section{DocBook}
-\emph{DocBook DTD}\index{DocBook|(} to typ dokumentu definiujący
-strukturę i~zawartość zbioru znaczników SGML, służących do
-dokumentacji oprogramowania i~różnego rodzaju dokumentacje
-techniczne~\cite[s.~123]{Elmasri:2002:CMC}. Posiada ona bardzo rozbudowaną
-hierarchię znaczników do budowy struktur książek, dokumentacji
-technicznej itp dokumentów.  DTD dla tego typu dokumentu jest dostępne
-zarówno w~standardzie SGML jak i~XML. Dostępna jest także uproszczona
-wersja DTD o~nazwie SimpleDocbook. Zaletą używania wersji uproszczonej
-jest dużo łatwiejsze posługiwanie się nią, z~uwagi na znacznie
-mniejszą liczbę znaczników, por.~tabela~\ref{tab:dtd-cmp}.
+        \subsection{last.fm - zasada działania}
 
-\begin{table}[!tbh]
-\begin{tabular}{|l|l|l|} \hline
-Typ dokumentu & Liczba elementów & Liczba encji \\ \hline
-Docbook & 357 & 1814 \\ \hline
-SimpleDocBook  & 93  & 234 \\ \hline
-TEI & brak danych & 3 \\ \hline
-HTML & 98  & 234 \\ \hline
-\end{tabular}
-\caption{Porównanie wielkości popularnych definicji
-  typu dokumentu\label{tab:dtd-cmp}}
-\source{Obliczenia własne}
-\end{table}
+        Last.fm to serwis społecznościowy dla fanów muzyki,
+        który udostępnia wtyczki do popularnych odtwarzaczy muzycznych, np. Spotify.
+        Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
+        w której użytkownicy na podstawie meta-tagów przypisują go do artysty, płyty oraz gatunku muzycznego.
 
-DocBook jest używany obecnie w~większości zarówno komercyjnych jak
-i~niekomercyjnych projektach tworzenia dokumentacji komputerowej
-(np. dokumentacja dla takich projektów jak: LDP -- \textit{Linux
-Documentation Project}, \textit{RedHat Gnome Desktop},
-\textit{Postgres SQL RDBMS}, \textit{PHP3 Hypertext Preprocesor} czy
-dokumentacja do systemu FreeBSD).\index{DocBook|)}
+        Oba z wymienionych serwisów dostarczają API z danymi jakie użytkownik zgromadził na swoim koncie.
 
-\section{Edytory sterowane składnią\label{s:edytor}}
 
-Pierwszym elementem systemu SGML jest edytor
-strukturalny\index{edytor!strukturalny}, zwany też edytorem sterowanym
-składnią. W~tradycyjnych edytorach działających według paradygmatu
-WYSIWYG\index{WYSIWYG} autor wprowadzając tekst określa na bieżąco
-jego wygląd, mając zarówno w~jednym jak i~drugim przypadku dużą
-swobodę.  Taki sposób pracy w~przypadku masowego tworzenia dokumentów
-jest zupełnie nieefektywny. W~szczególności dotyczy to pracy wielu
-autorów nad jednym lub wieloma dokumentami o~zuniformizowanym
-formacie, czy też tworzenia dokumentów, o~których z~góry wiadomo, że
-będą prezentowane w~różny sposób.
+    \section{Cechy mechanizmu agregacji}
 
-Pewnym rozwiązaniem opisywanych wyżej problemów jest wykorzystanie
-szablonów, w~które, od jakiegoś czasu są wyposażane wszystkie
-popularne edytory biurowe\index{edytor!biurowy}.  Posługując się
-szablonami, autor nie definiuje wyglądu samodzielnie tylko wypełnia
-treścią zdefiniowany z~góry szablon dokumentu.
-Stanowiąc niewątpliwy
-krok do przodu takie podejście nie rozwiązuje jednak wszystkich
-problemów.
+    \subsection{Niezależność}
 
-Komercyjne edytory SGML, są w~chwili obecnej ciągle bardzo
-drogie, zaś oprogramowanie rozprowadzane na różnego rodzaju licencjach
-\emph{Open Source\/} nie oferuje jeszcze wygody pracy, do której
-przyzwyczaili się użytkownicy edytorów biurowych.
+        \subsection{Ciągłość}
 
-\section{Emacs i~psgml}
+        \subsection{Powtarzalność}
 
-Jedynym dostępnym w~chwili
-obecnej, efektywnym, tanim (darmowy) i~dostępnym na wielu
-platformach systemowo-sprzętowych środowisku do tworzenia dokumentów
-strukturalnych jakim jest edytor Emacs\index{edytor!Emacs} z~pakietem
-psgml. Środowisko to wspomaga autora poprzez:
-kolorowanie składni dokumentów SGML i~aplikacji SGML, automatyczne
-uzupełnianie brakujących znaczników, automatyczną kontrolę jakie
-w~danym kontekście można wstawiać znaczniki i~atrybuty, wyświetlanie
-informacje odnośnie możliwych i~domyślnych wartości.
-Wszystkie funkcje są dostępne za pomocą
-odpowiednie skrótów klawiszowych a~także dostępne poprzez wybór
-wskaźnikiem myszy odpowiedniej pozycji z~menu. Pakiet ten umożliwia
-również wywołanie zewnętrznego parsera\index{parser} SGML celem
-weryfikacji poprawności dokumentu.
+    \section{Powszechne problemy przy komunikacji z API}
 
-\chapter{Narzędzia i~standardy pokrewne}
+        \subsection{Ograniczenia dostawcy API}
 
-Systemy SGML, ze względu na mnogość funkcji jakie spełniają i~ich
-kompleksowe podejście do oznakowywania i~przetwarzania dokumentów
-tekstowych, są bardzo skomplikowane. Możemy wyróżnić dwa podejścia do
-budowy takich systemów.  Z~jednej strony, buduje się systemy
-zindywidualizowane, oparte o~specyficzne narzędzia tworzone w~takich
-językach, jak: C, C++, Perl czy Python. Edytory strukturalne, filtry
-do transformacji formatów czy parsery\index{parser} i~biblioteki
-przydatne do konstrukcji dalszych narzędzi, tworzone są według potrzeb
-określonych, pojedynczych systemów.
+        \subsection{Autoryzacja}
 
-Z~drugiej strony, twórcy oprogramowania postanowili pójść krok dalej
-i~połączyć te różne narzędzia w~jedną całość. Tą całość miał stanowić
-DSSSL lub jego XML-owy odpowiednik -- standard XSL. Ze względu na
-oferowane możliwości można twierdzić, że tworzenie i~używanie narzędzi
-implementujących standard DSSSL/XSL, jest najwłaściwszym
-podejściem. Przemawiają za tym różne argumenty, ale najważniejszym
-z~nich jest to, że mamy tu możliwość stworzenia niezależnego od
-platformy programowej i~narzędziowej zbioru szablonów -- przepisów jak
-przetwarzać dokumenty SGML.
+        \subsection{Braki dostępu}
 
-\section{Przetwarzanie dokumentów SGML -- standard DSSSL\label{s:dsssl}}
+\chapter{Analiza danych}
 
-DSSSL (\textit{Document Style Semantics and Specification Language\/})
--- to międzynarodowy standard ściśle związany ze standardem SGML.
-Standard ten, można podzielić na następujące części:
+    \section{Opis zebranych danych}
 
-\begin{itemize}
-\item język transformacji (\textit{transformation language\/}).  To
-  definicja języka służącego do transformacji dokumentu oznaczonego
-  znacznikami zgodnie z~pewnym DTD na dokument oznaczony zgodnie
-  z~innym~DTD.
-\item język stylu (\textit{style language\/}) opisujący sposób
-  formatowania dokumentów SGML.
-\item język zapytań (\textit{query language\/}) służy do
-  identyfikowania poszczególnych fragmentów dokumentu SGML.
-\end{itemize}
+    \section{Data fusion - Łączenie danych w czasie}
 
-Opisane główne części składowe standardu DSSSL dają obraz tego, jak
-wiele aspektów przetwarzania zostało zdefiniowanych i~jak
-skomplikowany jest to problem. Jest to głównym powodem tego, że mimo
-upływu kilku lat od zdefiniowania standardu nie powstały ani
-komercyjne ani wolnodostępne aplikacje wspierające go
-w~całości. Istnieją natomiast \emph{nieliczne\/} narzędzia realizujące
-DSSSL w~ograniczonym zakresie, głównie w~części definiującej język
-stylu, który odpowiada za opatrzenie dokumentu czysto strukturalnego
-w~informacje formatujące. Daje to możliwość publikacji dokumentów SGML
-zarówno w~postaci elektronicznej, hipertekstowej czy też drukowanej.
+        \subsection{Korekta}
 
-\section{Przetwarzanie dokumentów XML -- standard XSL\label{s:xsl}}
+        \subsection{Integracja dwóch źródeł danych}
 
-Tak jak XML jest \emph{uproszczoną\/} wersją standardu SGML, tak XSL
-jest uproszczonym odpowiednikiem standardu DSSSL. W~szczególności,
-wyróżnić można w~tym standardzie następujące części składowe:
+     \section{Budowa raportów na podstawie szeregów czasowych}
 
-\begin{itemize}
-\item język transformacji (XSLT) To definicja języka służącego do
-  transformacji dokumentu.
-\item język zapytań (XPath) służy do identyfikowania poszczególnych
-  fragmentów dokumentu.
-\item język stylu deefiniujący sposób formatowania dokumentów XML.
-\end{itemize}
+\chapter{Wizualizacja danych}
+
+     \section{Jeden zbiór danych - wiele interpretacji}
+
+     \section{Wybór odpowiednich metod wizualizacji danych}
+
+     \section{Analiza danych z punktu widzenia użytkownika}
+
+\chapter{MOCK DATA BELOW}
 
 \chapter{Przegląd dostępnych narzędzi\label{PRZEGLAD.NARZEDZI}}
 
