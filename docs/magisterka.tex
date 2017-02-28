@@ -3,6 +3,8 @@
 % nieparzystych:
 %\documentclass[openright]{xmgr}
 
+\usepackage{epigraph}
+
 %\defaultfontfeatures{Scale=MatchLowercase}
 %\setmainfont[Numbers=OldStyle,Ligatures=TeX]{Minion Pro}
 %\setsansfont[Numbers=OldStyle,Ligatures=TeX]{Myriad Pro}
@@ -15,18 +17,15 @@
 % drukowany tylko z włączoną opcją 'brudnopis':
 \wersja   {wersja wstępna [\ymdtoday]}
 
-\author   {Walenty Szczęsny}
-\nralbumu {100\,001}
-\email    {walenty@szczesny.com.pl}
+\author   {Piotr Lewandowski}
+\nralbumu {215575}
+\email    {poczta@piotrl.net}
 
-\author   {Monika A.~Szczęsna-Woś}
-\nralbumu {100\,002}
-
-\title    {Dokumenty strukturalne: teoria i~zastosowania}
-\date     {2100}
+\title    {Analiza wpływu nawyków muzycznych na aktywności wykonywane przy komputerze}
+\date     {2017}
 \miejsce  {Gdańsk}
 
-\opiekun  {prof. dr hab. D. Htunk}
+\opiekun  {dr W. Bzyl}
 
 % dodatkowe polecenia
 %\renewcommand{\filename}[1]{\texttt{#1}}
@@ -37,19 +36,34 @@
 
 % streszczenie
 \begin{abstract}
-  Aczkolwiek w~ciągu ostatnich lat skład tekstu wspomagany komputerowo
-  całkowicie wyeliminował stosowanie tradycyjnych technik drukarskich,
-  to podobny proces w~przypadku publikacji elektronicznych czyli
-  publikacji, które w~ogóle nie wykorzystują papieru, a~nośnikem
-  informacji staje się ekran komputera nie jest obserwowany.
+    W ramach pracy magisterskiej napisano aplikację internetową,
+    wdrożoną w chmurze Digital Ocean pod adresem http://tbd.digitalocean.com/
+    z przygotowanymi danymi testowymi pod kontem (user: test, login: test).
+
+    Aplikacja umożliwia agregację danych użytkownika z dwóch serwisów,
+    RescueTime — lista aktywności oraz
+    Last.fm — lista odsłuchiwanych utworów.
+    Pobrane dane są połączone na wspólnej osi czasu i wizualizowane pod różnymi względami za pomocą wykresów oraz tabel.
+
+    Mechanizm agregacji napisany jest w języku Java i frameworku Spring,
+    dane przechowywane są w bazie danych PostgreSQL,
+    a warstwa wizualna została stworzona w JavaScript
+    z użyciem biblioteki generującej wykresy — C3.js
+    oraz frameworka Material Design.
+
+    Kod znajduje się w prywatnym repozytorium GIT (pod adresem https://github.com/piotrl/master-thesis),
+    pytania o dostęp lub o pracę można kierować na mail: poczta@piotrl.net.
 \end{abstract}
 
 % słowa kluczowe
-\keywords{SGML,
- XML,
- XSL,
- dokumenty elektroniczne,
- dokumenty strukturalne}
+\keywords{
+    Aggregation,
+    Data Integration,
+    Data Visualisation,
+    PostgreSQL,
+    JavaScript,
+    Java
+}
 
 % tytuł i spis treści
 \maketitle
@@ -57,49 +71,25 @@
 % wstęp
 \introduction
 
-Aczkolwiek w~ciągu ostatnich lat skład tekstu wspomagany
-komputerowo całkowicie wyeliminował stosowanie tradycyjnych technik
-drukarskich, to podobny proces w~przypadku publikacji elektronicznych
-czyli publikacji, które w~ogóle nie wykorzystują papieru, a~nośnikem
-informacji staje się ekran komputera nie jest obserwowany.
+\epigraph{Without deviation from the norm, progress is not possible}{\textit{Frank Zappa}}
 
-Formatowanie wizualne, powstało z~myślą o~przygotowaniu publikacji do
-druku i~dlatego nie może sprostać nowym potrzebom, które stwarza
-postęp techniki. Coraz większą rolę odgrywają dziś elektroniczne
-repozytoria, bazy danych, publikacje na CD-Romach oraz WWW.  Wypływa
-też stąd ważny wniosek, że tworzenie dokumentów według paradygmatu
-WYSIWYG nie jest efektywne i~stopniowo należy oczekiwać powstawania,
-wdrażania i~rozpowszechniania się systemów opartych na paradygmacie
-\emph{formatowania strukturalnego}.
+[Work in progress]
 
-W~dokumencie formatowanym strukturalnie oznaczana jest struktura
-dokumentu a~nie określany jego wygląd. Zwróćmy uwagę, że układ
-graficzny jest pochodną struktury, tj. nadajemy jednolity wygląd
-tytułom rozdziałów, śródtytułów, przypisów, jednakowo wyróżniamy
-wyliczenia itp.  Układ graficzny jak już wspominano może ulegać zmianie
-(np. wraz z~rozpowszechnianiem się nowych technologii wydawniczych)
-ale treść i~struktura raczej nie, np. Biblia Gutenberga widziana z~tej
-perspektywy nie zmieniła się wcale.
 
-\chapter{Wprowadzenie do standardów SGML}
-
-SGML~\cite{Goldfarb:2002:CFG} jest to \emph{metajęzyk} służący do opisywania
-struktury i~zawartości dokumentów (standard ISO 8879).  Do
-podstawowych zalet takiego podejścia należy:
-\begin{itemize}
-\item
-jest to międzynarodowy
-standard dostępny na wielu platformach sprzętowo\-systemowych;
-\item
-jest to
-język opisu \emph{każdego\/} dokumentu, o~praktycznie nieograniczonych
-możliwościach (\emph{rozszerzalność\/})
-\item
-umożliwia powtórne
-wykorzystywanie dokumentów, także w sposób inny od poprzedniego
-(np. tradycyjna książka i~dokument multimedialny utworzony z~tego
-samego dokumentu SGML-owego).
-\end{itemize}
+%\begin{itemize}
+%\item
+%jest to międzynarodowy
+%standard dostępny na wielu platformach sprzętowo\-systemowych;
+%\item
+%jest to
+%język opisu \emph{każdego\/} dokumentu, o~praktycznie nieograniczonych
+%możliwościach (\emph{rozszerzalność\/})
+%\item
+%umożliwia powtórne
+%wykorzystywanie dokumentów, także w sposób inny od poprzedniego
+%(np. tradycyjna książka i~dokument multimedialny utworzony z~tego
+%samego dokumentu SGML-owego).
+%\end{itemize}
 
 Standard służy jedynie do opisywania logicznej struktury dokumentów,
 nie determinuje ostatecznej formy prezentacji informacji, która może
