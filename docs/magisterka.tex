@@ -76,11 +76,11 @@
 
 [Work in progress]
 
-Podczas pracy, często słucham muzyki by się odciąć od zewnętrznych dźwięków oraz odpowiednio nastroić.
+Podczas pracy często słucham muzyki, by się odciąć od zewnętrznych dźwięków oraz odpowiednio nastroić.
 
 Spotyka się na artykuły twierdzące, że odpowiednio dobrana muzyka wpływa na lepszą koncentrację.
 Popularnym przykładem jest wystąpienie Willa Henshalla na konferencji TEDx,
-którą w momencie pisania pracy obejrzano ponad 400 tysiący razy:
+którą w momencie pisania pracy obejrzano ponad 400 tysięcy razy:
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/tedx-will-hensell.png}
@@ -105,19 +105,19 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
     Podstawą działania aplikacji są dane z komputera użytkownika,
     lista aktywności wykonywanych w danej jednostce czasu oraz odsłuchiwana muzyka.
     Aby zdobyć te dane, postanowiłem nie pisać programu śledzącego procesy (daemon),
-    lecz skorzystać z gotowych rozwiazań.
+    lecz skorzystać z gotowych rozwiązań.
 
         \section*{RescueTime}
 
-        RescueTime to program który nasłuchuje na aktualnie aktywne procesy
+        RescueTime to program, który nasłuchuje na aktualnie aktywne procesy
         i raz na minutę wysyła te dane do serwisu internetowego RescueTime.com.
         Podstawową cechą tego serwisu jest automatyczne kategoryzowanie aktywności oraz ustawienie produktywności w 5 punktowej skali:
         „Bardzo produktywny”, „Produktywny”, „Neutralny”, „Rozpraszający” i „Bardzo rozpraszający”.
 
-        Dla przykładu, odtwarzacz wideo VLC jest przypisany do kategorii rozrywka ze statusem „Bardzo rozpraszający”,
+        Dla przykładu odtwarzacz wideo VLC jest przypisany do kategorii rozrywka ze statusem „Bardzo rozpraszający”,
         natomiast przeglądanie plików programem Windows Explorer jest w kategorii „Pomocnicze” ze statusem „Neutralny”.
 
-        Dzięki temu, jesteśmy w stanie sprawdzić nasz codzienny współczynnik produktywności.
+        Dzięki temu jesteśmy w stanie sprawdzić nasz codzienny współczynnik produktywności.
 
         \begin{figure}
           \includegraphics[width=\linewidth]{fig/rescuetime-daily-dashboard.png}
@@ -165,7 +165,7 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
 
         \subsection*{Ciągłość}
         Celem codziennego uruchamiania agregacji jest pobranie najnowszych danych do systemu,
-        API pozwalają nam na wybranie tylko małego fragmentu danych więc istotne jest by zacząć agregację od momentu ostatniej
+        API pozwalają nam na wybranie tylko małego fragmentu danych, więc istotne jest by zacząć agregację od momentu ostatniej
         dla danego użytkownika.
 
         \subsection*{Powtarzalność}
@@ -181,12 +181,12 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
         \subsection*{Zepsute dane}
         API nie gwarantuje istnienia ani poprawności wszystkich informacji.
         Przykładowo last.fm do identyfikacji utworu dostarcza jego identyfikator i pełną nazwę.
-        Zawsze bezpieczniej jest korzystać z identyfikatora ponieważ w nazwie mogą występować niebezpieczne dane np. znaki UTF-8,
-        jednak istnieją rekordy dla których identyfikator jest pusty.
+        Zawsze bezpieczniej jest korzystać z identyfikatora, ponieważ w nazwie mogą występować niebezpieczne dane np. znaki UTF-8,
+        jednak istnieją, rekordy dla których identyfikator jest pusty.
 
         \subsection*{Wydajność}
         Dobrze jest kopiować wszystkie powtarzalne informacje do własnej bazy danych,
-        dzięki temu możemy ograniczyć ilość rządań do API, które może mieć limity.
+        dzięki temu możemy ograniczyć ilość żądań do API, które może mieć limity.
 
 \chapter{Analiza danych}
 
@@ -208,115 +208,9 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
 
      \section{Analiza danych z punktu widzenia użytkownika}
 
-\chapter{MOCK DATA BELOW}
-
-\chapter{Przegląd dostępnych narzędzi\label{PRZEGLAD.NARZEDZI}}
-
-W~celu wykorzystania standardu SGML do przetwarzania dokumentów,
-niezbędne jest zebranie odpowiedniego zestawu narzędzi. Narzędzi do
-przetwarzania dokumentów SGML jest wiele. Są to zarówno całe
-systemy zintegrowane, jak i~poszczególne programy, biblioteki czy
-skrypty wspomagające.
-
-\section{Narzędzia do przeglądania dokumentów SGML}
-
-Do tej kategorii oprogramowania zaliczamy przeglądarki dokumentów
-SGML oraz serwery sieciowe wspomagające standard SGML, przy
-czym rozwiązań wspierających standard XML jest już w~chwili obecnej
-dużo więcej i~są dużo powszechniejsze.
-
-Jeżeli chodzi o~przeglądarki to zarówno Internet Explorer jak
-i~Netscape umożliwiają bezpośrednie wyświetlenie dokumentów XML;
-ponieważ jednak nie wspierają w~całości standardu XML, prowadzi to
-ciągle do wielu problemów\footnote{Z~innych mniej popularnych
-  rozwiązań można wymienić takie aplikacje, jak: HyBrick SGML
-  Browser firmy Fujitsu Limited, Panorama Publisher firmy InterLeaf
-  Inc, DynaText firmy Inso Corporation czy darmowy QWeb. W~przypadku
-  serwerów zwykle dokonują one transformacji ,,w~locie'' żądanych
-  dokumentów na format HTML (rzadziej bezpośrednio wyświetlają
-  dokumenty XML).  Ta kategoria oprogramowania ma, z~punktu widzenia
-  projektu, znaczenie drugorzędne.}.
-
-\section{Parsery SGML}
-Program \texttt{nsgmls} (z~pakietu \texttt{SP} Jamesa Clarka) jest
-doskonałym parserem\index{parser} dokumentów SGML, dostępnym
-publicznie.  Parser \texttt{nsgmls} jest dostępny w~postaci źródłowej
-oraz w~postaci programów wykonywalnych przygotowanych na platformę
-MS~Windows, Linux/Unix i~inne. Oprócz analizy poprawności dokumentu
-parser\index{parser} ten umożliwia również konwersję danych do formatu
-ESIS\index{ESIS}, który wykorzystywany jest jako dane wejściowe przez
-wiele narzędzi do przetwarzania i~formatowania dokumentów SGML.
-Dodatkowymi, bardzo przydatnymi elementami pakietu \texttt{SP} są:
-program \texttt{sgmlnorm} do normalizacji, program \texttt{sx} służący
-do konwersji dokumentu SGML na XML oraz biblioteki programistyczne,
-przydatne przy tworzeniu specjalistycznych aplikacji służących do
-przetwarzania dokumentów SGML.
-
-W~przypadku dokumentów XML publicznie dostępnych, parserów jest
-w~chwili obecnej kilkadziesiąt. Do popularniejszych zaliczyć można
-Microsoft Java XML Parser firmy Microsoft, LT XML firmy Language
-Technology Group, Exapt oraz XP (James Clark)
-
-\section{Wykorzystanie języków skryptowych}
-
-\section{Wykorzystanie szablonów XSL}
-
-Stosując wersję XML typu DocBook można wykorzystać szablony stylów
-przygotowane w~standardzie XSL (autor N.~Walsh). W~chwili obecnej
-są dostępne narzędzia umożliwiające przetworzenie dokumentów XML do
-postaci drukowanej (Adobe PDF) oraz hipertekstowej (HTML).
-
-Podobnie jak w~przypadku szablonów DSSSL, szablony stylów XSL są
-sparametryzowane i~udokumentowane i~dzięki temu łatwe w~adaptacji. Do
-zamiany dokumentu XML na postać prezentacyjną można wykorzystać jeden
-z~dostępnych publicznie procesorów XSLT
-(por.~tabela~\ref{zest:proces:xslt}).
-
-\begin{table}[!htb]
-\begin{tabular}{|l|l|l|} \hline
-Nazwa & Autor      & Adres URL \\ \hline
-\texttt{sablotron} & Ginger Alliance & \url{http://www.gingerall.com} \\ \hline
-\texttt{Xt}        & J.~Clark & \url{http://www.jclark.com} \\ \hline
-\texttt{4XSLT}     & FourThought & \url{http://www.fourthought.com} \\ \hline
-\texttt{Saxon}     & Michael Kay &  \url{http://users.iclway.co.uk/mhkay/saxon} \\ \hline
-\texttt{Xalan}     & Apache XML Project & \url{http://xml.apache.org} \\ \hline
-\end{tabular}
-\caption{Publicznie dostępne procesory XLST\label{zest:proces:xslt}}
-\source{Opracowanie własne}
-\end{table}
-
-XSL:FO jest skomplikowanym językiem o~dużych możliwościach,
-zawierającym ponad 50 różnych ,,obiektów formatujących'', począwszy od
-najprostszych, takich jak prostokątne bloki tekstu poprzez wyliczenia,
-tabele i~odsyłacze. Obiekty te można formatować wykorzystując przeszło
-200 różnych właściwości (\emph{properties\/}), takich jak: kroje,
-odmiany i~wielkości pisma, odstępy, kolory itp.
-W~tym dokumencie przedstawione jest absolutne miniumum informacji
-na temat standardu XSL:FO.
-
-Cały dokument XSL:FO zawarty jest wewnątrz elementu \texttt{fo:root}.
-Element ten zawiera (w~podanej niżej kolejności):
-
-\begin{itemize}
-\item dokładnie jeden element \texttt{fo:layout-master-set} zawierający
-  szablony określające wygląd poszczególnych stron oraz sekwencji
-  stron (te ostatnie są opcjonalne, ale typowo są definiowane);
-\item zero lub więcej elementów \texttt{fo:declarations};
-\item jeden lub więcej elementów \texttt{fo:page-sequance}
- zawierających treść formatowanego dokumentu wraz z~opisem
- jego sformatowania i~podziału na strony.
-\end{itemize}
-
 % zakończenie
 \summary
-Możliwości, jakie stoją przed archiwum prac magisterskich opartych na
-XML-u, są ograniczone jedynie czasem, jaki należy poświęcić na pełną
-implementację systemu. Nie ma przeszkód technologicznych do stworzenia
-co najmniej równie doskonałego repozytorium, jak ma to miejsce w
-przypadku ETD. Jeżeli chcemy w pełni uczestniczyć w rozwoju nowej ery
-informacji, musimy szczególną uwagę przykładać do odpowiedniej
-klasyfikacji i archiwizacji danych. Sądzę, że język XML znacznie to
-upraszcza.
+[Work in progress]
 
 % literatura (obowiązkowo):
 \bibliographystyle{unsrt}
