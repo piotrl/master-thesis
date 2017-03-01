@@ -107,9 +107,9 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
     Aby zdobyć te dane, postanowiłem nie pisać programu śledzącego procesy (daemon),
     lecz skorzystać z gotowych rozwiazań.
 
-        \subsection{RescueTime - zasada działania}
+        \section*{RescueTime}
 
-        RescueTime to program który działa w tle, nasłuchuje na aktualnie aktywne procesy
+        RescueTime to program który nasłuchuje na aktualnie aktywne procesy
         i raz na minutę wysyła te dane do serwisu internetowego RescueTime.com.
         Podstawową cechą tego serwisu jest automatyczne kategoryzowanie aktywności oraz ustawienie produktywności w 5 punktowej skali:
         „Bardzo produktywny”, „Produktywny”, „Neutralny”, „Rozpraszający” i „Bardzo rozpraszający”.
@@ -119,35 +119,74 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
 
         Dzięki temu, jesteśmy w stanie sprawdzić nasz codzienny współczynnik produktywności.
 
+        \begin{figure}
+          \includegraphics[width=\linewidth]{fig/rescuetime-daily-dashboard.png}
+          \caption{Codzienny raport aktywności RescueTime}
+          \label{fig:RescueTime}
+        \end{figure}
+
         Program jest w stanie rozpoznać nie tylko tytuły aktualnie otwartych okien,
         ale również w przypadku przeglądarki – adresy odwiedzanych stron internetowych,
         jest to bardzo ważne ze względu na dominującą ilość czasu spędzonego dziennie w samej przeglądarce.
 
-        \subsection{last.fm - zasada działania}
+        \section*{last.fm}
 
         Last.fm to serwis społecznościowy dla fanów muzyki,
-        który udostępnia wtyczki do popularnych odtwarzaczy muzycznych, np. Spotify.
+        pomagający odkrywać nowych artystów na podstawie historii użytkownika.
+
+        Last.fm zbiera dane użytkowników za pomocą wtyczek, instalowanych do odtwarzaczy muzycznych, np. Spotify.
         Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
         w której użytkownicy na podstawie meta-tagów przypisują go do artysty, płyty oraz gatunku muzycznego.
 
-        Oba z wymienionych serwisów dostarczają API z danymi jakie użytkownik zgromadził na swoim koncie.
+        \begin{figure}
+          \includegraphics[width=\linewidth]{fig/lastfm-now-listening.png}
+          \caption{Raport słuchanej muzyki w last.fm}
+          \label{fig:Last.fm}
+        \end{figure}
 
+        \section*{Komunikacja z zewnętrznymi serwisami}
 
-    \section{Cechy mechanizmu agregacji}
+    \section{Mechanizm agregacji danych}
 
-    \subsection{Niezależność}
+        Oba z wymienionych serwisów udostępniają część danych, które użytkownik zgromadził na swoim koncie.
+        Dostęp ten jest realizowany przez API, po okazaniu odpowiednich tokenów uwierzytelniających, mamy dostęp do danych użytkownika.
 
-        \subsection{Ciągłość}
+        Przed analizą, konieczne jest pobranie danych do własnej bazy danych oraz stworzenie modelu relacji pomiędzy nimi.
+        Proces pobierania nazywam agregacją danych i jest on podstawą działania aplikacji,
+        ponieważ to w nim zdobywamy interesujące nas informacje.
 
-        \subsection{Powtarzalność}
+        Aby aplikacja nie była jednorazowego użytku, należy dla każdego użytkownika dostarczać kolejne porcje danych.
+        Rodzi to szereg problemów oraz wyznacza pewne cechy, które napisany mechanizm musi spełniać.
+
+        \subsection*{Niezależność}
+        Podczas pobierania danych dla jednego użytkownika może wystąpić błąd, np. poprzez tymczasową niedostępność API,
+        nie powinien on wpłynąć na agregacje innych użytkowników, ani na działanie mechanizmu w przyszłości dla tego samego użytkownika
+        (Nie powinien ciągle powtarzać błędnych zapytań).
+
+        \subsection*{Ciągłość}
+        Celem codziennego uruchamiania agregacji jest pobranie najnowszych danych do systemu,
+        API pozwalają nam na wybranie tylko małego fragmentu danych więc istotne jest by zacząć agregację od momentu ostatniej
+        dla danego użytkownika.
+
+        \subsection*{Powtarzalność}
 
     \section{Powszechne problemy przy komunikacji z API}
 
-        \subsection{Ograniczenia dostawcy API}
+        \subsection*{Ograniczenia dostawcy API}
 
-        \subsection{Autoryzacja}
+        \subsection*{Autoryzacja}
 
-        \subsection{Braki dostępu}
+        \subsection*{Braki dostępu}
+
+        \subsection*{Zepsute dane}
+        API nie gwarantuje istnienia ani poprawności wszystkich informacji.
+        Przykładowo last.fm do identyfikacji utworu dostarcza jego identyfikator i pełną nazwę.
+        Zawsze bezpieczniej jest korzystać z identyfikatora ponieważ w nazwie mogą występować niebezpieczne dane np. znaki UTF-8,
+        jednak istnieją rekordy dla których identyfikator jest pusty.
+
+        \subsection*{Wydajność}
+        Dobrze jest kopiować wszystkie powtarzalne informacje do własnej bazy danych,
+        dzięki temu możemy ograniczyć ilość rządań do API, które może mieć limity.
 
 \chapter{Analiza danych}
 
@@ -155,9 +194,9 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
 
     \section{Data fusion - Łączenie danych w czasie}
 
-        \subsection{Korekta}
+        \subsection*{Korekta}
 
-        \subsection{Integracja dwóch źródeł danych}
+        \subsection*{Integracja dwóch źródeł danych}
 
      \section{Budowa raportów na podstawie szeregów czasowych}
 
@@ -278,16 +317,6 @@ przypadku ETD. Jeżeli chcemy w pełni uczestniczyć w rozwoju nowej ery
 informacji, musimy szczególną uwagę przykładać do odpowiedniej
 klasyfikacji i archiwizacji danych. Sądzę, że język XML znacznie to
 upraszcza.
-
-% załączniki (opcjonalnie):
-\appendix
-\chapter{Tytuł załącznika jeden}
-
-Treść załącznika jeden.
-
-\chapter{Tytuł załącznika dwa}
-
-Treść załącznika dwa.
 
 % literatura (obowiązkowo):
 \bibliographystyle{unsrt}
