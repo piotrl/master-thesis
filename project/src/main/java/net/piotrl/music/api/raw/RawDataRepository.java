@@ -1,6 +1,7 @@
 package net.piotrl.music.api.raw;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.piotrl.music.shared.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
@@ -74,19 +76,36 @@ public class RawDataRepository {
         return jdbcOperations.query(sql, sqlParams, new BeanPropertyRowMapper<>(RawScrobbles.class));
     }
 
-    public List<Integer> monthlyActivities(int year, int month, long accountId) {
+    public Map<Integer, List<Double>> monthlyActivities(int year, int month, long accountId) {
         LocalDate initial = LocalDate.of(year, month, 1);
         LocalDate end = initial.withDayOfMonth(initial.lengthOfMonth());
 
         List<RawActivity> rawActivities = rawActivities(initial, end, accountId);
-        List<Integer> groupedActivities = Lists.newArrayList();
+        Map<Integer, List<Double>> groupedActivities = Maps.newHashMap();
         for (int i = 1; i <= initial.lengthOfMonth(); i++) {
             List<RawActivity> dailyActivities = getDailyActivities(year, month, i, rawActivities);
-            groupedActivities.add(dailyActivities.size());
+            Map<Integer, Long> groups = dailyActivities.stream()
+                    .collect(Collectors.groupingBy(
+                            RawActivity::getProductivityScore,
+                            Collectors.reducing(0L, e -> (long) e.getDuration(), Long::sum)
+                    ));
+
+            groups.forEach((key, value) -> {
+                Double doubleVal = Double.valueOf(value);
+                List<Double> longs = groupedActivities.get(key);
+                if (longs != null) {
+                    longs.add(doubleVal);
+                } else {
+                    List<Double> dailyActivity = Lists.newArrayList();
+                    dailyActivity.add(doubleVal / 3600);
+                    groupedActivities.put(key, dailyActivity);
+                }
+            });
         }
 
         return groupedActivities;
     }
+
 
     private List<RawActivity> getDailyActivities(int year, int month, int day, List<RawActivity> rawActivities) {
         return rawActivities.stream()

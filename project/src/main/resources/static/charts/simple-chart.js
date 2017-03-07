@@ -9,21 +9,40 @@ var chart = c3.generate({
 });
 
 (function () {
+    // this month
     document.addEventListener('DOMContentLoaded', () => {
-        const year = 2017;
-        const month = 2;
-        const montlyChart = `http://localhost:8080/api/raw/activities/year/${year}/month/${month}`;
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth();
 
-        fetch(montlyChart)
+        const monthlyActivityChart = `http://localhost:8080/api/raw/activities/year/${year}/month/${month}`;
+
+        fetch(monthlyActivityChart)
             .then(res => res.json())
             .then(activitiesInMonth => {
                 console.log(activitiesInMonth);
                 c3.generate({
                     bindto: '#chart-month',
                     data: {
+                        type: 'scatter',
                         columns: [
-                            ['Activity', ...activitiesInMonth]
+                            ['Very distracting', ...activitiesInMonth[-2]],
+                            ['Distracting', ...activitiesInMonth[-1]],
+                            ['Neutral', ...activitiesInMonth[0]],
+                            ['Productive', ...activitiesInMonth[1]],
+                            ['Very productive', ...activitiesInMonth[2]]
                         ]
+                    },
+                    axis: {
+                        x: {
+                            label: 'Dni w miesiącu',
+                            tick: {
+                                fit: false
+                            }
+                        },
+                        y: {
+                            label: 'Spędzone godziny'
+                        }
                     }
                 });
             })
