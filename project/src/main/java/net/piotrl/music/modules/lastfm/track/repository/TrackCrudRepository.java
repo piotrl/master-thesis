@@ -11,11 +11,13 @@ import javax.transaction.Transactional;
 public interface TrackCrudRepository extends CrudRepository<TrackEntity, Integer> {
 
     @Query(" SELECT t FROM TrackEntity t " +
-            "WHERE " +
-            "   (t.mbid IS NOT NULL AND t.mbid = ?1) " +
-            "OR " +
-            "   (t.mbid IS NULL AND t.name = ?2) "
+            " WHERE (t.mbid IS NOT NULL AND t.mbid = ?1) "
     )
-    TrackEntity findTrackByMbidThenByName(String mbid, String name);
+    TrackEntity findTrackByMbid(String mbid);
+
+    @Query(" SELECT t FROM TrackEntity t " +
+            " WHERE (t.mbid IS NULL AND t.name = ?1) "
+    )
+    TrackEntity findTrackByName(String name);
 
 }

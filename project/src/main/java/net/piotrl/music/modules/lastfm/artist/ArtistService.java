@@ -30,10 +30,10 @@ public class ArtistService {
 
     private ArtistEntity insertIfExists(ArtistEntity artistEntity) {
         log.info("Saving artist | Name: {} | Mbid: {}", artistEntity.getName(), artistEntity.getMbid());
-        ArtistEntity existingArtist = artistCrudRepository.findArtistByMbidThenByName(
-                artistEntity.getMbid(), artistEntity.getName()
-        );
-
+        ArtistEntity existingArtist = artistCrudRepository.findArtistByMbid(artistEntity.getMbid());
+        if (existingArtist == null) {
+            existingArtist = artistCrudRepository.findArtistByName(artistEntity.getName());
+        }
         if (existingArtist == null) {
             log.info("Artist not found | Name: {} | Mbid: {}", artistEntity.getName(), artistEntity.getMbid());
             log.info("Create new artist");

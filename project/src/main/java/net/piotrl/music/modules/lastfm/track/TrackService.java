@@ -47,9 +47,10 @@ public class TrackService {
 
     public TrackEntity saveUniqueTrack(Track tracksDetails, ArtistEntity artistEntity) {
         log.info("Saving track | Name: {} | Mbid: {}", tracksDetails.getName(), tracksDetails.getMbid());
-        TrackEntity savedTrack = trackCrudRepository.findTrackByMbidThenByName(
-                tracksDetails.getMbid(), tracksDetails.getName()
-        );
+        TrackEntity savedTrack = trackCrudRepository.findTrackByMbid(tracksDetails.getMbid());
+        if (savedTrack == null) {
+            savedTrack = trackCrudRepository.findTrackByName(tracksDetails.getName());
+        }
 
         if (savedTrack == null) {
             log.info("Track not found | {} | Creating new entity", tracksDetails.getName());
@@ -69,14 +70,19 @@ public class TrackService {
     }
 
     public TrackDto fillTrackInfo(Track scrobble, TrackLoader loader) {
+        log.info("Looking for track | Name: {} | Mbid: {}", scrobble.getName(), scrobble.getMbid());
         TrackDto trackDto = new TrackDto();
         trackDto.setScrobble(scrobble);
-        TrackEntity savedTrack = trackCrudRepository.findTrackByMbidThenByName(
-                scrobble.getMbid(), scrobble.getName()
-        );
+
+        TrackEntity savedTrack = trackCrudRepository.findTrackByMbid(scrobble.getMbid());
+        if (savedTrack == null) {
+            savedTrack = trackCrudRepository.findTrackByName(scrobble.getName());
+        }
         if (savedTrack != null) {
+            log.info("Track found in database");
             trackDto.setDetails(savedTrack);
         } else {
+            log.info("Track not found, loading from API");
             Track trackDetails = loader.getTrackDetails(scrobble);
             trackDto.setLastfmTrackDetails(trackDetails);
         }

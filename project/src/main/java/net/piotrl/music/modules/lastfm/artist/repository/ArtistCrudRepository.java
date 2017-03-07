@@ -17,4 +17,16 @@ public interface ArtistCrudRepository extends CrudRepository<ArtistEntity, Integ
             "   (a.mbid IS NULL AND a.name = ?2) "
     )
     ArtistEntity findArtistByMbidThenByName(String mbid, String name);
+
+    @Query(" SELECT a FROM ArtistEntity a " +
+            "WHERE " +
+            "   (a.mbid IS NOT NULL AND a.mbid = ?1) "
+    )
+    ArtistEntity findArtistByMbid(String mbid);
+
+    @Query(" SELECT a FROM ArtistEntity a " +
+            "WHERE " +
+            "   (a.mbid IS NULL AND a.name = ?1) "
+    )
+    ArtistEntity findArtistByName(String name);
 }
