@@ -14,28 +14,8 @@
                 Welcome to the Spring MVC Quickstart application!
                 Get started quickly by signing up.
             </p>
-            <p>
-                <a class="btn btn-success btn-lg" id="signup">Sign up</a>
-            </p>
         </div>
     </div>
-    <script th:inline="javascript" type="text/javascript">
-        /* Fill in modal with content loaded with Ajax */
-        $(document).ready(function () {
-            $('#signup').on('click', function () {
-                $("#signup-modal").modal();
-                $("#signup-modal-body").text("");
-                $.ajax({
-                    url: "signup",
-                    cache: false
-                }).done(function (html) {
-                    $("#signup-modal-body").append(html);
-                });
-            })
-        });
-    </script>
-    <!-- Signup modal -->
-    <div th:replace="fragments/components :: modal(id='signup-modal', title='Signup')"></div>
 </div>
 </body>
 </html>

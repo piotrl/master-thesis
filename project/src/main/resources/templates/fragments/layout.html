@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../../static/lib/c3/c3.min.css" th:href="@{lib/c3/c3.min.css}"/>
 
     <link rel="stylesheet" href="../../static/lib/material/material.css" th:href="@{lib/material/material.css}"/>
+    <link rel="stylesheet" href="../../static/layout.css" th:href="@{layout.css}"/>
     <link rel="stylesheet" href="../../static/dashboard.css" th:href="@{dashboard.css}"/>
 </head>
 <body>
@@ -30,7 +31,7 @@
                     <i class="material-icons">search</i>
                 </label>
                 <div class="mdl-textfield__expandable-holder">
-                    <input class="mdl-textfield__input" type="text" id="search" />
+                    <input class="mdl-textfield__input" type="text" id="search"/>
                     <label class="mdl-textfield__label" for="search">Enter your query...</label>
                 </div>
             </div>
@@ -47,7 +48,7 @@
     <!-- nav -->
     <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="demo-drawer-header">
-            <img src="images/user.jpg" class="demo-avatar" />
+            <img src="images/user.jpg" class="demo-avatar"/>
             <div class="demo-avatar-dropdown">
                 <span>You!</span>
                 <div class="mdl-layout-spacer"></div>
@@ -57,6 +58,14 @@
                 </button>
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
                     <li class="mdl-menu__item"><i class="material-icons">settings</i>Settings</li>
+                    <!--<li class="mdl-menu__item"><i class="material-icons">exit to app</i>-->
+                        <!--<a th:if="${#authorization.expression('isAuthenticated()')}"-->
+                           <!--th:href="@{#}"-->
+                           <!--onclick="$('#form').submit();">-->
+                            <!--&nbsp;Log out-->
+                            <!--<form style="visibility: hidden" id="logoutform" method="post" action="#" th:action="@{/logout}"></form>-->
+                        <!--</a>-->
+                    <!--</li>-->
                 </ul>
             </div>
         </header>
@@ -69,13 +78,6 @@
                th:href="@{/signin}">
                 <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">people</i>&nbsp;Sign in
             </a>
-            <a class="mdl-navigation__link"
-               th:if="${#authorization.expression('isAuthenticated()')}"
-               th:href="@{#}"
-               onclick="$('#form').submit();">
-                <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">exit to app</i>&nbsp;Sign in
-                <form style="visibility: hidden" id="logoutform" method="post" action="#" th:action="@{/logout}"></form>
-            </a>
         </nav>
     </div>
 
@@ -85,10 +87,22 @@
     </main>
 
     <!-- Footer -->
-    <div th:align="center">
-        &copy;&nbsp;<span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2017</span>
-        - Piotr Lewandowski - Master Thesis <span th:text="${@environment.getProperty('app.version')}"></span>
-    </div>
+    <footer class="mdl-mini-footer">
+        <div class="mdl-mini-footer__left-section">
+            <div class="mdl-logo">
+                &copy;&nbsp;<span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2017</span>
+                &hyphen; Piotr Lewandowski &hyphen; Master Thesis
+            </div>
+        </div>
+        <div class="mdl-mini-footer__right-section">
+            <ul class="mdl-mini-footer__link-list">
+                <li><a href="#">Read me</a></li>
+                <li><a href="#">About</a></li>
+                <li><span th:text="${@environment.getProperty('app.version')}"></span></li>
+            </ul>
+        </div>
+    </footer>
+
 </div>
 
 <script src="../../static/lib/material/material.js" th:src="@{lib/material/material.js}"></script>

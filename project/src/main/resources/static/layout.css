@@ -1,0 +1,4 @@
+.mdl-layout--fixed-drawer.is-upgraded:not(.is-small-screen) > .mdl-mini-footer {
+    margin-left: 240px;
+    /*width: calc(100% - 240px); // Brokes right padding*/
+}
