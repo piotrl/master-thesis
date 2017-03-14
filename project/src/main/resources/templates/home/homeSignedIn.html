@@ -6,16 +6,19 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="demo-content">
-        <!-- /* Handle the flash message */-->
-        <th:block th:if="${message != null}">
-            <!-- /* The message code is returned from the @Controller */ -->
-            <div th:replace="fragments/components :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">
-                &nbsp;</div>
-        </th:block>
-        <div class="mdl-grid">
-            <div th:replace="dashboard/summary :: summary-day"></div>
-            <div th:replace="dashboard/summary :: summary-month"></div>
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            <div class="mdl-tabs__tab-bar">
+                <a href="#starks-panel" class="mdl-tabs__tab is-active">Lastfm</a>
+                <a href="#lannisters-panel" class="mdl-tabs__tab">Rescue time</a>
+            </div>
+
+            <div class="mdl-tabs__panel is-active" id="starks-panel">
+                <div th:replace="dashboard/summary :: summary-day"></div>
+            </div>
+            <div class="mdl-tabs__panel" id="lannisters-panel">
+                <div th:replace="dashboard/summary :: summary-month"></div>
+            </div>
         </div>
     </div>
 </div>

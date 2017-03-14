@@ -1,4 +1,4 @@
-var chart = c3.generate({
+const chart = c3.generate({
     bindto: '#chart-day',
     data: {
         columns: [
