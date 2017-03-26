@@ -31,18 +31,30 @@ public class StatsRepository {
                 .addValue("accountId", accountId);
 
         String sql = "SELECT " +
-                "  activity.id           AS activityId, " +
-                "  category.name         AS categoryName, " +
-                "  action.name           AS actionName, " +
-                "  activity.productivity AS productivityScore, " +
-                "  activity.spent_time   AS duration, " +
-                "  activity.start_time   AS startTime " +
-                "FROM rescuetime_activity activity " +
-                "  JOIN rescuetime_action action ON activity.action_id = action.id " +
-                "  JOIN rescuetime_category category ON action.category_id = category.id " +
-                "WHERE start_time >= :from AND start_time <= :to " +
-                "   AND activity.account_id = :accountId " +
-                "ORDER BY startTime";
+                "  artist.name                AS artistName, " +
+                "  sum(track.duration) / 60.0 AS sumMinutes, " +
+                "  count(artist.name)         AS countTracks, " +
+                "  AVG(ra.productivity)       AS AVG_PRODUCTIVITY, " +
+                "  count(CASE WHEN ra.productivity = -2 " +
+                "    THEN 1 END)              AS VERY_UNPRODUCTIVE, " +
+                "  count(CASE WHEN ra.productivity = -1 " +
+                "    THEN 1 END)              AS UNPRODUCTIVE, " +
+                "  count(CASE WHEN ra.productivity = 0 " +
+                "    THEN 1 END)              AS NEUTRAL, " +
+                "  count(CASE WHEN ra.productivity = 1 " +
+                "    THEN 1 END)              AS PRODUCTIVE, " +
+                "  count(CASE WHEN ra.productivity = 2 " +
+                "    THEN 1 END)              AS VERY_PRODUCTIVE " +
+                "FROM lastfm_scrobble scrobble " +
+                "  JOIN lastfm_track track ON scrobble.track_id = track.id " +
+                "  JOIN lastfm_artist artist ON track.artist_id = artist.id " +
+                "  JOIN rescuetime_activity ra ON scrobble.played_when >= ra.start_time AND scrobble.played_when <= ra.end_time " +
+                "WHERE scrobble.played_when >= :from AND scrobble.played_when <= :to " +
+                "      AND scrobble.account_id = :accountId " +
+                "      AND ra.account_id = :accountId " +
+                "GROUP BY artist.id " +
+                "ORDER BY sumMinutes DESC " +
+                "LIMIT 10;";
 
         return jdbcOperations.queryForObject(sql, sqlParams, new BeanPropertyRowMapper<>(MostPopularArtistsProductivity.class));
     }
