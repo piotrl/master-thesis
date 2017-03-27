@@ -1,7 +1,7 @@
 package net.piotrl.music.api.summary;
 
-import net.piotrl.music.api.raw.RawActivity;
-import net.piotrl.music.api.summary.dto.MostPopularArtistsProductivity;
+import net.piotrl.music.api.summary.dto.ArtistProductivity;
+import net.piotrl.music.api.summary.dto.ProductivityValue;
 import net.piotrl.music.shared.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class StatsRepository {
 
@@ -20,11 +21,7 @@ public class StatsRepository {
     }
 
 
-    public MostPopularArtistsProductivity mostPopularArtistsProductivityStats(LocalDate month, long accountId) {
-        if (month == null) {
-            month = LocalDate.now();
-        }
-
+    public List<ArtistProductivity> mostPopularArtistsProductivityStats(LocalDate month, long accountId) {
         MapSqlParameterSource sqlParams = new MapSqlParameterSource()
                 .addValue("from", DateUtil.toDate(month.withDayOfMonth(1)))
                 .addValue("to", DateUtil.toDate(month.withDayOfMonth(month.lengthOfMonth())))
@@ -33,7 +30,7 @@ public class StatsRepository {
         String sql = "SELECT " +
                 "  artist.name                AS artistName, " +
                 "  sum(track.duration) / 60.0 AS sumMinutes, " +
-                "  count(artist.name)         AS countTracks, " +
+                "  count(*)         AS countTracks, " +
                 "  AVG(ra.productivity)       AS AVG_PRODUCTIVITY, " +
                 "  count(CASE WHEN ra.productivity = -2 " +
                 "    THEN 1 END)              AS VERY_UNPRODUCTIVE, " +
@@ -56,6 +53,20 @@ public class StatsRepository {
                 "ORDER BY sumMinutes DESC " +
                 "LIMIT 10;";
 
-        return jdbcOperations.queryForObject(sql, sqlParams, new BeanPropertyRowMapper<>(MostPopularArtistsProductivity.class));
+        return jdbcOperations.query(
+                sql, sqlParams, new BeanPropertyRowMapper<>(ArtistProductivity.class)
+        );
+    }
+
+    public ProductivityValue averageProductivityForMusic(LocalDate month, long accountId) {
+        MapSqlParameterSource sqlParams = new MapSqlParameterSource()
+                .addValue("from", DateUtil.toDate(month.withDayOfMonth(1)))
+                .addValue("to", DateUtil.toDate(month.withDayOfMonth(month.lengthOfMonth())))
+                .addValue("accountId", accountId);
+
+        String sql = "";
+        return jdbcOperations.queryForObject(
+                sql, sqlParams, new BeanPropertyRowMapper<>(ProductivityValue.class)
+        );
     }
 }

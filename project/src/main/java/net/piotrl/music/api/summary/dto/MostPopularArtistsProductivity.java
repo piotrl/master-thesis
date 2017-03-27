@@ -7,16 +7,7 @@ import java.util.Map;
 
 @Data
 public class MostPopularArtistsProductivity {
-    public Map<Integer, Double> averagePercentageActivity;
-    public Map<Integer, Double> averageHoursActivity;
+    public ProductivityValue<Double> averagePercentageActivity;
+    public ProductivityValue<Double> averageHoursActivity;
     public List<ArtistProductivity> artists;
-
-    @Data
-    public class ArtistProductivity {
-        public String name;
-        public double averageProductivity;
-        public long playedTime;
-        public Map<Integer, Double> percentageActivity;
-        public Map<Integer, Double> hoursActivity;
-    }
 }
