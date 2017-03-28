@@ -144,3 +144,27 @@ CREATE TABLE public.aggregation_userdata
   CONSTRAINT aggregation_userdata_account_id_fk FOREIGN KEY (account_id) REFERENCES account (id)
 );
 CREATE UNIQUE INDEX aggregation_userdata_account_id_uindex ON public.aggregation_userdata (account_id);
+
+DROP MATERIALIZED VIEW IF EXISTS music_activity;
+CREATE MATERIALIZED VIEW music_activity AS
+  SELECT
+    activity.id            AS activityId,
+    activity.activity_name AS activityName,
+    activity.productivity  AS productivity,
+    activity.start_time    AS activityStarted,
+    activity.end_time      AS activityFinished,
+    category.name          AS categoryName,
+    scrobble.id            AS scrobbleId,
+    scrobble.played_when   AS playedWhen,
+    artist.name            AS artistName,
+    track.name             AS trackName,
+    activity.account_id    AS accountId
+  FROM rescuetime_activity activity
+    JOIN rescuetime_category category ON activity.category_id = category.id
+    JOIN lastfm_scrobble scrobble
+      ON scrobble.played_when >= activity.start_time
+         AND scrobble.played_when <= activity.end_time
+         AND scrobble.account_id = activity.account_id
+    JOIN lastfm_track track ON scrobble.track_id = track.id
+    JOIN lastfm_artist artist ON track.artist_id = artist.id
+  ORDER BY played_when DESC;
