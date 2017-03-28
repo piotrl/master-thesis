@@ -98,7 +98,7 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
 \end{figure}
 
 
-\chapter{Agregacja danych}
+\chapter{Import danych}
 
     \section{Wybór dostawców danych}
 
@@ -146,13 +146,13 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
 
         \section*{Komunikacja z zewnętrznymi serwisami}
 
-    \section{Mechanizm agregacji danych}
+    \section{Mechanizm importu danych}
 
         Oba z wymienionych serwisów udostępniają część danych, które użytkownik zgromadził na swoim koncie.
         Dostęp ten jest realizowany przez API, po okazaniu odpowiednich tokenów uwierzytelniających, mamy dostęp do danych użytkownika.
 
         Przed analizą, konieczne jest pobranie danych do własnej bazy danych oraz stworzenie modelu relacji pomiędzy nimi.
-        Proces pobierania nazywam agregacją danych i jest on podstawą działania aplikacji,
+        Proces pobierania nazywam agregacją danych lub importem danych i jest on podstawą działania aplikacji,
         ponieważ to w nim zdobywamy interesujące nas informacje.
 
         Aby aplikacja nie była jednorazowego użytku, należy dla każdego użytkownika dostarczać kolejne porcje danych.
@@ -164,9 +164,9 @@ Na to pytanie odpowiedziało XX tysięcy ludzi (TODO: Źródło).
         (Nie powinien ciągle powtarzać błędnych zapytań).
 
         \subsection*{Ciągłość}
-        Celem codziennego uruchamiania agregacji jest pobranie najnowszych danych do systemu,
-        API pozwalają nam na wybranie tylko małego fragmentu danych, więc istotne jest by zacząć agregację od momentu ostatniej
-        dla danego użytkownika.
+        Celem codzienne uruchamianie procedury i pobranie najnowszych lub brakujących danych do systemu,
+        API pozwalają nam na wybranie tylko małego fragmentu danych, istotne jest więc by zacząć import
+        od momentu ostatniego poprawnie wczytanego rekordu dla danego użytkownika.
 
         \subsection*{Powtarzalność}
 

@@ -17,6 +17,9 @@
     - [[PL] Article](https://bulldogjob.pl/news/137-muzyka-do-programowania-czego-sluchaja-programisci) (23-01-2017)
 4. **Google charts vs D3.js**
     - [Article](https://blog.socialcops.com/engineering/d3-js-versus-google-charts/)
+    
+5. [**PostgreSQL: Data analysis and analytics**](https://www.slideshare.net/hansjurgenschonig/postgresql-data-analysis-and-analytics)
+6. [**Population vs. Sample Variance and Standard Deviation**](http://www.macroption.com/population-sample-variance-standard-deviation/)
 
 ### 4. Strony internetowe
 
