@@ -10,3 +10,16 @@ WHERE ma.accountId = :accountId
 --   AND date_trunc('day', ma.activityStarted) = '2017-02-23' -- mock
 GROUP BY hour
 ORDER BY hour ASC;
+
+/**
+   Most popular artists played in minutes
+ */
+SELECT
+  ma.artistName,
+  sum(ma.trackDuration)         AS minutes,
+  count(DISTINCT ma.scrobbleId) AS scrobbles
+FROM music_activity ma
+WHERE ma.activityStarted >= :from AND ma.activityStarted <= :to
+      AND ma.accountid = :accountId
+GROUP BY ma.artistName
+ORDER BY minutes DESC;
