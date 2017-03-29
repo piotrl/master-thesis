@@ -153,11 +153,13 @@ CREATE MATERIALIZED VIEW music_activity AS
     activity.productivity  AS productivity,
     activity.start_time    AS activityStarted,
     activity.end_time      AS activityFinished,
+    activity.spent_time    AS activityTime,
     category.name          AS categoryName,
     scrobble.id            AS scrobbleId,
     scrobble.played_when   AS playedWhen,
     artist.name            AS artistName,
     track.name             AS trackName,
+    track.duration         AS trackDuration,
     activity.account_id    AS accountId
   FROM rescuetime_activity activity
     JOIN rescuetime_category category ON activity.category_id = category.id
