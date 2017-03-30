@@ -2,10 +2,10 @@
 SELECT
   date_trunc('hour', ma.activityStarted) AS hour,
   count(DISTINCT ma.activityName)        AS activities,
-  sum(DISTINCT track.duration) / 60.0    AS musicMinutes,
+  sum(DISTINCT COALESCE(track.duration, 0)) / 60.0    AS musicMinutes,
   sum(DISTINCT ma.activityTime) / 60.0   AS activityMinutes
 FROM music_activity ma
-  JOIN lastfm_track track ON track.id = ma.trackId
+  LEFT JOIN lastfm_track track ON track.id = ma.trackId
 WHERE ma.accountId = :accountId
 --   AND date_trunc('day', ma.activityStarted) = '2017-02-23' -- mock
 GROUP BY hour
