@@ -16,28 +16,28 @@ Kod znajduje się w prywatnym repozytorium GIT (pod adresem https://github.com/p
 
 ### Spis treści
 1. Wstęp
-  1. Wpływu muzyki na produktywność
-  2. Przepływ danych w aplikacji
+    1. Wpływu muzyki na produktywność
+    2. Przepływ danych w aplikacji
 2. Agregacja danych
-  1. Wybór dostawców danych
-  2. Cechy dobrego mechanizmu agregacji
-    1. Niezależność
-    2. Ciągłość
-    3. Powtarzalność
-  3. Powszechne problemy przy komunikacji z API
-    1. Orgraniczenia
-    2. Autoryzacja
-    3. Braki dostępu    
+    1. Wybór dostawców danych
+    2. Cechy dobrego mechanizmu agregacji
+        1. Niezależność
+        2. Ciągłość
+        3. Powtarzalność
+    3. Powszechne problemy przy komunikacji z API
+        1. Orgraniczenia
+        2. Autoryzacja
+        3. Braki dostępu    
 3. Analiza danych
-  1. Opis zebranych danych
-  2. Data fusion - Łączenie danych w czasie
-    1. Korekta
-    2. Integracja dwóch źródeł danych
-  2. Budowa raportów na podstawie szeregów czasowych
+    1. Opis zebranych danych
+    2. Data fusion - Łączenie danych w czasie
+        1. Korekta
+        2. Integracja dwóch źródeł danych
+    3. Budowa raportów na podstawie szeregów czasowych
 4. Wizualizacja danych
-  1. Jeden zbiór danych - wiele interpretacji
-  2. Wybór odpowiednich metod wizualizacji danych
-  3. Analiza danych z punktu widzenia użytkownika
+    1. Jeden zbiór danych - wiele interpretacji
+    2. Wybór odpowiednich metod wizualizacji danych
+    3. Analiza danych z punktu widzenia użytkownika
 5. Zakończenie
 
 ### Wstęp do pracy
