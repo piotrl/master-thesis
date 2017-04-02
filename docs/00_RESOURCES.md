@@ -20,6 +20,7 @@
     
 5. [**PostgreSQL: Data analysis and analytics**](https://www.slideshare.net/hansjurgenschonig/postgresql-data-analysis-and-analytics)
 6. [**Population vs. Sample Variance and Standard Deviation**](http://www.macroption.com/population-sample-variance-standard-deviation/)
+7. [**PostgreSQL: Understanding Window Functions**](http://tapoueh.org/blog/2013/08/20-Window-Functions)
 
 ### 4. Strony internetowe
 
