@@ -19,15 +19,15 @@ public class StatsService {
         this.statsRepository = statsRepository;
     }
 
-    public MostPopularArtistsProductivity TopArtistsProductivity(LocalDate month, long accountId) {
+    public MostPopularArtistsProductivity topArtistsProductivity(LocalDate month, long accountId) {
         if (month == null) {
             month = LocalDate.now();
         }
-        List<ArtistProductivity> artistProductivities = statsRepository.mostPopularArtistsProductivityStats(month, accountId);
+        List<ArtistProductivity> artistsProductivity = statsRepository.mostPopularArtistsProductivityStats(month, accountId);
         ProductivityValue<Double> averageProductivityForMusic = statsRepository.averageProductivityForMusic(month, accountId);
 
         MostPopularArtistsProductivity mostPopularArtistsProductivity = new MostPopularArtistsProductivity();
-        mostPopularArtistsProductivity.setArtists(artistProductivities);
+        mostPopularArtistsProductivity.setArtists(artistsProductivity);
         mostPopularArtistsProductivity.setAverageHoursActivity(averageProductivityForMusic);
         return mostPopularArtistsProductivity;
     }
