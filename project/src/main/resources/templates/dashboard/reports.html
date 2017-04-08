@@ -7,7 +7,7 @@
 <body>
 <div layout:fragment="content">
     <div class="mdl-cell mdl-cell--12-col">
-        <div class="mdl-card mdl-shadow--2dp mdl-card--full-width">
+        <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col">
             <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
                 <h2 class="mdl-card__title-text">Filter</h2>
             </div>
@@ -21,7 +21,7 @@
                     </div>
                     <div class="mdl-cell">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="month" id="filter-month" />
+                            <input class="mdl-textfield__input" type="month" id="filter-month"/>
                             <label class="mdl-textfield__label" for="filter-month">Month</label>
                         </div>
                     </div>
@@ -31,6 +31,18 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-card mdl-shadow--2dp mdl-cell--6-col">
+            <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+                <h2 class="mdl-card__title-text">Filter</h2>
+            </div>
+
+            <div class="mdl-card__actions mdl-card--border">
+                <div th:replace="dashboard/reports-music-ratio.part :: reports-music-ratio"></div>
             </div>
         </div>
     </div>
