@@ -14,20 +14,24 @@
 
             <div class="mdl-card__actions mdl-card--border">
                 <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--middle mdl-typography--text-right">
-                        <button class="mdl-button mdl-button--icon mdl-button--colored mdl-js-button mdl-js-ripple-effect"
-                                type="submit"><i class="material-icons">arrow</i> &leftarrow;
+                    <div class="mdl-cell mdl-cell--1-offset mdl-cell--middle mdl-typography--text-right">
+                        <button id="filter-button-left"
+                                class="mdl-button mdl-button--icon mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                                type="submit">
+                            <i class="material-icons">arrow</i> &leftarrow;
                         </button>
                     </div>
-                    <div class="mdl-cell">
+                    <div class="mdl-cell mdl-cell--2-col">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <input class="mdl-textfield__input" type="month" id="filter-month"/>
                             <label class="mdl-textfield__label" for="filter-month">Month</label>
                         </div>
                     </div>
                     <div class="mdl-cell mdl-cell--middle mdl-typography--text-left">
-                        <button class="mdl-button mdl-button--icon mdl-button--colored mdl-js-button mdl-js-ripple-effect"
-                                type="submit"><i class="material-icons">arrow</i> &rightarrow;
+                        <button id="filter-button-right"
+                                class="mdl-button mdl-button--icon mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                                type="submit">
+                            <i class="material-icons">arrow</i> &rightarrow;
                         </button>
                     </div>
                 </div>
@@ -37,10 +41,6 @@
 
     <div class="mdl-cell mdl-cell--12-col">
         <div class="mdl-card mdl-shadow--2dp mdl-cell--6-col">
-            <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-                <h2 class="mdl-card__title-text">Filter</h2>
-            </div>
-
             <div class="mdl-card__actions mdl-card--border">
                 <div th:replace="dashboard/reports-music-ratio.part :: reports-music-ratio"></div>
             </div>
