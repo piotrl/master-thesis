@@ -1,6 +1,7 @@
 package net.piotrl.music.api.summary;
 
 import net.piotrl.music.api.summary.dto.ArtistProductivity;
+import net.piotrl.music.api.summary.dto.MusicActivitySalienceSummary;
 import net.piotrl.music.api.summary.dto.ProductivityValue;
 import net.piotrl.music.shared.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,50 @@ public class StatsRepository {
         String sql = "";
         return jdbcOperations.queryForObject(
                 sql, sqlParams, new BeanPropertyRowMapper<>(ProductivityValue.class)
+        );
+    }
+
+    public List<MusicActivitySalienceSummary> musicProductivitySalienceMonthly(LocalDate firstDayOfMonth, LocalDate lastDayOfMonth, long accountId) {
+        MapSqlParameterSource sqlParams = new MapSqlParameterSource()
+                .addValue("from", DateUtil.toDate(firstDayOfMonth))
+                .addValue("to", DateUtil.toDate(lastDayOfMonth))
+                .addValue("accountId", accountId);
+
+        String sql = "" +
+                "WITH aggregation_summary AS ( " +
+                "    SELECT " +
+                "      day, " +
+                "      sum(music) / 3600.0                   AS music, " +
+                "      sum(activity) / 3600.0                AS activity, " +
+                "      (sum(activity) - sum(music)) / 3600.0 AS salience " +
+                "    FROM (SELECT " +
+                "            played_when :: DATE AS day, " +
+                "            track.duration      AS music, " +
+                "            0                   AS activity " +
+                "          FROM lastfm_scrobble scrobble " +
+                "            JOIN lastfm_track track ON scrobble.track_id = track.id " +
+                "          WHERE scrobble.account_id = :accountId " +
+                "          UNION " +
+                "          SELECT " +
+                "            start_time :: DATE AS day, " +
+                "            0                  AS music, " +
+                "            spent_time         AS activity " +
+                "          FROM rescuetime_activity " +
+                "          WHERE account_id = :accountId " +
+                "         ) m " +
+                "    GROUP BY day " +
+                "    ORDER BY day " +
+                ") " +
+                "SELECT summary.* " +
+                "FROM generate_series( " +
+                "         DATE_TRUNC('day', :from :: DATE), " +
+                "         DATE_TRUNC('day', :to :: DATE), " +
+                "         '1 day' :: INTERVAL " +
+                "     ) date_serie " +
+                "  JOIN aggregation_summary summary ON summary.day = date_serie";
+
+        return jdbcOperations.query(
+                sql, sqlParams, new BeanPropertyRowMapper<>(MusicActivitySalienceSummary.class)
         );
     }
 }

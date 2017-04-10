@@ -2,6 +2,7 @@ package net.piotrl.music.api.summary;
 
 import net.piotrl.music.api.summary.dto.ArtistProductivity;
 import net.piotrl.music.api.summary.dto.MostPopularArtistsProductivity;
+import net.piotrl.music.api.summary.dto.MusicActivitySalienceSummary;
 import net.piotrl.music.api.summary.dto.ProductivityValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,4 +33,9 @@ public class StatsService {
         return mostPopularArtistsProductivity;
     }
 
+    public List<MusicActivitySalienceSummary> musicProductivitySalienceMonthly(int year, int month, long userId) {
+        LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
+        LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
+        return statsRepository.musicProductivitySalienceMonthly(firstDayOfMonth, lastDayOfMonth, userId);
+    }
 }

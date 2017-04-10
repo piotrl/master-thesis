@@ -16,7 +16,7 @@ ORDER BY hour ASC;
  */
 SELECT
   artist.name,
-  sum(track.duration) / 3600.0    AS hours,
+  sum(track.duration) / 3600.0  AS hours,
   count(DISTINCT ma.scrobbleId) AS scrobbles
 FROM music_activity ma
   JOIN lastfm_track track ON track.id = ma.trackId
@@ -29,31 +29,34 @@ ORDER BY scrobbles DESC;
 /**
  * summary of listened activities, music and salience per day for current month
  */
-WITH aggregation_summary AS (SELECT
-                               day,
-                               sum(music) / 3600.0                   AS music,
-                               sum(activity) / 3600.0                AS activity,
-                               (sum(activity) - sum(music)) / 3600.0 AS salience
-                             FROM (SELECT
-                                     played_when :: DATE AS day,
-                                     track.duration      AS music,
-                                     0                   AS activity
-                                   FROM lastfm_scrobble scrobble
-                                     JOIN lastfm_track track ON scrobble.track_id = track.id
-                                   UNION
-                                   SELECT
-                                     start_time :: DATE AS day,
-                                     0                  AS music,
-                                     spent_time         AS activity
-                                   FROM rescuetime_activity
-                                  ) m
-                             GROUP BY day
-                             ORDER BY day)
-SELECT
-  summary.*
+WITH aggregation_summary AS (
+    SELECT
+      day,
+      sum(music) / 3600.0                   AS music,
+      sum(activity) / 3600.0                AS activity,
+      (sum(activity) - sum(music)) / 3600.0 AS salience
+    FROM (SELECT
+            played_when :: DATE AS day,
+            track.duration      AS music,
+            0                   AS activity
+          FROM lastfm_scrobble scrobble
+            JOIN lastfm_track track ON scrobble.track_id = track.id
+          WHERE scrobble.account_id = :accountId
+          UNION
+          SELECT
+            start_time :: DATE AS day,
+            0                  AS music,
+            spent_time         AS activity
+          FROM rescuetime_activity
+          WHERE rescuetime_activity.account_id = :accountId
+         ) m
+    GROUP BY day
+    ORDER BY day
+)
+SELECT summary.*
 FROM generate_series(
-         DATE_TRUNC('month', NOW() :: DATE),
-         DATE_TRUNC('month', NOW()) + '1 MONTH' :: INTERVAL - '1 DAY' :: INTERVAL,
+         DATE_TRUNC('day', :from :: DATE),
+         DATE_TRUNC('day', :to :: DATE),
          '1 day' :: INTERVAL
      ) date
-  JOIN aggregation_summary summary ON summary.day = date
+  JOIN aggregation_summary summary ON summary.day = date;
