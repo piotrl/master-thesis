@@ -28,4 +28,12 @@ public class StatsController {
         return statsService.musicProductivitySalienceMonthly(year, month, 1l);
     }
 
+    @RequestMapping("music/year/{year}/month/{month}/musicPlayedDuringActivities")
+    public List<MusicActivitySalienceSummary> musicPlayedDuringActivities(@PathVariable int year,
+                                                                     @PathVariable int month,
+                                                                     Principal principal) {
+//        Assert.notNull(principal);
+        return statsService.musicPlayedDuringActivities(year, month, 1l);
+    }
+
 }

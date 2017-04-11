@@ -118,4 +118,52 @@ public class StatsRepository {
                 sql, sqlParams, new BeanPropertyRowMapper<>(MusicActivitySalienceSummary.class)
         );
     }
+
+    public List<MusicActivitySalienceSummary> musicPlayedDuringActivities(LocalDate firstDayOfMonth, LocalDate lastDayOfMonth, long accountId) {
+        MapSqlParameterSource sqlParams = new MapSqlParameterSource()
+                .addValue("from", DateUtil.toDate(firstDayOfMonth))
+                .addValue("to", DateUtil.toDate(lastDayOfMonth))
+                .addValue("accountId", accountId);
+
+        String sql = "" +
+               "WITH aggregation_summary AS ( " +
+                "    SELECT " +
+                "      day                                   AS aggregated_day, " +
+                "      sum(music) / 3600.0                   AS music, " +
+                "      sum(activity) / 3600.0                AS activity, " +
+                "      (sum(activity) - sum(music)) / 3600.0 AS salience " +
+                "    FROM (SELECT DISTINCT ON (m.trackid, m.activitystarted) " +
+                "            m.activitystarted :: DATE AS day, " +
+                "            track.duration            AS music, " +
+                "            0                         AS activity " +
+                "          FROM music_activity m " +
+                "            LEFT JOIN lastfm_scrobble scrobble ON m.scrobbleid = scrobble.id " +
+                "            LEFT JOIN lastfm_track track ON scrobble.track_id = track.id " +
+                "          WHERE m.accountid = :accountId " +
+                "          UNION " +
+                "          SELECT " +
+                "            m.activitystarted :: DATE AS day, " +
+                "            0                         AS music, " +
+                "            ra.spent_time             AS activity " +
+                "          FROM music_activity m " +
+                "            JOIN rescuetime_activity ra ON ra.id = m.activityid " +
+                "          WHERE m.accountid = :accountId " +
+                "         ) m " +
+                "    GROUP BY day " +
+                "    ORDER BY day " +
+                ") " +
+                "SELECT " +
+                "  date AS timestamp, " +
+                "  summary.* " +
+                "FROM generate_series( " +
+                "         DATE_TRUNC('day', :from :: DATE), " +
+                "         DATE_TRUNC('day', :to :: DATE), " +
+                "         '1 day' :: INTERVAL " +
+                "     ) date " +
+                "  LEFT JOIN aggregation_summary summary ON summary.aggregated_day = date";
+
+        return jdbcOperations.query(
+                sql, sqlParams, new BeanPropertyRowMapper<>(MusicActivitySalienceSummary.class)
+        );
+    }
 }

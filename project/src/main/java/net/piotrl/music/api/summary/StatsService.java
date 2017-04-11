@@ -38,4 +38,10 @@ public class StatsService {
         LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
         return statsRepository.musicProductivitySalienceMonthly(firstDayOfMonth, lastDayOfMonth, userId);
     }
+
+    public List<MusicActivitySalienceSummary> musicPlayedDuringActivities(int year, int month, long userId) {
+        LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
+        LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
+        return statsRepository.musicPlayedDuringActivities(firstDayOfMonth, lastDayOfMonth, userId);
+    }
 }
