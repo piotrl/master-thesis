@@ -6,8 +6,8 @@ import java.util.Date;
 
 @Data
 public class MusicActivitySalienceSummary {
-    private Date day;
-    private double music;
-    private double activity;
-    private double salience;
+    private Date timestamp;
+    private Double music;
+    private Double activity;
+    private Double salience;
 }

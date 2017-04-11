@@ -82,7 +82,7 @@ public class StatsRepository {
         String sql = "" +
                 "WITH aggregation_summary AS ( " +
                 "    SELECT " +
-                "      day, " +
+                "      day                                   AS aggregated_day, " +
                 "      sum(music) / 3600.0                   AS music, " +
                 "      sum(activity) / 3600.0                AS activity, " +
                 "      (sum(activity) - sum(music)) / 3600.0 AS salience " +
@@ -99,18 +99,20 @@ public class StatsRepository {
                 "            0                  AS music, " +
                 "            spent_time         AS activity " +
                 "          FROM rescuetime_activity " +
-                "          WHERE account_id = :accountId " +
+                "          WHERE rescuetime_activity.account_id = :accountId " +
                 "         ) m " +
                 "    GROUP BY day " +
                 "    ORDER BY day " +
                 ") " +
-                "SELECT summary.* " +
+                "SELECT " +
+                "  date AS timestamp, " +
+                "  summary.* " +
                 "FROM generate_series( " +
                 "         DATE_TRUNC('day', :from :: DATE), " +
                 "         DATE_TRUNC('day', :to :: DATE), " +
                 "         '1 day' :: INTERVAL " +
-                "     ) date_serie " +
-                "  JOIN aggregation_summary summary ON summary.day = date_serie";
+                "     ) date " +
+                "  LEFT JOIN aggregation_summary summary ON summary.aggregated_day = date";
 
         return jdbcOperations.query(
                 sql, sqlParams, new BeanPropertyRowMapper<>(MusicActivitySalienceSummary.class)
