@@ -1,5 +1,6 @@
 (function (reports) {
     "use strict";
+    google.charts.load('current', {'packages': ['corechart']});
 
     initMusicSummary();
     initSilenceSummary();
@@ -8,38 +9,38 @@
 
     function initMusicSummary() {
         // this month
-        google.charts.load('current', {'packages': ['corechart']});
-
+        const date = dateFns.parse(reports.$filterDateInput.value);
+        const year = dateFns.getYear(date);
+        const month = dateFns.getMonth(date) + 1;
+        fetch(`http://localhost:8080/api/stats/music/year/${year}/month/${month}/summary`)
+            .then(response => response.json())
+            .then(data => {
+                google.charts.setOnLoadCallback(drawChart(data));
+            });
         // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(drawChart);
 
-        function drawChart() {
-            console.log("drawChart");
+        function drawChart(stats) {
+            stats = stats.map((column => {
+                return [dateFns.format(dateFns.parse(column.timestamp), 'MM-DD'), column.activity, column.music, column.salience];
+            }));            // Create the data table.
 
-            // Create the data table.
-            var data = new google.visualization.arrayToDataTable([
-                ['Day', 'Activity', 'Music', 'Silient'],
-                ['1', 12, 3, 4],
-                ['2', 3, 3-1, 1],
-                ['3', 11, 4-1, 4],
-                ['4', 2, 2-1, 1],
-                ['5', 1, 1-1, 3],
-                ['6', 3, 3-1, 1],
-                ['7', 4, 4-1, 1],
-                ['8', 5, 5-1, 0.5]
-            ]);
-
-            var options = {
-                title : 'Monthly activity summary',
+            const options = {
+                title: 'Monthly activity summary',
                 vAxis: {title: 'Hours'},
-                hAxis: {title: 'Month'},
+                hAxis: {title: 'Days'},
                 seriesType: 'bars',
                 series: {2: {type: 'line'}}
             };
 
             // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.ComboChart(document.getElementById('reports-music-ratio'));
-            chart.draw(data, options);
+            return () => {
+                const data = new google.visualization.arrayToDataTable([
+                    ['Day', 'Activity', 'Music', 'Silient'],
+                    ... stats
+                ]);
+                const chart = new google.visualization.ComboChart(document.getElementById('reports-music-ratio'));
+                chart.draw(data, options);
+            };
         }
     }
 
@@ -55,21 +56,21 @@
 
             // Create the data table.
             var data = new google.visualization.arrayToDataTable([
-                ['Day', 'Silient'],
-                ['1', 74],
-                ['2', 44],
-                ['3', 81],
-                ['4', 23],
-                ['5', 23],
-                ['6', 12],
-                ['7', 11],
-                ['8', 55]
+                ['Day', 'Silient', 'Productivity'],
+                ['1', 74, 41],
+                ['2', 44, 12],
+                ['3', 81, 11],
+                ['4', 23, 55],
+                ['5', 23, 66],
+                ['6', 12, 12],
+                ['7', 11, 81],
+                ['8', 55, 91]
             ]);
 
             var options = {
                 title : 'Silience %',
                 vAxis: {title: 'Hours'},
-                hAxis: {title: 'Month'},
+                hAxis: {title: 'Days'},
                 seriesType: 'bars'
             };
 
