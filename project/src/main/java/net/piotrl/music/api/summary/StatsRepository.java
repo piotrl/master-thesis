@@ -24,14 +24,14 @@ public class StatsRepository {
     }
 
 
-    public List<ArtistProductivity> mostPopularArtistsProductivityStats(LocalDate month, long accountId) {
+    public List<ArtistProductivity> mostPopularArtistsProductivityStats(LocalDate from, LocalDate to, long accountId) {
         MapSqlParameterSource sqlParams = new MapSqlParameterSource()
-                .addValue("from", DateUtil.toDate(month.withDayOfMonth(1)))
-                .addValue("to", DateUtil.toDate(month.withDayOfMonth(month.lengthOfMonth())))
+                .addValue("from", DateUtil.toDate(from))
+                .addValue("to", DateUtil.toDate(to))
                 .addValue("accountId", accountId);
 
         String sql = "SELECT " +
-                "  artist.name                AS artistName, " +
+                "  artist.name                AS name, " +
                 "  sum(track.duration) / 60.0 AS sumMinutes, " +
                 "  count(*)         AS countTracks, " +
                 "  AVG(ra.productivity)       AS AVG_PRODUCTIVITY, " +
@@ -61,10 +61,10 @@ public class StatsRepository {
         );
     }
 
-    public ProductivityValue averageProductivityForMusic(LocalDate month, long accountId) {
+    public ProductivityValue averageProductivityForMusic(LocalDate from, LocalDate to, long accountId) {
         MapSqlParameterSource sqlParams = new MapSqlParameterSource()
-                .addValue("from", DateUtil.toDate(month.withDayOfMonth(1)))
-                .addValue("to", DateUtil.toDate(month.withDayOfMonth(month.lengthOfMonth())))
+                .addValue("from", DateUtil.toDate(from))
+                .addValue("to", DateUtil.toDate(to))
                 .addValue("accountId", accountId);
 
         String sql = "";

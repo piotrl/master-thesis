@@ -1,6 +1,7 @@
 package net.piotrl.music.api.summary;
 
 import net.piotrl.music.api.summary.artists.ArtistsSummary;
+import net.piotrl.music.api.summary.dto.MostPopularArtistsProductivity;
 import net.piotrl.music.api.summary.dto.MusicActivitySalienceSummary;
 import net.piotrl.music.api.summary.tags.TagSummary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,9 @@ public class StatsController {
     }
 
     @RequestMapping("music/year/{year}/month/{month}/summary")
-    public List<MusicActivitySalienceSummary> topArtistsProductivity(@PathVariable int year,
-                                                                     @PathVariable int month,
-                                                                     Principal principal) {
+    public List<MusicActivitySalienceSummary> musicProductivitySalienceMonthly(@PathVariable int year,
+                                                                               @PathVariable int month,
+                                                                               Principal principal) {
 //        Assert.notNull(principal);
         return statsService.musicProductivitySalienceMonthly(year, month, 1l);
     }
@@ -36,6 +37,14 @@ public class StatsController {
                                                                           Principal principal) {
 //        Assert.notNull(principal);
         return statsService.musicPlayedDuringActivities(year, month, 1l);
+    }
+
+    @RequestMapping("music/year/{year}/month/{month}/popular")
+    public MostPopularArtistsProductivity topArtistsProductivity(@PathVariable int year,
+                                                                 @PathVariable int month,
+                                                                 Principal principal) {
+//        Assert.notNull(principal);
+        return statsService.topArtistsProductivity(year, month, 1l);
     }
 
     @RequestMapping("tags/year/{year}/month/{month}/popular")
@@ -53,5 +62,4 @@ public class StatsController {
 //        Assert.notNull(principal);
         return statsService.mostPopularArtists(year, month, 1l);
     }
-
 }

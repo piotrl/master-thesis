@@ -28,12 +28,12 @@ public class StatsService {
         this.artistsRepository = artistsRepository;
     }
 
-    public MostPopularArtistsProductivity topArtistsProductivity(LocalDate month, long accountId) {
-        if (month == null) {
-            month = LocalDate.now();
-        }
-        List<ArtistProductivity> artistsProductivity = statsRepository.mostPopularArtistsProductivityStats(month, accountId);
-        ProductivityValue<Double> averageProductivityForMusic = statsRepository.averageProductivityForMusic(month, accountId);
+    public MostPopularArtistsProductivity topArtistsProductivity(int year, int month, long accountId) {
+        LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
+        LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
+
+        List<ArtistProductivity> artistsProductivity = statsRepository.mostPopularArtistsProductivityStats(firstDayOfMonth, lastDayOfMonth, accountId);
+        ProductivityValue<Double> averageProductivityForMusic = statsRepository.averageProductivityForMusic(firstDayOfMonth, lastDayOfMonth, accountId);
 
         MostPopularArtistsProductivity mostPopularArtistsProductivity = new MostPopularArtistsProductivity();
         mostPopularArtistsProductivity.setArtists(artistsProductivity);
@@ -57,6 +57,7 @@ public class StatsService {
         LocalDate monthDate = LocalDate.of(year, month, 1);
         return tagsRepository.mostPopularTagsInMonth(monthDate, accountId);
     }
+
     List<ArtistsSummary> mostPopularArtists(int year, int month, long accountId) {
         LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
         LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
