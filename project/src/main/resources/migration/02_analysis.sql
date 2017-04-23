@@ -122,3 +122,21 @@ WHERE ma.activitystarted >= :from
 GROUP BY tag.name
 ORDER BY playedTimes DESC
 LIMIT 10;
+
+/**
+ * Most popular artists
+ */
+
+SELECT
+  track.artist               AS artistName,
+  max(track.image_url_small) AS imageUrl,
+  count(*)                   AS playedTimes
+FROM (SELECT DISTINCT ON (scrobbleId) *
+      FROM music_activity) ma
+  JOIN lastfm_track track ON track.id = ma.trackid
+WHERE ma.activitystarted >= :from
+      AND ma.activitystarted <= :to
+      AND ma.accountid = :accountId
+GROUP BY track.artist
+ORDER BY playedTimes DESC
+LIMIT 10;
