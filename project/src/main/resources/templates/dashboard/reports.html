@@ -48,7 +48,7 @@
                         <th class="mdl-data-table__cell--non-numeric">Tag</th>
                         <th>Times played</th>
                         <th>Duration</th>
-                     </tr>
+                    </tr>
                     </thead>
                     <tbody>
                     <!-- Placeholder -->
@@ -69,39 +69,39 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <!-- placeholder -->
+                    <!-- placeholder -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <div class="mdl-cell mdl-cell--12-col">
-        <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col">
-            <div class="mdl-card__title">
-                <h2 class="mdl-card__title-text">All aggregated music and activities</h2>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <div id="reports-music-ratio"></div>
+    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <div class="mdl-tabs__tab-bar">
+            <a href="#panel-music-during-activities" class="mdl-tabs__tab is-active">Music played only during
+                activities</a>
+            <a href="#panel-music-ratio" class="mdl-tabs__tab">All aggregated music</a>
+        </div>
+
+        <div class="mdl-tabs__panel is-active" id="panel-music-during-activities">
+            <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Music played only during activities</h2>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <div id="reports-music-during-activities" style="width: 100%;"></div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="mdl-cell mdl-cell--12-col">
-        <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col">
-            <div class="mdl-card__title">
-                <h2 class="mdl-card__title-text">Music played only during activities</h2>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <div id="reports-music-during-activities"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="mdl-cell mdl-cell--12-col">
-        <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col">
-            <div class="mdl-card__actions mdl-card--border">
-                <div id="reports-silence-ratio"></div>
+        <div class="mdl-tabs__panel" id="panel-music-ratio">
+            <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">All aggregated music and activities</h2>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <div id="reports-music-ratio" style="width: 100%;"></div>
+                </div>
             </div>
         </div>
     </div>

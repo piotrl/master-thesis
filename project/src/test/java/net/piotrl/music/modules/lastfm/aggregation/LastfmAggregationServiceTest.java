@@ -18,7 +18,7 @@ public class LastfmAggregationServiceTest {
 
     @Test
     public void startAggregation() throws Exception {
-        LocalDate recentDate = LocalDate.now().minusDays(14);
+        LocalDate recentDate = LocalDate.of(2017, 3, 7);
         lastfmAggregationService.startAggregation(AggregationPropertiesMock.globalContext(), recentDate);
     }
 }

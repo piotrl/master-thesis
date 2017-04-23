@@ -1,16 +1,20 @@
-package net.piotrl.music.web.reports;
+package net.piotrl.music.web.dashboard;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.security.Principal;
 
 @Controller
-class ReportsController {
+class DashboardController {
 
     @GetMapping("/reports")
     String index(Principal principal) {
         return "dashboard/reports";
+    }
+
+    @GetMapping("/productivity")
+    String productivityls(Principal principal) {
+        return "dashboard/productivity";
     }
 }
