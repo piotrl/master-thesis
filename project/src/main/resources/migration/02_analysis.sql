@@ -1,3 +1,5 @@
+REFRESH MATERIALIZED VIEW music_activity;
+
 -- Look for correlation between amount activities within one hour and music played
 SELECT
   date_trunc('hour', ma.activityStarted)           AS hour,
@@ -64,7 +66,7 @@ FROM generate_series(
   LEFT JOIN aggregation_summary summary ON summary.aggregated_day = date;
 
 /**
- *
+ * Music played ONLY during activities (UNION prevents tracks duplication)
  */
 WITH aggregation_summary AS (
     SELECT
@@ -72,7 +74,7 @@ WITH aggregation_summary AS (
       sum(music) / 3600.0                   AS music,
       sum(activity) / 3600.0                AS activity,
       (sum(activity) - sum(music)) / 3600.0 AS salience
-    FROM (SELECT DISTINCT ON (m.trackid, m.activitystarted)
+    FROM (SELECT DISTINCT ON (m.scrobbleid, m.activitystarted)
             m.activitystarted :: DATE AS day,
             track.duration            AS music,
             0                         AS activity
@@ -101,3 +103,22 @@ FROM generate_series(
          '1 day' :: INTERVAL
      ) date
   LEFT JOIN aggregation_summary summary ON summary.aggregated_day = date;
+
+/**
+ * Most popular tags in month
+ */
+
+SELECT
+  tag.name,
+  count(*) AS playedTimes
+FROM (SELECT DISTINCT ON (scrobbleId) *
+      FROM music_activity) ma
+  JOIN lastfm_track track ON track.id = ma.trackid
+  JOIN lastfm_tag_track tagtrack ON tagtrack.track_id = track.id
+  JOIN lastfm_tag tag ON tag.id = tagtrack.tag_id
+WHERE ma.activitystarted >= :from
+      AND ma.activitystarted <= :to
+      AND ma.accountid = :accountId
+GROUP BY tag.name
+ORDER BY playedTimes DESC
+LIMIT 10;

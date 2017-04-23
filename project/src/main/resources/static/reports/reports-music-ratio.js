@@ -38,6 +38,7 @@
         const options = {
             vAxis: {title: 'Hours'},
             hAxis: {title: 'Days'},
+            height: 400,
             seriesType: 'bars',
             series: {2: {type: 'line'}}
         };
