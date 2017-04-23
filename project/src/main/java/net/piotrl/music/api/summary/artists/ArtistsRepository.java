@@ -30,7 +30,8 @@ public class ArtistsRepository {
         String sql = "SELECT " +
                 "  track.artist               AS name, " +
                 "  max(track.image_url_small) AS imageUrl, " +
-                "  count(*)                   AS playedTimes " +
+                "  count(*)                   AS playedTimes," +
+                "  sum(track.duration) / 60   AS duration " +
                 "FROM (SELECT DISTINCT ON (scrobbleId) * " +
                 "      FROM music_activity) ma " +
                 "  JOIN lastfm_track track ON track.id = ma.trackid " +

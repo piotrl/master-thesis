@@ -30,10 +30,14 @@
 
     function drawTagsTable(rows) {
         const htmlRows = rows.map(row => {
+            let hours = Math.floor(row.duration / 60);
+            let minutes = row.duration - (hours * 60);
             return `
                     <tr>
                         <td class="mdl-data-table__cell--non-numeric">${row.name}</td>
                         <td>${row.playedTimes}</td>
+                        <td>${(hours > 0) ? hours + "h " + minutes + "min" : minutes + "min"}</td>
+
                     </tr>
             `
         });
@@ -43,11 +47,14 @@
 
     function drawArtistsTable(rows) {
         const htmlRows = rows.map(row => {
+            let hours = Math.floor(row.duration / 60);
+            let minutes = row.duration - (hours * 60);
             return `
                     <tr>
-                        <td><img src="${row.imageUrl}" alt="-" /></td>
+                        <td><img src="${row.imageUrl}" alt="-" class="mdl-list__item-icon" /></td>
                         <td class="mdl-data-table__cell--non-numeric">${row.name}</td>
                         <td>${row.playedTimes}</td>
+                        <td>${(hours > 0) ? hours + "h " + minutes + "min" : minutes + "min"}</td>
                     </tr>
             `
         });

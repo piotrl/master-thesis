@@ -7,4 +7,5 @@ public class ArtistsSummary {
     private String name;
     private String imageUrl;
     private Integer playedTimes;
+    private Double duration;
 }

@@ -110,7 +110,8 @@ FROM generate_series(
 
 SELECT
   tag.name,
-  count(*) AS playedTimes
+  count(*)                 AS playedTimes,
+  sum(track.duration) / 60 AS duration
 FROM (SELECT DISTINCT ON (scrobbleId) *
       FROM music_activity) ma
   JOIN lastfm_track track ON track.id = ma.trackid
@@ -130,7 +131,8 @@ LIMIT 10;
 SELECT
   track.artist               AS artistName,
   max(track.image_url_small) AS imageUrl,
-  count(*)                   AS playedTimes
+  count(*)                   AS playedTimes,
+  sum(track.duration) / 60   AS duration
 FROM (SELECT DISTINCT ON (scrobbleId) *
       FROM music_activity) ma
   JOIN lastfm_track track ON track.id = ma.trackid
@@ -140,3 +142,9 @@ WHERE ma.activitystarted >= :from
 GROUP BY track.artist
 ORDER BY playedTimes DESC
 LIMIT 10;
+
+SELECT
+  name,
+  duration
+FROM lastfm_track
+WHERE artist = 'Queen'

@@ -6,4 +6,5 @@ import lombok.Data;
 public class TagSummary {
     private String name;
     private Integer playedTimes;
+    private Double duration;
 }

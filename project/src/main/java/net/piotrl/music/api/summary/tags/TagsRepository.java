@@ -29,7 +29,8 @@ public class TagsRepository {
 
         String sql = "SELECT " +
                 "  tag.name, " +
-                "  count(*) AS playedTimes " +
+                "  count(*) AS playedTimes," +
+                "  sum(track.duration) / 60   AS duration " +
                 "FROM (SELECT DISTINCT ON (scrobbleId) * " +
                 "      FROM music_activity) ma " +
                 "  JOIN lastfm_track track ON track.id = ma.trackid " +
