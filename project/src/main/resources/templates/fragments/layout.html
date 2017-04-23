@@ -17,6 +17,14 @@
     <link rel="stylesheet" href="../../static/lib/material/material.css" th:href="@{lib/material/material.css}"/>
     <link rel="stylesheet" href="../../static/layout.css" th:href="@{layout.css}"/>
     <link rel="stylesheet" href="../../static/dashboard.css" th:href="@{dashboard.css}"/>
+
+    <script src="../../static/lib/material/material.js" th:src="@{lib/material/material.js}"></script>
+    <script src="../../static/lib/d3/d3.min.js" th:src="@{lib/d3/d3.min.js}"></script>
+    <script src="../../static/lib/c3/c3.min.js" th:src="@{lib/c3/c3.min.js}"></script>
+    <script src="../../static/lib/date_fns.min.js " th:src="@{lib/date_fns.min.js}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="../../static/main.js" th:src="@{main.js}"></script>
+
 </head>
 <body>
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header is-upgraded">
@@ -74,6 +82,12 @@
                th:href="@{/reports}">
                 <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">people</i>&nbsp;Aggregation summary
             </a>
+
+            <a class="mdl-navigation__link"
+               th:if="${#authorization.expression('isAuthenticated()')}"
+               th:href="@{/productivity}">
+                <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">done</i>&nbsp;Productivity
+            </a>
         </nav>
     </div>
 
@@ -100,17 +114,7 @@
     </footer>
 
 </div>
-
-<script src="../../static/lib/material/material.js" th:src="@{lib/material/material.js}"></script>
-<script src="../../static/lib/d3/d3.min.js" th:src="@{lib/d3/d3.min.js}"></script>
-<script src="../../static/lib/c3/c3.min.js" th:src="@{lib/c3/c3.min.js}"></script>
-<script src="../../static/lib/date_fns.min.js " th:src="@{lib/date_fns.min.js}"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-<script src="../../static/main.js" th:src="@{main.js}"></script>
 <script src="../../static/charts/simple-chart.js" th:src="@{charts/simple-chart.js}"></script>
-<script src="../../static/reports/reports.service.js" th:src="@{reports/reports.service.js}"></script>
-<script src="../../static/reports/reports-music-ratio.js" th:src="@{reports/reports-music-ratio.js}"></script>
-<script src="../../static/reports/reports-table-top.js" th:src="@{reports/reports-table-top.js}"></script>
+
 </body>
 </html>

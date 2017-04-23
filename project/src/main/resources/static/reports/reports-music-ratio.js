@@ -7,7 +7,7 @@
     reports.$filterDateInput.addEventListener('input', initMusicSummary);
     reports.$filterDateInput.addEventListener('input', musicPlayedDuringActivities);
     document.querySelector("[href='#panel-music-ratio']").addEventListener("click", initMusicSummary);
-    document.querySelector("[href='#panel-music-during-activities']").addEventListener("click", musicPlayedDuringActivities);
+    document.querySelector("[href='#reports-music-during-activities']").addEventListener("click", musicPlayedDuringActivities);
 
 
     function initMusicSummary() {
