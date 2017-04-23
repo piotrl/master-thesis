@@ -31,7 +31,8 @@ public class ArtistsRepository {
                 "  track.artist               AS name, " +
                 "  max(track.image_url_small) AS imageUrl, " +
                 "  count(*)                   AS playedTimes," +
-                "  sum(track.duration) / 60   AS duration " +
+                "  sum(track.duration) / 60   AS duration," +
+                "  count(CASE WHEN track.duration = 0 THEN 1 END) AS corrupted " +
                 "FROM (SELECT DISTINCT ON (scrobbleId) * " +
                 "      FROM music_activity) ma " +
                 "  JOIN lastfm_track track ON track.id = ma.trackid " +

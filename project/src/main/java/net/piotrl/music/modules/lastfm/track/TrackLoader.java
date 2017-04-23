@@ -54,7 +54,7 @@ public class TrackLoader {
         return getTrackInfo(artist, mbid);
     }
 
-    private Track getTrackInfo(String artist, String trackNameOrMbid) {
+    Track getTrackInfo(String artist, String trackNameOrMbid) {
         return Track.getInfo(artist, trackNameOrMbid, lastFmProperties.getApiKey());
     }
 

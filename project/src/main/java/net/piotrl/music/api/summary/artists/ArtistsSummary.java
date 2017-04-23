@@ -8,4 +8,5 @@ public class ArtistsSummary {
     private String imageUrl;
     private Integer playedTimes;
     private Double duration;
+    private Integer corrupted;
 }

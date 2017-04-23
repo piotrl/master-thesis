@@ -30,7 +30,8 @@ public class TagsRepository {
         String sql = "SELECT " +
                 "  tag.name, " +
                 "  count(*) AS playedTimes," +
-                "  sum(track.duration) / 60   AS duration " +
+                "  sum(track.duration) / 60   AS duration," +
+                "  count(CASE WHEN track.duration = 0 THEN 1 END) AS corrupted " +
                 "FROM (SELECT DISTINCT ON (scrobbleId) * " +
                 "      FROM music_activity) ma " +
                 "  JOIN lastfm_track track ON track.id = ma.trackid " +

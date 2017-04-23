@@ -34,7 +34,7 @@ public class AggregationScheduler {
     /**
      * Runs every day at 3am
      */
-    @Scheduled(cron = "03 00 * * * *")
+//    @Scheduled(cron = "03 00 * * * *")
     public void start() {
         List<Account> accounts = accountRepository.findAll();
         Instant startTime = Instant.now();

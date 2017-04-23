@@ -111,7 +111,8 @@ FROM generate_series(
 SELECT
   tag.name,
   count(*)                 AS playedTimes,
-  sum(track.duration) / 60 AS duration
+  sum(track.duration) / 60 AS duration,
+  count(CASE WHEN track.duration = 0 THEN 1 END) AS corrupted
 FROM (SELECT DISTINCT ON (scrobbleId) *
       FROM music_activity) ma
   JOIN lastfm_track track ON track.id = ma.trackid
@@ -132,7 +133,8 @@ SELECT
   track.artist               AS artistName,
   max(track.image_url_small) AS imageUrl,
   count(*)                   AS playedTimes,
-  sum(track.duration) / 60   AS duration
+  sum(track.duration) / 60   AS duration,
+  count(CASE WHEN track.duration = 0 THEN 1 END) AS corrupted
 FROM (SELECT DISTINCT ON (scrobbleId) *
       FROM music_activity) ma
   JOIN lastfm_track track ON track.id = ma.trackid
@@ -144,7 +146,8 @@ ORDER BY playedTimes DESC
 LIMIT 10;
 
 SELECT
+  artist,
   name,
   duration
 FROM lastfm_track
-WHERE artist = 'Queen'
+WHERE duration = 0
