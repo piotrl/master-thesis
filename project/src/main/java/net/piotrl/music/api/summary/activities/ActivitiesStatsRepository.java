@@ -30,9 +30,9 @@ public class ActivitiesStatsRepository {
                 "WITH amoutn_of_activities AS ( " +
                 "    SELECT " +
                 "      start_time :: TIMESTAMP WITHOUT TIME ZONE, " +
-                "      sum(CASE WHEN ra.productivity > 0 " +
+                "      count(CASE WHEN ra.productivity > 0 " +
                 "        THEN ra.spent_time END) AS productive, " +
-                "      sum(CASE WHEN ra.productivity < 0 " +
+                "      count(CASE WHEN ra.productivity < 0 " +
                 "        THEN ra.spent_time END) AS distraction, " +
                 "      count(*) AS activitiesCount " +
                 "    FROM rescuetime_activity ra " +
@@ -40,10 +40,15 @@ public class ActivitiesStatsRepository {
                 "    GROUP BY start_time " +
                 "    ORDER BY start_time DESC " +
                 ") " +
-                "SELECT * " +
+                "SELECT " +
+                "   date as date, " +
+                "   summary.start_time AS start_time," +
+                "   summary.productive AS productive," +
+                "   summary.distraction AS distraction," +
+                "   summary.activitiesCount AS activitiesCount  " +
                 "FROM generate_series( " +
-                "         DATE_TRUNC('day', :from :: TIMESTAMP), " +
-                "         DATE_TRUNC('day', :to :: TIMESTAMP), " +
+                "         DATE_TRUNC('minute', :from :: TIMESTAMP), " +
+                "         DATE_TRUNC('minute', :to :: TIMESTAMP), " +
                 "         '5 min' :: INTERVAL " +
                 "     ) date " +
                 "  LEFT JOIN amoutn_of_activities summary ON summary.start_time = date";

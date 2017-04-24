@@ -23,8 +23,8 @@
                     </div>
                     <div class="mdl-cell mdl-cell--3-col">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input" type="month" id="filter-month"/>
-                            <label class="mdl-textfield__label" for="filter-month">Month</label>
+                            <input class="mdl-textfield__input" type="date" id="filter-day"/>
+                            <label class="mdl-textfield__label" for="filter-day">Day</label>
                         </div>
                     </div>
                     <div class="mdl-cell mdl-cell--middle mdl-typography--text-left">
@@ -45,10 +45,14 @@
                 <h2 class="mdl-card__title-text">All aggregated music and activities</h2>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <div id="reports-music-ratio"></div>
+                <div id="productivity-multitasking-activities"></div>
             </div>
         </div>
     </div>
+    <script src="../../static/dashboard/productivity/productivity.service.js"
+            th:src="@{dashboard/productivity/productivity.service.js}"></script>
+    <script src="../../static/dashboard/productivity/productivity-multitasking-activities.js"
+            th:src="@{dashboard/productivity/productivity-multitasking-activities.js}"></script>
 
 </div>
 </body>
