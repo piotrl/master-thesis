@@ -1,5 +1,7 @@
 package net.piotrl.music.api.summary;
 
+import net.piotrl.music.api.summary.activities.MultitaskingOnProductivity;
+import net.piotrl.music.api.summary.activities.ActivitiesStatsRepository;
 import net.piotrl.music.api.summary.artists.ArtistsRepository;
 import net.piotrl.music.api.summary.artists.ArtistsSummary;
 import net.piotrl.music.api.summary.dto.ArtistProductivity;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -20,12 +24,14 @@ public class StatsService {
     private final StatsRepository statsRepository;
     private final TagsRepository tagsRepository;
     private final ArtistsRepository artistsRepository;
+    private final ActivitiesStatsRepository activitiesStatsRepository;
 
     @Autowired
-    public StatsService(StatsRepository statsRepository, TagsRepository tagsRepository, ArtistsRepository artistsRepository) {
+    public StatsService(StatsRepository statsRepository, TagsRepository tagsRepository, ArtistsRepository artistsRepository, ActivitiesStatsRepository activitiesStatsRepository) {
         this.statsRepository = statsRepository;
         this.tagsRepository = tagsRepository;
         this.artistsRepository = artistsRepository;
+        this.activitiesStatsRepository = activitiesStatsRepository;
     }
 
     public MostPopularArtistsProductivity topArtistsProductivity(int year, int month, long accountId) {
@@ -62,5 +68,11 @@ public class StatsService {
         LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
         LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
         return artistsRepository.mostPopularArtists(firstDayOfMonth, lastDayOfMonth, accountId);
+    }
+
+    List<MultitaskingOnProductivity> activitiesMultitaskingOnProductivity(int year, int month, int day, long accountId) {
+        LocalDateTime startOfDay = LocalDate.of(year, month, day).atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.toLocalDate().atTime(LocalTime.MAX);
+        return activitiesStatsRepository.activitiesFrequencyAndProductivity(startOfDay, endOfDay, accountId);
     }
 }

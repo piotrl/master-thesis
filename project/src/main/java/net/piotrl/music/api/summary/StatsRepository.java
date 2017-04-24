@@ -67,6 +67,7 @@ public class StatsRepository {
                 .addValue("to", DateUtil.toDate(to))
                 .addValue("accountId", accountId);
 
+        // FIXME: Missing
         String sql = "";
         return jdbcOperations.queryForObject(
                 sql, sqlParams, new BeanPropertyRowMapper<>(ProductivityValue.class)

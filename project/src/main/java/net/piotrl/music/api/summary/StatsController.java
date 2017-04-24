@@ -1,5 +1,6 @@
 package net.piotrl.music.api.summary;
 
+import net.piotrl.music.api.summary.activities.MultitaskingOnProductivity;
 import net.piotrl.music.api.summary.artists.ArtistsSummary;
 import net.piotrl.music.api.summary.dto.MostPopularArtistsProductivity;
 import net.piotrl.music.api.summary.dto.MusicActivitySalienceSummary;
@@ -61,5 +62,14 @@ public class StatsController {
                                            Principal principal) {
 //        Assert.notNull(principal);
         return statsService.mostPopularArtists(year, month, 1l);
+    }
+
+    @RequestMapping("activities/year/{year}/month/{month}/day/{day}/multitasking")
+    public List<MultitaskingOnProductivity> activitiesMultitaskingOnProductivity(@PathVariable int year,
+                                                                                 @PathVariable int month,
+                                                                                 @PathVariable int day,
+                                                                                 Principal principal) {
+//        Assert.notNull(principal);
+        return statsService.activitiesMultitaskingOnProductivity(year, month, day, 1l);
     }
 }
