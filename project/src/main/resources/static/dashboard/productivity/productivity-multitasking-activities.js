@@ -33,6 +33,7 @@
                 google.charts.setOnLoadCallback(drawScatterChart(data.productive, 'activities-multitasking-scatter-productive'));
                 google.charts.setOnLoadCallback(drawScatterChart(data.distraction, 'activities-multitasking-scatter-distraction'));
                 google.charts.setOnLoadCallback(drawScatterChart(data.neutral, 'activities-multitasking-scatter-neutral'));
+                google.charts.setOnLoadCallback(drawProductivityDonut(data, 'activities-multitasking-donut'));
             });
     }
 
@@ -53,7 +54,7 @@
         return () => {
             const data = new google.visualization.arrayToDataTable([
                 ['Hours', 'Tasks', 'Productivity'],
-                ... stats
+                ...stats
             ]);
             const chart = new google.visualization.ComboChart(document.getElementById(id));
             chart.draw(data, options);
@@ -82,10 +83,32 @@
         return () => {
             const data = new google.visualization.arrayToDataTable([
                 ['Productive spent', 'Tasks'],
-                ... stats
+                ...stats
             ]);
             const chart = new google.visualization.ScatterChart(document.getElementById(id));
             chart.draw(data, options);
+        };
+    }
+
+    function drawProductivityDonut(stats, id) {
+        var options = {
+            pieHole: 0.5,
+            pieSliceText: 'none'
+        };
+
+        return () => {
+            const data = new google.visualization.arrayToDataTable([
+                ['Group', 'Activities'],
+                ['Productive', calcMinutes(stats.productive)],
+                ['Distractions', calcMinutes(stats.distraction)],
+                ['Neutral', calcMinutes(stats.neutral)]
+            ]);
+            const chart = new google.visualization.PieChart(document.getElementById(id));
+            chart.draw(data, options);
+
+            function calcMinutes(arrayScatter) {
+                return arrayScatter.reduce((acc, val) => acc + val.activityTime, 0) / 60.0;
+            }
         };
     }
 
