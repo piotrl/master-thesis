@@ -159,16 +159,28 @@ WITH amoutn_of_activities AS (
         THEN ra.spent_time END) AS productive,
       sum(CASE WHEN ra.productivity < 0
         THEN ra.spent_time END) AS distraction,
-      count(*)
+      count(*)                  AS activitiesCount
     FROM rescuetime_activity ra
     WHERE ra.account_id = :accountId
     GROUP BY start_time
-    ORDER BY start_time DESC
-)
-SELECT *
-FROM generate_series(
-         DATE_TRUNC('day', :from :: TIMESTAMP),
-         DATE_TRUNC('day', :to :: TIMESTAMP),
-         '5 min' :: INTERVAL
-     ) date
-  LEFT JOIN amoutn_of_activities summary ON summary.start_time = date;
+    ORDER BY start_time DESC )
+SELECT
+  s.date,
+  sum(summary.productive)      AS productive,
+  sum(summary.distraction)     AS distraction,
+  sum(summary.activitiesCount) AS activitiesCount
+FROM (
+       SELECT
+         lag(date)
+         OVER (
+           ORDER BY date ) AS previous,
+         date              AS date
+       FROM generate_series(
+                DATE_TRUNC('minute', :from :: TIMESTAMP),
+                DATE_TRUNC('minute', :to :: TIMESTAMP),
+                '30 minutes' :: INTERVAL) date
+     ) s
+  LEFT JOIN
+  amoutn_of_activities summary
+    ON summary.start_time <= s.date AND summary.start_time >= s.previous
+GROUP BY date;

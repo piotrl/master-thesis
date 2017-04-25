@@ -34,24 +34,31 @@ public class ActivitiesStatsRepository {
                 "        THEN ra.spent_time END) AS productive, " +
                 "      count(CASE WHEN ra.productivity < 0 " +
                 "        THEN ra.spent_time END) AS distraction, " +
-                "      count(*) AS activitiesCount " +
+                "      count(*)                  AS activitiesCount " +
                 "    FROM rescuetime_activity ra " +
                 "    WHERE ra.account_id = :accountId " +
                 "    GROUP BY start_time " +
-                "    ORDER BY start_time DESC " +
-                ") " +
+                "    ORDER BY start_time DESC ) " +
                 "SELECT " +
-                "   date as date, " +
-                "   summary.start_time AS start_time," +
-                "   summary.productive AS productive," +
-                "   summary.distraction AS distraction," +
-                "   summary.activitiesCount AS activitiesCount  " +
-                "FROM generate_series( " +
-                "         DATE_TRUNC('minute', :from :: TIMESTAMP), " +
-                "         DATE_TRUNC('minute', :to :: TIMESTAMP), " +
-                "         '5 min' :: INTERVAL " +
-                "     ) date " +
-                "  LEFT JOIN amoutn_of_activities summary ON summary.start_time = date";
+                "  s.date, " +
+                "  sum(summary.productive)      AS productive, " +
+                "  sum(summary.distraction)     AS distraction, " +
+                "  sum(summary.activitiesCount) AS activitiesCount " +
+                "FROM ( " +
+                "       SELECT " +
+                "         lag(date) " +
+                "         OVER ( " +
+                "           ORDER BY date ) AS previous, " +
+                "         date              AS date " +
+                "       FROM generate_series( " +
+                "                DATE_TRUNC('minute', :from :: TIMESTAMP), " +
+                "                DATE_TRUNC('minute', :to :: TIMESTAMP), " +
+                "                '30 minutes' :: INTERVAL) date " +
+                "     ) s " +
+                "  LEFT JOIN " +
+                "  amoutn_of_activities summary " +
+                "    ON summary.start_time <= s.date AND summary.start_time >= s.previous " +
+                "GROUP BY date ";
 
         return jdbcOperations.query(
                 sql, sqlParams, new BeanPropertyRowMapper<>(MultitaskingOnProductivity.class)
