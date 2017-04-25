@@ -76,24 +76,30 @@ public class ActivitiesStatsRepository {
 
         String sql = "" +
                 "SELECT " +
-                "  periodEnd, " +
+                "  periodStart AS period, " +
                 "  productivity, " +
                 "  activitystarted, " +
+                "  activityname, " +
                 "  activitytime, " +
-                "  sum(activitytime) OVER (PARTITION BY activitystarted ) AS sumTimeIn5min, " +
-                "  sum(activitytime) OVER (PARTITION BY periodEnd )          AS sumTimeByPeriod, " +
-                "  count(*) OVER (PARTITION BY activitystarted )          AS tasks, " +
-                "  count(*) OVER (PARTITION BY periodEnd )                   AS tasksInPeriod " +
+                "  sum(activitytime) OVER (PARTITION BY activitystarted, activityname) AS sumTimeIn5min, " +
+                "  sum(activitytime) OVER (PARTITION BY periodStart, activityname) AS sumTimeByPeriod, " +
+                "  count(*) OVER (PARTITION BY activitystarted) AS tasks, " +
+                "  count(*) OVER (PARTITION BY periodStart) AS tasksInPeriod " +
                 "FROM (SELECT " +
-                "        lead(date) OVER (ORDER BY date) AS periodEnd, " +
-                "        date                            AS periodStart " +
-                "      FROM generate_series( " +
-                "               DATE_TRUNC('minute', :from :: TIMESTAMP), " +
-                "               DATE_TRUNC('minute', :to :: TIMESTAMP), " +
-                "               '15 minutes' :: INTERVAL) date " +
-                "     ) serie " +
-                "  JOIN music_activity ma " +
-                "    ON ma.activitystarted > serie.periodStart AND ma.activitystarted <= serie.periodEnd ";
+                "        DISTINCT ON (ma.activitystarted, ma.activityname, ma.activitytime) * " +
+                "      FROM " +
+                "        (SELECT " +
+                "           date              AS periodStart, " +
+                "           lead(date) OVER (ORDER BY date) AS periodEnd " +
+                "         FROM generate_series( " +
+                "                  DATE_TRUNC('minute', :from :: TIMESTAMP), " +
+                "                  DATE_TRUNC('minute', :to :: TIMESTAMP), " +
+                "                  '15 minutes' :: INTERVAL) date " +
+                "        ) serie " +
+                "        JOIN music_activity ma " +
+                "          ON ma.activitystarted > serie.periodStart AND ma.activitystarted <= serie.periodEnd " +
+                "     ) s " +
+                "ORDER BY periodStart, activitystarted ";
 
         return jdbcOperations.query(
                 sql, sqlParams, new BeanPropertyRowMapper<>(SpentTimeAndTasksCorrelationScatterChart.class)

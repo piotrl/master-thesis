@@ -61,17 +61,16 @@
     }
 
     function drawScatterChart(stats, id) {
-        stats = stats.map(column => {
-            return [column.sumTimeIn5min / 60.0, column.tasksInPeriod];
-        });
-
         var options = {
-            vAxis: {title: 'Tasks', minValue: 0, maxValue: 50},
-            hAxis: {title: 'Productive spent', minValue: 0, maxValue: 15},
+            vAxis: {title: 'Task switches in 15min', minValue: 0, maxValue: 20},
+            hAxis: {title: 'Productive spent [minutes]', minValue: 0, maxValue: 15},
             legend: 'none'
         };
 
-        // Instantiate and draw our chart, passing in some options.
+        stats = stats.map(column => {
+            return [column.sumTimeByPeriod / 60.0, column.tasksInPeriod];
+        });
+
         return () => {
             const data = new google.visualization.arrayToDataTable([
                 ['Productive spent', 'Tasks'],
