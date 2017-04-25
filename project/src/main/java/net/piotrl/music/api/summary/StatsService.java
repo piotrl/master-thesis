@@ -1,7 +1,8 @@
 package net.piotrl.music.api.summary;
 
-import net.piotrl.music.api.summary.activities.MultitaskingOnProductivity;
+import net.piotrl.music.api.summary.activities.dto.MultitaskingOnProductivity;
 import net.piotrl.music.api.summary.activities.ActivitiesStatsRepository;
+import net.piotrl.music.api.summary.activities.dto.SpentTimeAndTasksCorrelationScatterChart;
 import net.piotrl.music.api.summary.artists.ArtistsRepository;
 import net.piotrl.music.api.summary.artists.ArtistsSummary;
 import net.piotrl.music.api.summary.dto.ArtistProductivity;
@@ -74,5 +75,22 @@ public class StatsService {
         LocalDateTime startOfDay = LocalDate.of(year, month, day).atStartOfDay();
         LocalDateTime endOfDay = startOfDay.toLocalDate().atTime(LocalTime.MAX);
         return activitiesStatsRepository.activitiesFrequencyAndProductivity(startOfDay, endOfDay, accountId);
+    }
+
+    List<SpentTimeAndTasksCorrelationScatterChart> spentTimeAndTasksCorrelationScatterChart(
+            int year, int month, int day, long accountId) {
+        LocalDateTime startOfDay = LocalDate.of(year, month, day).atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.toLocalDate().atTime(LocalTime.MAX);
+        return activitiesStatsRepository.spentTimeAndTasksCorrelationScatterChart(startOfDay, endOfDay, accountId);
+    }
+
+    List<SpentTimeAndTasksCorrelationScatterChart> spentTimeAndTasksCorrelationScatterChart(
+            int year, int month, long accountId) {
+        LocalDateTime firstDayOfMonth = LocalDate.of(year, month, 1).atStartOfDay();
+        LocalDateTime lastDayOfMonth = firstDayOfMonth.withDayOfMonth(
+                firstDayOfMonth.toLocalDate().lengthOfMonth()
+        ).toLocalDate().atTime(LocalTime.MAX);
+
+        return activitiesStatsRepository.spentTimeAndTasksCorrelationScatterChart(firstDayOfMonth, lastDayOfMonth, accountId);
     }
 }

@@ -1,4 +1,4 @@
-package net.piotrl.music.api.summary.activities;
+package net.piotrl.music.api.summary.activities.dto;
 
 import lombok.Data;
 

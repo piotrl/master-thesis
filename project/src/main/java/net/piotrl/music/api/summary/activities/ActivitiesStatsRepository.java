@@ -1,5 +1,7 @@
 package net.piotrl.music.api.summary.activities;
 
+import net.piotrl.music.api.summary.activities.dto.MultitaskingOnProductivity;
+import net.piotrl.music.api.summary.activities.dto.SpentTimeAndTasksCorrelationScatterChart;
 import net.piotrl.music.shared.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -62,6 +64,39 @@ public class ActivitiesStatsRepository {
 
         return jdbcOperations.query(
                 sql, sqlParams, new BeanPropertyRowMapper<>(MultitaskingOnProductivity.class)
+        );
+    }
+
+    public List<SpentTimeAndTasksCorrelationScatterChart> spentTimeAndTasksCorrelationScatterChart(
+            LocalDateTime from, LocalDateTime to, long accountId) {
+        MapSqlParameterSource sqlParams = new MapSqlParameterSource()
+                .addValue("from", DateUtil.toDate(from))
+                .addValue("to", DateUtil.toDate(to))
+                .addValue("accountId", accountId);
+
+        String sql = "" +
+                "SELECT " +
+                "  periodEnd, " +
+                "  productivity, " +
+                "  activitystarted, " +
+                "  activitytime, " +
+                "  sum(activitytime) OVER (PARTITION BY activitystarted ) AS sumTimeIn5min, " +
+                "  sum(activitytime) OVER (PARTITION BY periodEnd )          AS sumTimeByPeriod, " +
+                "  count(*) OVER (PARTITION BY activitystarted )          AS tasks, " +
+                "  count(*) OVER (PARTITION BY periodEnd )                   AS tasksInPeriod " +
+                "FROM (SELECT " +
+                "        lead(date) OVER (ORDER BY date) AS periodEnd, " +
+                "        date                            AS periodStart " +
+                "      FROM generate_series( " +
+                "               DATE_TRUNC('minute', :from :: TIMESTAMP), " +
+                "               DATE_TRUNC('minute', :to :: TIMESTAMP), " +
+                "               '15 minutes' :: INTERVAL) date " +
+                "     ) serie " +
+                "  JOIN music_activity ma " +
+                "    ON ma.activitystarted > serie.periodStart AND ma.activitystarted <= serie.periodEnd ";
+
+        return jdbcOperations.query(
+                sql, sqlParams, new BeanPropertyRowMapper<>(SpentTimeAndTasksCorrelationScatterChart.class)
         );
     }
 }
