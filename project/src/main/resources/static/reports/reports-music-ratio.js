@@ -43,7 +43,10 @@
             hAxis: {title: 'Days'},
             height: 400,
             seriesType: 'bars',
-            series: {2: {type: 'line'}}
+            series: {2: {
+                type: 'line',
+                curveType: 'function'
+            }}
         };
 
         // Instantiate and draw our chart, passing in some options.
