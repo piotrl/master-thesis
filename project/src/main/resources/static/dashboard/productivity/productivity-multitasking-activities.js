@@ -64,7 +64,15 @@
         var options = {
             vAxis: {title: 'Task switches in 15min', minValue: 0, maxValue: 20},
             hAxis: {title: 'Productive spent [minutes]', minValue: 0, maxValue: 15},
-            legend: 'none'
+            legend: 'none',
+            trendlines: {
+                0: {
+                    type: 'exponential',
+                    showR2: true,
+                    pointsVisible: false
+                }
+            }
+
         };
 
         stats = stats.map(column => {
