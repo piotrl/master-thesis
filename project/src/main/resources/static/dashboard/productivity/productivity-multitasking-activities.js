@@ -30,7 +30,9 @@
         fetch(`http://localhost:8080/api/stats/activities/year/${year}/month/${month}/day/${day}/spentTimeTasksScatter`)
             .then(response => response.json())
             .then(data => {
-                google.charts.setOnLoadCallback(drawScatterChart(data, 'activities-multitasking-scatter'));
+                google.charts.setOnLoadCallback(drawScatterChart(data.productive, 'activities-multitasking-scatter-productive'));
+                google.charts.setOnLoadCallback(drawScatterChart(data.distraction, 'activities-multitasking-scatter-distraction'));
+                google.charts.setOnLoadCallback(drawScatterChart(data.neutral, 'activities-multitasking-scatter-neutral'));
             });
     }
 
@@ -64,7 +66,6 @@
         });
 
         var options = {
-            title: 'Tasks in 15min period vs. Activity time',
             vAxis: {title: 'Tasks', minValue: 0, maxValue: 50},
             hAxis: {title: 'Productive spent', minValue: 0, maxValue: 15},
             legend: 'none'

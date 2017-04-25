@@ -2,6 +2,7 @@ package net.piotrl.music.api.summary;
 
 import net.piotrl.music.api.summary.activities.dto.MultitaskingOnProductivity;
 import net.piotrl.music.api.summary.activities.ActivitiesStatsRepository;
+import net.piotrl.music.api.summary.activities.dto.Productivity;
 import net.piotrl.music.api.summary.activities.dto.SpentTimeAndTasksCorrelationScatterChart;
 import net.piotrl.music.api.summary.artists.ArtistsRepository;
 import net.piotrl.music.api.summary.artists.ArtistsSummary;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StatsService {
@@ -77,20 +79,31 @@ public class StatsService {
         return activitiesStatsRepository.activitiesFrequencyAndProductivity(startOfDay, endOfDay, accountId);
     }
 
-    List<SpentTimeAndTasksCorrelationScatterChart> spentTimeAndTasksCorrelationScatterChart(
+    Productivity<List<SpentTimeAndTasksCorrelationScatterChart>> spentTimeAndTasksCorrelationScatterChart(
             int year, int month, int day, long accountId) {
         LocalDateTime startOfDay = LocalDate.of(year, month, day).atStartOfDay();
         LocalDateTime endOfDay = startOfDay.toLocalDate().atTime(LocalTime.MAX);
-        return activitiesStatsRepository.spentTimeAndTasksCorrelationScatterChart(startOfDay, endOfDay, accountId);
+        List<SpentTimeAndTasksCorrelationScatterChart> list = activitiesStatsRepository.spentTimeAndTasksCorrelationScatterChart(startOfDay, endOfDay, accountId);
+
+        return new Productivity<>(
+                list.stream().filter(i -> i.getProductivity() > 0).collect(Collectors.toList()),
+                list.stream().filter(i -> i.getProductivity() < 0).collect(Collectors.toList()),
+                list.stream().filter(i -> i.getProductivity() == 0).collect(Collectors.toList())
+        );
     }
 
-    List<SpentTimeAndTasksCorrelationScatterChart> spentTimeAndTasksCorrelationScatterChart(
+    Productivity<List<SpentTimeAndTasksCorrelationScatterChart>> spentTimeAndTasksCorrelationScatterChart(
             int year, int month, long accountId) {
         LocalDateTime firstDayOfMonth = LocalDate.of(year, month, 1).atStartOfDay();
         LocalDateTime lastDayOfMonth = firstDayOfMonth.withDayOfMonth(
                 firstDayOfMonth.toLocalDate().lengthOfMonth()
         ).toLocalDate().atTime(LocalTime.MAX);
 
-        return activitiesStatsRepository.spentTimeAndTasksCorrelationScatterChart(firstDayOfMonth, lastDayOfMonth, accountId);
+        List<SpentTimeAndTasksCorrelationScatterChart> list = activitiesStatsRepository.spentTimeAndTasksCorrelationScatterChart(firstDayOfMonth, lastDayOfMonth, accountId);
+        return new Productivity<>(
+                list.stream().filter(i -> i.getProductivity() > 0).collect(Collectors.toList()),
+                list.stream().filter(i -> i.getProductivity() < 0).collect(Collectors.toList()),
+                list.stream().filter(i -> i.getProductivity() == 0).collect(Collectors.toList())
+        );
     }
 }
