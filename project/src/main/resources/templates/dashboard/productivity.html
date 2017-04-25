@@ -42,6 +42,17 @@
     <div class="mdl-cell mdl-cell--12-col">
         <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col">
             <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">Tasks in 15min period vs. Activity time</h2>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <div id="activities-multitasking-scatter"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mdl-cell mdl-cell--12-col">
+        <div class="mdl-card mdl-shadow--2dp mdl-cell--12-col">
+            <div class="mdl-card__title">
                 <h2 class="mdl-card__title-text">All aggregated music and activities</h2>
             </div>
             <div class="mdl-card__actions mdl-card--border">
@@ -49,6 +60,7 @@
             </div>
         </div>
     </div>
+
     <script src="../../static/dashboard/productivity/productivity.service.js"
             th:src="@{dashboard/productivity/productivity.service.js}"></script>
     <script src="../../static/dashboard/productivity/productivity-multitasking-activities.js"
