@@ -96,23 +96,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="mdl-mini-footer">
-        <div class="mdl-mini-footer__left-section">
-            <div class="mdl-logo">
-                &copy;&nbsp;<span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2017</span>
-                &hyphen; Piotr Lewandowski &hyphen; Master Thesis
-            </div>
-        </div>
-        <div class="mdl-mini-footer__right-section">
-            <ul class="mdl-mini-footer__link-list">
-                <li><a href="#">Read me</a></li>
-                <li><a href="#">About</a></li>
-                <li><span th:text="${@environment.getProperty('app.version')}"></span></li>
-            </ul>
-        </div>
-    </footer>
-
 </div>
 <script src="../../static/charts/simple-chart.js" th:src="@{charts/simple-chart.js}"></script>
 
