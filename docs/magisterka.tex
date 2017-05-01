@@ -125,12 +125,11 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         Dla przykładu odtwarzacz wideo VLC jest przypisany do kategorii „Entertainment” ze statusem „Bardzo rozpraszający”,
         natomiast przeglądanie plików programem Windows Explorer jest w kategorii „Utilities” ze statusem „Neutralny”.
 
-        Dzięki temu jesteśmy w stanie sprawdzić nasz codzienny współczynnik produktywności.
+        Dzięki temu jesteśmy w stanie obliczyć nasz codzienny współczynnik produktywności,
+        sumując czas spędzony na aktywnościach z każdej kategorii.
 
         \begin{table}[]
         \centering
-        \caption{Lista przykładowych aktywności wraz z ich kategoriami. Skala produktywności od +2 do -2}
-        \label{RescueTime - lista przykładowych aktywności}
         \begin{tabular}{lll}
         \hline
         \multicolumn{1}{l|}{Aktywność} & \multicolumn{1}{l|}{Kategoria} & Produktywność \\ \hline
@@ -143,21 +142,37 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         outlook.office.com             & Communication \& Scheduling    & 0             \\
         wunderlist                     & Business                       & +2
         \end{tabular}
+        \caption{
+            Lista przykładowych aktywności wraz z ich kategoriami. Skala produktywności od +2 do -2
+            \newline Źródło: Opracowanie własne.
+        }
+        \label{RescueTime - lista przykładowych aktywności}
         \end{table}
-
 
         Program jest w stanie rozpoznać nie tylko tytuły aktualnie otwartych okien,
         ale również w przypadku przeglądarki – adresy odwiedzanych stron internetowych,
         jest to bardzo ważne ze względu na dominującą ilość czasu spędzonego w samej przeglądarce.
+
+        Dostęp do informacji użytkownika odbywa się po REST API z tokenem uwierzytelniającym,
+        który użytkownik musi wygenerować na stronie RescueTime.com.
+        Po poprawnym uwierzytelnieniu, mamy dostęp do danych sprzed 3 miesięcy w formacie JSON.
 
         \section*{last.fm}
 
         Last.fm to serwis społecznościowy dla fanów muzyki,
         pomagający odkrywać nowych artystów na podstawie historii użytkownika.
 
-        Last.fm zbiera dane użytkowników za pomocą wtyczek, instalowanych do odtwarzaczy muzycznych, np. Spotify.
+        Wtyczka "last.fm Scrobbler"\cite{lastfm:trackmymusic} integruje się z wieloma odtwarzaczami muzycznymi, np. Spotify.
         Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
-        w której użytkownicy na podstawie meta-tagów przypisują go do artysty, płyty oraz gatunku muzycznego.
+        w której na podstawie meta-tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
+
+		 Last.fm udostępnia szereg metod REST API \cite{lastfm:apidoc}, 
+		 dla mnie szczególnie istotne są te związane z odtworzeniami użytkownika oraz szczegółowych informacji o piosenkach i artystach.
+
+		Metoda user.getRecentTracks % TODO
+
+
+		% identyfikuje swoje dane za pomocą MBID \cite{lastfm:mbid}
 
         \begin{figure}
           \includegraphics[width=\linewidth]{fig/lastfm-now-listening.png}
@@ -174,7 +189,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
         Przed analizą, konieczne jest pobranie danych do własnej bazy danych oraz stworzenie modelu relacji pomiędzy nimi.
         Proces pobierania nazywam agregacją danych lub importem danych i jest on podstawą działania aplikacji,
-        ponieważ to w nim zdobywamy interesujące nas informacje.
+        ponieważ to w nim zdobywamy interesujące nas informacje wykorzystywane do późniejszych obliczeń.
 
         Aby aplikacja nie była jednorazowego użytku, należy dla każdego użytkownika dostarczać kolejne porcje danych.
         Rodzi to szereg problemów oraz wyznacza pewne cechy, które napisany mechanizm musi spełniać.
