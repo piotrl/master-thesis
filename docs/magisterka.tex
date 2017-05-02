@@ -169,7 +169,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 		 Last.fm udostępnia szereg metod REST API \cite{lastfm:apidoc}, 
 		 dla mnie szczególnie istotne są te związane z odtworzeniami użytkownika oraz szczegółowych informacji o piosenkach i artystach.
 
-		Metoda user.getRecentTracks % TODO
+       Metoda user.getRecentTracks % TODO
 
 
 		% identyfikuje swoje dane za pomocą MBID \cite{lastfm:mbid}
@@ -181,6 +181,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         \end{figure}
 
         \section*{Komunikacja z zewnętrznymi serwisami}
+			TODO
 
     \section{Mechanizm importu danych}
 
@@ -191,13 +192,20 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         Proces pobierania nazywam agregacją danych lub importem danych i jest on podstawą działania aplikacji,
         ponieważ to w nim zdobywamy interesujące nas informacje wykorzystywane do późniejszych obliczeń.
 
-        Aby aplikacja nie była jednorazowego użytku, należy dla każdego użytkownika dostarczać kolejne porcje danych.
+        Aby aplikacja nie była jednorazowego użytku, wraz z upływem czasu należy dla każdego użytkownika dostarczać
+		  kolejne porcje danych z zewnętrznych serwisów.
         Rodzi to szereg problemów oraz wyznacza pewne cechy, które napisany mechanizm musi spełniać.
 
         \subsection*{Niezależność}
         Podczas pobierania danych dla jednego użytkownika może wystąpić błąd, np. poprzez tymczasową niedostępność API,
-        nie powinien on wpłynąć na agregacje innych użytkowników, ani na działanie mechanizmu w przyszłości dla tego samego użytkownika
-        (Nie powinien ciągle powtarzać błędnych zapytań).
+        nie powinien on wpłynąć na agregacje innych użytkowników, ani na działanie mechanizmu w przyszłości dla tego samego użytkownika.
+		 
+  		 Części błędów można się spodziewać, np. lastfm udostępnia do każdej metody API listę błędów które może zwrócić zamiast odpowiedzi.
+		 Z drugiej strony, mogą wystąpić błędy po naszej stronie - zwłaszcza gdy API nie jest bardzo dobrze udokumentowane 
+		 lub nie mamy zbyt dużego doświadczenia z pracy z nimi, np. podczas mapowania odpowiedzi na obiekty lub przy zapisie danych do bazy.
+
+		 Można sobie z tym radzić na kilka sposobów, przechwytując wyjątki podczas wysyłania każdego requestu oraz budując globalny error handler.
+
 
         \subsection*{Ciągłość}
         Celem codzienne uruchamianie procedury i pobranie najnowszych lub brakujących danych do systemu,
