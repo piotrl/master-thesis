@@ -1,3 +1,4 @@
+% !TeX spellcheck = <none>
 \documentclass[brudnopis]{xmgr}
 % Jeśli nowe rozdziały mają się zaczynać na stronach
 % nieparzystych:
@@ -220,9 +221,6 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
           \label{fig:Last.fm}
         \end{figure}
 
-        \section*{Komunikacja z zewnętrznymi serwisami}
-			TODO
-
     \section{Mechanizm importu danych}
         Oba z wymienionych serwisów udostępniają część danych, które użytkownik zgromadził na swoim koncie.
         Dostęp ten jest realizowany przez API, po okazaniu odpowiednich tokenów uwierzytelniających, mamy dostęp do danych użytkownika.
@@ -246,10 +244,19 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
             Można sobie z tym radzić na kilka sposobów, przechwytując wyjątki podczas wysyłania każdego requestu
             oraz dodatkowy error handler przechwytujący wszystkie wyjątki powstałe podczas budowania modelu i zapisywania danych w bazie.
 
-            Dzięki rozróżnieniu wyjątków na API i inne, mamy możliwość różnicowania o ich krytyczności. Czy chcemy .
-		 
+            Dzięki kilku poziomom przechtywywania wyjątków, mamy możliwość różnicowania o ich krytyczności. 
+            Możemy kolejkować nieudane requesty i po kilku minutach ponowić próbę ich wysłania. Jest to skuteczne rozwiązanie gdy API ma sztywny czas sesji po którym następuje wylogowanie.
+            RescueTime i last.fm mają autoryzację bezstanową, w pełni polegającej na raz wygenerowanym kluczu - sesja nie jest tu problem, więc zdecydowałem się porzucić pomysł kolejkowania pojedynczych requestów.
+
+            % TODO: Blad w jedenej agregacji nie wplywa na nastepne / kolejnych uzytkownikow
 
         \subsection*{Ciągłość}
+
+            \begin{figure}
+                \includegraphics[width=\linewidth]{fig/db-aggregation.png}
+                \caption{Schemat relacji aggregation}
+                \label{fig:Relacja aggregation}
+            \end{figure}
             Celem codzienne uruchamianie procedury i pobranie najnowszych lub brakujących danych do systemu,
             API pozwalają nam na wybranie tylko małego fragmentu danych, istotne jest więc by zacząć import
             od momentu ostatniego poprawnie wczytanego rekordu dla danego użytkownika.
@@ -265,7 +272,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
             RescueTime mimo, że co do sekundy loguje start i koniec aktywności,
             jego najwyższa dokładność oferowana użytkownikowi to 5 minut \footnote{TODO: rescuetime:apidoc-precision},
             a w darmowej wersji zezwala na dostęp maksymalnie trzy miesiące wstecz.
-            Jest możliwość sterowania formatem odpowiedzi z serwera, CSV lub JSON - jednak JSON
+            Jest możliwość sterowania formatem odpowiedzi z serwera, CSV lub JSON - jednak JSON	
 
             \begin{lstlisting}[language=json,firstnumber=1]
 {"menu": {
@@ -284,12 +291,26 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
 
         \subsection*{Autoryzacja}
+        
+        Do każdego requestu należy dodać klucze autoryzujące, które użytkownik musi wygenerować w serwisach Last.fm i RescueTime \cite{rescuetime:apidoc-keymanagment} oraz dodać w ustawieniach aplikacji. Klucze zapisywane są ws tabeli \textit{aggregation\_metadata}.
+        
+        Last.fm wymaga rejestracji aplikacji, po którym otrzymujesz dwa klucze: sekretny i normalny.
+        
+        W obu serwisach dostępne jest logowanie za pomocą OAuth, jednak w obecnej wersji applikacji nie używam tego mechanizmu.
+        
+        \begin{figure}
+        	\includegraphics[width=\linewidth]{fig/db-aggregation-metadata.png}
+        	\caption{Schemat relacji aggregation\_metadata}
+        	\label{fig:}
+        \end{figure}
 
-        \subsection*{Zepsute dane}
-        API nie gwarantuje istnienia ani poprawności wszystkich informacji.
-        Przykładowo last.fm do identyfikacji utworu dostarcza jego identyfikator i pełną nazwę.
-        Zawsze bezpieczniej jest korzystać z identyfikatora, ponieważ w nazwie mogą występować niebezpieczne dane np. znaki UTF-8,
-        jednak istnieją, rekordy dla których identyfikator jest pusty. \cite{Goldfarb:2002:CFG}
+        \subsection*{Niepełne dane}
+        API nie gwarantuje istnienia ani poprawnosci wszystkich informacji.
+        Przykładowo last.fm do identyfikacji utworu dostarcza jego MBID oraz pełną nazwę.
+        Bezpieczniej jest korzystać z identyfikatora mbid, ponieważ w nazwie mogą występować problematyczne znaki UTF-8 np. w przypadku Chińskich artystów.
+        Niekiedy nie jest to możliwe, istnieją bowiem rekordy dla których identyfikator jest pusty.
+        
+        W przypadku RescueTime nie doszukałem się danych które mógłbym uznać za niepełne.
 
         \subsection*{Wydajność}
         Dobrze jest kopiować wszystkie powtarzalne informacje do własnej bazy danych,
@@ -302,6 +323,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
     \section{Opis zebranych danych}
 
+
     \section{Data fusion - Łączenie danych w czasie}
 
         \subsection*{Korekta}
@@ -309,6 +331,8 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         \subsection*{Integracja dwóch źródeł danych}
 
      \section{Budowa raportów na podstawie szeregów czasowych}
+
+
 
 \chapter{Wizualizacja danych}
 
