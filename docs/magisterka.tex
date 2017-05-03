@@ -15,6 +15,47 @@
 \setsansfont[Numbers=OldStyle,Mapping=tex-text]{Myriad Pro}
 %\setmonofont[Scale=0.75]{Monaco}
 
+% Code listing
+%\usepackage{bera}% optional: just to have a nice mono-spaced font
+\usepackage{listings}
+\usepackage{xcolor}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+        *{0}{{{\color{numb}0}}}{1}
+        {1}{{{\color{numb}1}}}{1}
+        {2}{{{\color{numb}2}}}{1}
+        {3}{{{\color{numb}3}}}{1}
+        {4}{{{\color{numb}4}}}{1}
+        {5}{{{\color{numb}5}}}{1}
+        {6}{{{\color{numb}6}}}{1}
+        {7}{{{\color{numb}7}}}{1}
+        {8}{{{\color{numb}8}}}{1}
+        {9}{{{\color{numb}9}}}{1}
+        {:}{{{\color{punct}{:}}}}{1}
+        {,}{{{\color{punct}{,}}}}{1}
+        {\{}{{{\color{delim}{\{}}}}{1}
+        {\}}{{{\color{delim}{\}}}}}{1}
+        {[}{{{\color{delim}{[}}}}{1}
+        {]}{{{\color{delim}{]}}}}{1},
+}
+
+% END Code listing
+
 % Opcjonalnie identyfikator dokumentu
 % drukowany tylko z włączoną opcją 'brudnopis':
 \wersja   {wersja wstępna [\ymdtoday]}
@@ -149,28 +190,27 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         \label{RescueTime - lista przykładowych aktywności}
         \end{table}
 
-        Program jest w stanie rozpoznać nie tylko tytuły aktualnie otwartych okien,
-        ale również w przypadku przeglądarki – adresy odwiedzanych stron internetowych,
-        jest to bardzo ważne ze względu na dominującą ilość czasu spędzonego w samej przeglądarce.
+            Program jest w stanie rozpoznać nie tylko tytuły aktualnie otwartych okien,
+            ale również w przypadku przeglądarki – adresy odwiedzanych stron internetowych,
+            jest to bardzo ważne ze względu na dominującą ilość czasu spędzonego w samej przeglądarce.
 
-        Dostęp do informacji użytkownika odbywa się po REST API z tokenem uwierzytelniającym,
-        który użytkownik musi wygenerować na stronie RescueTime.com.
-        Po poprawnym uwierzytelnieniu, mamy dostęp do danych sprzed 3 miesięcy w formacie JSON.
+            Dostęp do informacji użytkownika odbywa się po REST API z tokenem uwierzytelniającym,
+            który użytkownik musi wygenerować na stronie RescueTime.com.
+            Po poprawnym uwierzytelnieniu, mamy dostęp do danych sprzed 3 miesięcy w formacie JSON.
 
         \section*{last.fm}
 
-        Last.fm to serwis społecznościowy dla fanów muzyki,
-        pomagający odkrywać nowych artystów na podstawie historii użytkownika.
+            Last.fm to serwis społecznościowy dla fanów muzyki,
+            pomagający odkrywać nowych artystów na podstawie historii użytkownika.
 
-        Wtyczka "last.fm Scrobbler"\cite{lastfm:trackmymusic} integruje się z wieloma odtwarzaczami muzycznymi, np. Spotify.
-        Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
-        w której na podstawie meta-tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
+            Wtyczka "last.fm Scrobbler"\cite{lastfm:trackmymusic} integruje się z wieloma odtwarzaczami muzycznymi, np. Spotify.
+            Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
+            w której na podstawie meta-tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
 
-		 Last.fm udostępnia szereg metod REST API \cite{lastfm:apidoc}, 
-		 dla mnie szczególnie istotne są te związane z odtworzeniami użytkownika oraz szczegółowych informacji o piosenkach i artystach.
+            Last.fm udostępnia szereg metod REST API \cite{lastfm:apidoc},
+            dla mnie szczególnie istotne są te związane z odtworzeniami użytkownika oraz szczegółowych informacji o piosenkach i artystach.
 
-       Metoda user.getRecentTracks % TODO
-
+            Metoda user.getRecentTracks % TODO
 
 		% identyfikuje swoje dane za pomocą MBID \cite{lastfm:mbid}
 
@@ -184,7 +224,6 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 			TODO
 
     \section{Mechanizm importu danych}
-
         Oba z wymienionych serwisów udostępniają część danych, które użytkownik zgromadził na swoim koncie.
         Dostęp ten jest realizowany przez API, po okazaniu odpowiednich tokenów uwierzytelniających, mamy dostęp do danych użytkownika.
 
@@ -193,34 +232,58 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         ponieważ to w nim zdobywamy interesujące nas informacje wykorzystywane do późniejszych obliczeń.
 
         Aby aplikacja nie była jednorazowego użytku, wraz z upływem czasu należy dla każdego użytkownika dostarczać
-		  kolejne porcje danych z zewnętrznych serwisów.
+        kolejne porcje danych z zewnętrznych serwisów.
         Rodzi to szereg problemów oraz wyznacza pewne cechy, które napisany mechanizm musi spełniać.
 
         \subsection*{Niezależność}
-        Podczas pobierania danych dla jednego użytkownika może wystąpić błąd, np. poprzez tymczasową niedostępność API,
-        nie powinien on wpłynąć na agregacje innych użytkowników, ani na działanie mechanizmu w przyszłości dla tego samego użytkownika.
+            Podczas pobierania danych dla jednego użytkownika może wystąpić błąd, np. poprzez tymczasową niedostępność API,
+            nie powinien on wpłynąć na agregacje innych użytkowników, ani na działanie mechanizmu w przyszłości dla tego samego użytkownika.
+
+            Części błędów można się spodziewać, np. lastfm udostępnia do każdej metody API listę błędów które może zwrócić zamiast odpowiedzi.
+            Z drugiej strony, mogą wystąpić błędy po naszej stronie - zwłaszcza gdy API nie jest bardzo dobrze udokumentowane
+            lub nie mamy zbyt dużego doświadczenia z pracy z nimi, np. podczas mapowania odpowiedzi na obiekty lub przy zapisie danych do bazy.
+
+            Można sobie z tym radzić na kilka sposobów, przechwytując wyjątki podczas wysyłania każdego requestu
+            oraz dodatkowy error handler przechwytujący wszystkie wyjątki powstałe podczas budowania modelu i zapisywania danych w bazie.
+
+            Dzięki rozróżnieniu wyjątków na API i inne, mamy możliwość różnicowania o ich krytyczności. Czy chcemy .
 		 
-  		 Części błędów można się spodziewać, np. lastfm udostępnia do każdej metody API listę błędów które może zwrócić zamiast odpowiedzi.
-		 Z drugiej strony, mogą wystąpić błędy po naszej stronie - zwłaszcza gdy API nie jest bardzo dobrze udokumentowane 
-		 lub nie mamy zbyt dużego doświadczenia z pracy z nimi, np. podczas mapowania odpowiedzi na obiekty lub przy zapisie danych do bazy.
-
-		 Można sobie z tym radzić na kilka sposobów, przechwytując wyjątki podczas wysyłania każdego requestu oraz budując globalny error handler.
-
 
         \subsection*{Ciągłość}
-        Celem codzienne uruchamianie procedury i pobranie najnowszych lub brakujących danych do systemu,
-        API pozwalają nam na wybranie tylko małego fragmentu danych, istotne jest więc by zacząć import
-        od momentu ostatniego poprawnie wczytanego rekordu dla danego użytkownika.
+            Celem codzienne uruchamianie procedury i pobranie najnowszych lub brakujących danych do systemu,
+            API pozwalają nam na wybranie tylko małego fragmentu danych, istotne jest więc by zacząć import
+            od momentu ostatniego poprawnie wczytanego rekordu dla danego użytkownika.
 
         \subsection*{Powtarzalność}
 
-    \section{Powszechne problemy przy komunikacji z API}
+    \section{Komunikacja z API}
 
-        \subsection*{Ograniczenia dostawcy API}
+        \subsection*{Specyfika API}
+            Przy projektowaniu rozwiązania warto pamiętać o tym, że nie istnieje powszechnie wykorzystywany standard budowania API,
+            a każdy dostawca implementuje je w sposób specyficzny dla swojego stystemu i danych jakie udostępnia.
+
+            RescueTime mimo, że co do sekundy loguje start i koniec aktywności,
+            jego najwyższa dokładność oferowana użytkownikowi to 5 minut \footnote{TODO: rescuetime:apidoc-precision},
+            a w darmowej wersji zezwala na dostęp maksymalnie trzy miesiące wstecz.
+            Jest możliwość sterowania formatem odpowiedzi z serwera, CSV lub JSON - jednak JSON
+
+            \begin{lstlisting}[language=json,firstnumber=1]
+{"menu": {
+  "id": "file",
+  "value": "File",
+  "popup": {
+    "menuitem": [
+      {"value": "New", "onclick": "CreateNewDoc()"},
+      {"value": "Open", "onclick": "OpenDoc()"},
+      {"value": "Close", "onclick": "CloseDoc()"}
+    ]
+  }
+}}
+0123456789
+            \end{lstlisting}
+
 
         \subsection*{Autoryzacja}
-
-        \subsection*{Braki dostępu}
 
         \subsection*{Zepsute dane}
         API nie gwarantuje istnienia ani poprawności wszystkich informacji.
@@ -230,7 +293,10 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
         \subsection*{Wydajność}
         Dobrze jest kopiować wszystkie powtarzalne informacje do własnej bazy danych,
-        dzięki temu możemy ograniczyć ilość żądań do API, które może mieć limity.
+        dzięki temu możemy ograniczyć ilość żądań do API tylko do nieznanych nam obiektów i zmniejszyć ryzyko wyczerpania limitu requestów.
+
+		 Jest to istotna optymalizacja, przy skali tysięcy requestów i średnim czasie requestu wachającym się między 0.5s a 2s, 
+		 robi to różnicę w minut.
 
 \chapter{Analiza danych}
 
