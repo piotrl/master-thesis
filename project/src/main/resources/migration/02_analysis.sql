@@ -118,9 +118,7 @@ FROM (SELECT DISTINCT ON (scrobbleId) *
   JOIN lastfm_track track ON track.id = ma.trackid
   JOIN lastfm_tag_track tagtrack ON tagtrack.track_id = track.id
   JOIN lastfm_tag tag ON tag.id = tagtrack.tag_id
-WHERE ma.activitystarted >= :from
-      AND ma.activitystarted <= :to
-      AND ma.accountid = :accountId
+WHERE ma.accountid = :accountId
 GROUP BY tag.name
 ORDER BY playedTimes DESC
 LIMIT 10;

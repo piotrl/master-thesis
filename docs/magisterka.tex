@@ -358,7 +358,62 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
 \section{Testy jednostkowe}
 
+Znaczna częsć kodu była napisana metodologią TDD, kod API zwracającego przeanalizowane dane nie jest przetestowany głównie dlatego, że główna logika jest w tym przypadku w zapytaniach SQL.
+
+Code coverage dla całego projektu wygląda tak:
+\begin{table}
+	
+	\begin{tabular}{|r|c|c|c|}
+		\hline 
+		Moduł & Pokrycie klas & Pokrycie metod & Pokrycie operacji \\ \hline 
+		Średnia projektu & 75\% (58 na 77) & 42\% (159 na 378) & 53\% (473 na 891) \\  
+		Moduł agregacji & 94\% (37 na 39) & 61\% (134 na 219) & 73\% (385 na 521) \\  
+		API & 43\% (10 na 23) & 8\% (10 na 122) & 12\% (35 na 270) \\  \hline
+	\end{tabular}
+
+    \caption{
+	Code coverage projektu Java
+	\newline Źródło: Opracowanie własne.
+	}
+\label{Projekt - Code coverage}
+\end{table}
+
 \section{Narzędzia}
+
+\begin{table}
+\begin{tabular}{|l|c|l|}
+	\hline 
+	Nazwa narzędzia & Wersja & Opis zastosowania \\ 
+	\hline 
+	Java & 8 & Główny język programowania \\ 
+	\hline 
+	Spring Boot & 1.4 & Framework IoT + MVC + REST \\ 
+	\hline 
+	PostgreSQL & 9.6 & Silnik bazy danych \\ 
+	\hline 
+	Thymeleaf & 3.0 & Silnik szablonów \\ 
+	\hline 
+	u-mass:lastfm-java & 0.1.2 & Komunikacja z last.fm API \\ 
+	\hline 
+	GSON & 2.8 & Serializacja JSON to POJO \\ 
+	\hline 
+	guava & 20.0 & Utilities \\ 
+	\hline 
+	Lombok & 1.16 & Java boilerplate-free code generator \\ 
+	\hline 
+	Spring Security & TODO & Autoryzacja użytkowników \\ 
+	\hline 
+	Junit & TODO & Unit tests runner \\ 
+	\hline 
+	Assertj & 3.5 & Biblioteka assercji testów \\ 
+	\hline 
+\end{tabular} 
+    \caption{
+	Code coverage projektu Java
+	\newline Źródło: Opracowanie własne.
+	}
+	\label{Projekt - Code coverage}
+\end{table}
 
 
 % zakończenie
