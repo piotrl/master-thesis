@@ -296,7 +296,8 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         
         Last.fm wymaga rejestracji aplikacji, po którym otrzymujesz dwa klucze: sekretny i normalny.
         
-        W obu serwisach dostępne jest logowanie za pomocą OAuth, jednak w obecnej wersji applikacji nie używam tego mechanizmu.
+        W obu serwisach dostępne jest logowanie za pomocą OAuth, dzięki temu użytkownik nie musi samodzielnie generować kluczy, 
+        a jedynie potwierdzić chęć udostępnienia swoich danych w aplikacji. W obecnej wersji applikacji nie używam tego mechanizmu.
         
         \begin{figure}
         	\includegraphics[width=\linewidth]{fig/db-aggregation-metadata.png}
@@ -316,10 +317,19 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         Dobrze jest kopiować wszystkie powtarzalne informacje do własnej bazy danych,
         dzięki temu możemy ograniczyć ilość żądań do API tylko do nieznanych nam obiektów i zmniejszyć ryzyko wyczerpania limitu requestów.
 
-		 Jest to istotna optymalizacja, przy skali tysięcy requestów i średnim czasie requestu wachającym się między 0.5s a 2s, 
-		 robi to różnicę w minut.
+		Jest to istotna optymalizacja, przy skali tysięcy requestów i średnim czasie requestu wachającym się między 0.5s a 2s, 
+		robi to różnicę w minut.
 
 \chapter{Analiza danych}
+
+	Gdy pierwsze dane zaczęły się pojawiać w systemie, można zacząć szukać ich sensownego zastosowania.
+	Na początku chciałbym zobrazować skalę ilosci danych po jakiej się poruszamy. 
+	Zaimportowane dane są z okresu od 31 stycznia do 4 maja 2017 z aktywnosci wykonywanych na prywatnym laptopie oraz od 3 lutego do 4 maja 2017 ze słuchanej muzyki na wielu urządzeniach (prywatny laptop, telefon, służbowy komputer). 
+	
+	W tym 3 miesięcznym okresie, wykonałem 30664 akcji, które są przypisane do 1916 programów lub stron internetowych z podziałem na 62 kategorie. Łącznie 498 godzin, srednio 5.5 godziny dziennie. 
+	
+	W przypadku muzyki - przesłuchałem 5203 piosenek, z czego 2303 były unikalne wsród 1155 artystów. Odsłuchane piosenki były przypisane przez społecznosć last.fm do 1185 różnych tagów - najpopularniejsze z nich to: rock, polish, soundtrack.
+	
 
     \section{Opis zebranych danych}
 
