@@ -306,32 +306,58 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         \end{figure}
 
         \subsection*{Niepełne dane}
-        API nie gwarantuje istnienia ani poprawnosci wszystkich informacji.
+        API nie gwarantuje istnienia ani poprawności wszystkich informacji.
         Przykładowo last.fm do identyfikacji utworu dostarcza jego MBID oraz pełną nazwę.
         Bezpieczniej jest korzystać z identyfikatora mbid, ponieważ w nazwie mogą występować problematyczne znaki UTF-8 np. w przypadku Chińskich artystów.
-        Niekiedy nie jest to możliwe, istnieją bowiem rekordy dla których identyfikator jest pusty.
+        Niekiedy nie jest to możliwe, istnieją bowiem rekordy, dla których identyfikator jest pusty.
         
-        W przypadku RescueTime nie doszukałem się danych które mógłbym uznać za niepełne.
+        W przypadku RescueTime nie doszukałem się danych, które mógłbym uznać za niepełne.
 
         \subsection*{Wydajność}
         Dobrze jest kopiować wszystkie powtarzalne informacje do własnej bazy danych,
         dzięki temu możemy ograniczyć ilość żądań do API tylko do nieznanych nam obiektów i zmniejszyć ryzyko wyczerpania limitu requestów.
 
-		Jest to istotna optymalizacja, przy skali tysięcy requestów i średnim czasie requestu wachającym się między 0.5s a 2s, 
-		robi to różnicę w minut.
+		Jest to istotna optymalizacja, przy skali tysięcy requestów i średnim czasie requestu wahającym się między 0.5s a 2s,
+		robi to różnicę minut.
 
 \chapter{Analiza danych}
 
-	Gdy pierwsze dane zaczęły się pojawiać w systemie, można zacząć szukać ich sensownego zastosowania.
-	Na początku chciałbym zobrazować skalę ilosci danych po jakiej się poruszamy. 
-	Zaimportowane dane są z okresu od 31 stycznia do 4 maja 2017 z aktywnosci wykonywanych na prywatnym laptopie oraz od 3 lutego do 4 maja 2017 ze słuchanej muzyki na wielu urządzeniach (prywatny laptop, telefon, służbowy komputer). 
-	
-	W tym 3 miesięcznym okresie, wykonałem 30664 akcji, które są przypisane do 1916 programów lub stron internetowych z podziałem na 62 kategorie. Łącznie 498 godzin, srednio 5.5 godziny dziennie. 
-	
-	W przypadku muzyki - przesłuchałem 5203 piosenek, z czego 2303 były unikalne wsród 1155 artystów. Odsłuchane piosenki były przypisane przez społecznosć last.fm do 1185 różnych tagów - najpopularniejsze z nich to: rock, polish, soundtrack.
-	
+	Po pojawieniu się pierwszych danych można zacząć je przeszukiwać i eksperymentalnie łączyć je między sobą.
+	Zacznę od zobrazowania skali danych, po jakiej się poruszam.
+	Zaimportowane dane są z okresu od 31 stycznia do 4 maja 2017 z aktywności wykonywanych na prywatnym laptopie
+	oraz od 3 lutego do 4 maja 2017 ze słuchanej muzyki z wielu urządzeń i komputerów.
+
+	W tym 3 miesięcznym okresie wykonałem 34611 akcji, które są przypisane do 1916 programów lub stron internetowych z podziałem na 62 kategorie.
+	Łącznie 588 godzin w ciągu 94 dni, średnio 6.2 godziny dziennie.
+	Z czego 60.5\% to aktywności oznaczone jako produktywne, a 39.5\% jako rozpraszające lub neutralne.
+
+	W ciągu 91 przeanalizowanych dni przesłuchałem 395 godzin muzyki — średnio 4.3 godziny dziennie.
+	Składa się na to 5203 odtworzeń piosenek, z czego 2303 unikalnych wśród 1155 artystów.
+	Odsłuchane piosenki były przypisane przez społeczność last.fm do 1185 różnych tagów — najpopularniejsze z nich to: rock, polish, soundtrack.
 
     \section{Opis zebranych danych}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/db-rescuetime-schema.png}
+        \caption{Schemat relacji danych o aktywnościach}
+        \label{fig:Dane z RescueTime - Schemat relacji}
+    \end{figure}
+
+    Najważniejszą tabelą wśród tych powiązanych z RescueTime jest rescuetime_activity,
+    to do niej w pierwszej kolejności trafiają dane z API bez żadnej obróbki,
+    następnie nazwa akcji oraz kategoria są przyporządkowywane do istniejących rekordów w tabelach
+    rescuetime_action oraz rescuetime_category lub tworzone nowe w razie konieczności.
+
+    \begin{table}
+    \begin{tabular}
+    id      &   account_id   &   start_time   &   end_time   &   productivity   &   spent_time   &   action_id   &   activity_name   &   category_id   &   category_name
+    14226   &   1   &   2017-01-31 09:20:00.000000 +01:00   &   2017-01-31 09:25:00   &   2   &   2   &   138   &   evernote.com   &   17   &   Writing
+    \end{tabular}
+    \caption{
+                Przykładowy rekord z tabeli rescuetime_activity
+            }
+    \label{RescueTime - Przykładowy rekord z tabeli rescuetime_activity}
+    \end{table}
 
 
     \section{Data fusion - Łączenie danych w czasie}
