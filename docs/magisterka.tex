@@ -301,7 +301,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         
         \begin{figure}
         	\includegraphics[width=\linewidth]{fig/db-aggregation-metadata.png}
-        	\caption{Schemat relacji \verb|aggregation_metadata|}
+        	\caption{Schemat relacji aggregation\_metadata}
         	\label{fig:}
         \end{figure}
 
@@ -310,7 +310,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         Przykładowo last.fm do identyfikacji utworu dostarcza jego MBID oraz pełną nazwę.
         Bezpieczniej jest korzystać z identyfikatora mbid, ponieważ w nazwie mogą występować problematyczne znaki UTF-8 np. w przypadku Chińskich artystów.
         Niekiedy nie jest to możliwe, istnieją bowiem rekordy, dla których identyfikator jest pusty.
-        
+
         W przypadku RescueTime nie doszukałem się danych, które mógłbym uznać za niepełne.
 
         \subsection*{Wydajność}
@@ -337,11 +337,11 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
     \section{Opis zebranych danych}
 
-%    \begin{figure}
-%        \includegraphics[width=\linewidth]{fig/db-rescuetime-schema.png}
-%        \caption{Schemat relacji danych o aktywnościach}
-%        \label{fig:Dane z RescueTime - Schemat relacji}
-%    \end{figure}
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/db-rescuetime-schema.png}
+        \caption{Schemat relacji danych o aktywnościach}
+        \label{fig:Dane z RescueTime - Schemat relacji}
+    \end{figure}
 
     Najważniejszą tabelą wśród tych powiązanych z RescueTime jest \verb|rescuetime_activity|,
     to do niej w pierwszej kolejności trafiają dane z API bez żadnej obróbki,
@@ -349,14 +349,24 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
     \verb|rescuetime_action| oraz \verb|rescuetime_category| lubzone nowe w razie konieczości.
 
     \begin{table}
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-        \verb|id|      &   \verb|account_id|   &   \verb|start_time|   &   \verb|ime|   &   \verb|roductivity|   &   \verb|spent_time|   \verb|action_id|   &   \verb|activity_name|   &   \verb|category_id|   &   \verb|category_name| \\
-         14226   &   1   &   2017-01-31 09:20:00.000000 +01:00   &   201-31 09:25:00  &   2   &   2   &   138   &   evernote.com   &   1 &   Writing
+    \centering
+    \begin{tabular}{|l|l|l|}
+        \hline
+        kolumna             & Rekord 1             & Rekord 2           \\ \hline
+        \verb|id|           & 14226                & 14251              \\
+        \verb|account_id|   & 1                    & 1                  \\ \hline
+        \verb|start_time|   & 2017-01-31 09:20:00  & 2017-01-31 10:05:00\\
+        \verb|end_time|     & 2017-01-31 09:25:00  & 2017-01-31 10:10:00\\ \hline
+        \verb|productivity| & +2                   & -2                 \\
+        \verb|spent_time|   & 4s                   & 12                 \\ \hline
+        \verb|action_id|    & 138                  & 22                 \\
+        \verb|activity_name|& evernote.com         & spotify            \\ \hline
+        \verb|category_id|  & 17                   & 34                 \\
+        \verb|category_name|& Writing              & Music              \\ \hline
     \end{tabular}
-        \caption{Przykładowy rekord z tabeli rescuetime_activity}
+        \caption{Przykładowy rekord z tabeli rescuetime\_activity}
         \label{RescueTime - Przykładowy rekord z tabeli rescuetime_activity}
     \end{table}
-
 
     \section{Data fusion - Łączenie danych w czasie}
 
@@ -386,10 +396,10 @@ Znaczna częsć kodu była napisana metodologią TDD, kod API zwracającego prze
 
 Code coverage dla całego projektu wygląda tak:
 \begin{table}
-	
+
 	\begin{tabular}{|r|c|c|c|}
-		\hline 
-		Moduł & Pokrycie klas & Pokrycie metod & Pokrycie operacji \\ \hline 
+		\hline
+		Moduł & Pokrycie klas & Pokrycie metod & Pokrycie operacji \\ \hline
 		Średnia projektu & 75\% (58 na 77) & 42\% (159 na 378) & 53\% (473 na 891) \\  
 		Moduł agregacji & 94\% (37 na 39) & 61\% (134 na 219) & 73\% (385 na 521) \\  
 		API & 43\% (10 na 23) & 8\% (10 na 122) & 12\% (35 na 270) \\  \hline
@@ -406,32 +416,32 @@ Code coverage dla całego projektu wygląda tak:
 
 \begin{table}
 \begin{tabular}{|l|c|l|}
-	\hline 
-	Nazwa narzędzia & Wersja & Opis zastosowania \\ 
-	\hline 
-	Java & 8 & Główny język programowania \\ 
-	\hline 
-	Spring Boot & 1.4 & Framework IoT + MVC + REST \\ 
-	\hline 
-	PostgreSQL & 9.6 & Silnik bazy danych \\ 
-	\hline 
-	Thymeleaf & 3.0 & Silnik szablonów \\ 
-	\hline 
-	u-mass:lastfm-java & 0.1.2 & Komunikacja z last.fm API \\ 
-	\hline 
-	GSON & 2.8 & Serializacja JSON to POJO \\ 
-	\hline 
-	guava & 20.0 & Utilities \\ 
-	\hline 
-	Lombok & 1.16 & Java boilerplate-free code generator \\ 
-	\hline 
-	Spring Security & TODO & Autoryzacja użytkowników \\ 
-	\hline 
-	Junit & TODO & Unit tests runner \\ 
-	\hline 
-	Assertj & 3.5 & Biblioteka assercji testów \\ 
-	\hline 
-\end{tabular} 
+	\hline
+	Nazwa narzędzia & Wersja & Opis zastosowania \\
+	\hline
+	Java & 8 & Główny język programowania \\
+	\hline
+	Spring Boot & 1.4 & Framework IoT + MVC + REST \\
+	\hline
+	PostgreSQL & 9.6 & Silnik bazy danych \\
+	\hline
+	Thymeleaf & 3.0 & Silnik szablonów \\
+	\hline
+	u-mass:lastfm-java & 0.1.2 & Komunikacja z last.fm API \\
+	\hline
+	GSON & 2.8 & Serializacja JSON to POJO \\
+	\hline
+	guava & 20.0 & Utilities \\
+	\hline
+	Lombok & 1.16 & Java boilerplate-free code generator \\
+	\hline
+	Spring Security & TODO & Autoryzacja użytkowników \\
+	\hline
+	Junit & TODO & Unit tests runner \\
+	\hline
+	Assertj & 3.5 & Biblioteka assercji testów \\
+	\hline
+\end{tabular}
     \caption{
 	Code coverage projektu Java
 	\newline Źródło: Opracowanie własne.
