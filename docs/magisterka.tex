@@ -301,7 +301,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         
         \begin{figure}
         	\includegraphics[width=\linewidth]{fig/db-aggregation-metadata.png}
-        	\caption{Schemat relacji aggregation\_metadata}
+        	\caption{Schemat relacji \verb|aggregation_metadata|}
         	\label{fig:}
         \end{figure}
 
@@ -337,26 +337,24 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
     \section{Opis zebranych danych}
 
-    \begin{figure}
-        \includegraphics[width=\linewidth]{fig/db-rescuetime-schema.png}
-        \caption{Schemat relacji danych o aktywnościach}
-        \label{fig:Dane z RescueTime - Schemat relacji}
-    \end{figure}
+%    \begin{figure}
+%        \includegraphics[width=\linewidth]{fig/db-rescuetime-schema.png}
+%        \caption{Schemat relacji danych o aktywnościach}
+%        \label{fig:Dane z RescueTime - Schemat relacji}
+%    \end{figure}
 
-    Najważniejszą tabelą wśród tych powiązanych z RescueTime jest rescuetime_activity,
+    Najważniejszą tabelą wśród tych powiązanych z RescueTime jest \verb|rescuetime_activity|,
     to do niej w pierwszej kolejności trafiają dane z API bez żadnej obróbki,
     następnie nazwa akcji oraz kategoria są przyporządkowywane do istniejących rekordów w tabelach
-    rescuetime_action oraz rescuetime_category lub tworzone nowe w razie konieczności.
+    \verb|rescuetime_action| oraz \verb|rescuetime_category| lubzone nowe w razie konieczości.
 
     \begin{table}
-    \begin{tabular}
-    id      &   account_id   &   start_time   &   end_time   &   productivity   &   spent_time   &   action_id   &   activity_name   &   category_id   &   category_name
-    14226   &   1   &   2017-01-31 09:20:00.000000 +01:00   &   2017-01-31 09:25:00   &   2   &   2   &   138   &   evernote.com   &   17   &   Writing
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+        \verb|id|      &   \verb|account_id|   &   \verb|start_time|   &   \verb|ime|   &   \verb|roductivity|   &   \verb|spent_time|   \verb|action_id|   &   \verb|activity_name|   &   \verb|category_id|   &   \verb|category_name| \\
+         14226   &   1   &   2017-01-31 09:20:00.000000 +01:00   &   201-31 09:25:00  &   2   &   2   &   138   &   evernote.com   &   1 &   Writing
     \end{tabular}
-    \caption{
-                Przykładowy rekord z tabeli rescuetime_activity
-            }
-    \label{RescueTime - Przykładowy rekord z tabeli rescuetime_activity}
+        \caption{Przykładowy rekord z tabeli rescuetime_activity}
+        \label{RescueTime - Przykładowy rekord z tabeli rescuetime_activity}
     \end{table}
 
 
