@@ -322,7 +322,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
 \chapter{Analiza danych}
 
-	Po pojawieniu się pierwszych danych można zacząć je przeszukiwać i eksperymentalnie łączyć je między sobą.
+	Po pojawieniu się pierwszych danych można zacząć je przeszukiwać i eksperymentalnie łączyć między sobą.
 	Zacznę od zobrazowania skali danych, po jakiej się poruszam.
 	Zaimportowane dane są z okresu od 31 stycznia do 4 maja 2017 z aktywności wykonywanych na prywatnym laptopie
 	oraz od 3 lutego do 4 maja 2017 ze słuchanej muzyki z wielu urządzeń i komputerów.
@@ -333,7 +333,34 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
 	W ciągu 91 przeanalizowanych dni przesłuchałem 395 godzin muzyki — średnio 4.3 godziny dziennie.
 	Składa się na to 5203 odtworzeń piosenek, z czego 2303 unikalnych wśród 1155 artystów.
-	Odsłuchane piosenki były przypisane przez społeczność last.fm do 1185 różnych tagów — najpopularniejsze z nich to: rock, polish, soundtrack.
+	Odsłuchane piosenki były przypisane przez społeczność last.fm do 1185 różnych tagów — najpopularniejsze z nich to: rock, polish, soundtrack
+	(przyporządkowane odpowiednio do 543, 423, 347 piosenek).
+
+	Warto już na początku zwrócić uwagę na długość pojedynczych akcji, 38\% ze wszystkich pojedynczych akcji trwało poniżej 10 sekund.
+	Mogą to
+
+    \begin{table}[]
+        \centering
+        \begin{tabular}{|l|l|l|}
+            \hline
+            Kategoria                           & Ilość zadań (x)   & \%      \\ \hline
+            \multicolumn{2}{|c|}{Zadania trwające poniżej 5 sekund} & x \/ 6784\\ \hline
+            Browsers                            & 1040              & 15.3\%  \\ \hline
+            General Utilities                   & 755               & 11.1\%  \\ \hline
+            GeneralSocial Networking            & 564               & 8.3\%   \\ \hline
+            Search                              & 563               & 8.2\%   \\ \hline
+            Uncategorized                       & 551               & 8.1\%   \\ \hline
+            \multicolumn{2}{|c|}{Zadania trwające ponad 2 minuty}   & x \/ 5012\\ \hline
+            Browsers                            & 1047              & 20.8\%  \\ \hline
+            Editing \& IDEs                     & 821               & 16.3\%  \\ \hline
+            General Social Networking           & 570               & 11.3\%  \\ \hline
+            General Software Development        & 408               & 8.1\%   \\ \hline
+            Games                               & 282               & 5.6\%   \\ \hline
+        \end{tabular}
+        \caption{Lista najpopularniejszych kategorii wśród krótkich zadań poniżej 5 sekund oraz tych powyżej 2 minut}
+        \label{Zadania krótkie i długie, które są najpopularniejsze?}
+    \end{table}
+
 
     \section{Opis zebranych danych}
 
@@ -343,10 +370,11 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         \label{fig:Dane z RescueTime - Schemat relacji}
     \end{figure}
 
-    Najważniejszą tabelą wśród tych powiązanych z RescueTime jest \verb|rescuetime_activity|,
+    Najważniejszą tabelą wśród tych powiązanych z aktywnościami jest \verb|rescuetime_activity|,
     to do niej w pierwszej kolejności trafiają dane z API bez żadnej obróbki,
     następnie nazwa akcji oraz kategoria są przyporządkowywane do istniejących rekordów w tabelach
-    \verb|rescuetime_action| oraz \verb|rescuetime_category| lubzone nowe w razie konieczości.
+    \verb|rescuetime_action| oraz \verb|rescuetime_category| lub utworzone nowe w razie konieczości.
+    Ma to na celu łatwiejsze przygotowanie danych i wykresów na podstawie konkretnej kategorii.
 
     \begin{table}
     \centering
@@ -367,6 +395,8 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         \caption{Przykładowy rekord z tabeli rescuetime\_activity}
         \label{RescueTime - Przykładowy rekord z tabeli rescuetime_activity}
     \end{table}
+
+    Dane zapisywane są w 5 minutowych okienkach ze względu na ograniczenia API, pojawiają się duplikaty
 
     \section{Data fusion - Łączenie danych w czasie}
 
