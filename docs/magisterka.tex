@@ -431,10 +431,42 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
             Brakuje ich również gdy artysta jest niszowy i dane nie zostały uzupełnione przez społeczność last.fm.
             Zorientowałem się o tym podczas budowania wykresu najpopularniejszych artystów,
             kiedy artysta ``Scott BradLee's Postmodern Jukebox'' mając 33 odtworzenia, ma zarejestrowane zaledwie 9 minut odsłuchu.
-            Zdecydowałem się policzyć średnią długość piosenki wśród wszystkich piosenek przesłuchanych przez użytkownika i nadać im go.
+            Zdecydowałem nadać im średnią długość ze wszystkich piosenek przesłuchanych przez użytkownika.
             W moim przypadku średnia wynosi 232 sekundy (liczone tylko z piosenek o długości dłuższej od zera).
 
         \subsection*{Integracja dwóch źródeł danych}
+
+            Najważniejszym elementem tej pracy jest połączenie obu źródeł danych,
+            dopiero na tej podstawie możemy wysnóć tytułowy wpływ muzyki na aktywności wykonywane przy komputerze.
+
+            Jeżeli chodzi o muzykę, muzyka słuchana poza komputerem jest dla nas nieinteresująca,
+            dlatego punktem wyjścia jest lista aktywności i to do każdej z nich będziemy dopasowywać muzykę. Nie na odwrót.
+            Z drugiej strony nie chcemy ignorować aktywności które były wykonywane w ciszy.
+            Dane wymagania doprowadzają nas do poniższego zapytania SQL (uproszczonego dla przykładu):
+
+\begin{lstlisting}[language=sql]
+SELECT *
+  FROM rescuetime_activity activity
+    LEFT JOIN lastfm_scrobble scrobble
+      ON scrobble.played_when >= activity.start_time
+         AND scrobble.played_when <= activity.end_time
+         AND scrobble.account_id = activity.account_id
+  ORDER BY played_when DESC;
+\end{lstlisting}
+            Warto zaznaczyć, że zapytanie napisane w ten sposób zduplikuje dane aktywności
+            jeżeli podczas ich wykonywania będzie odsłuchiwana więcej niż jedna piosenka.
+
+            Łączenie tabeli za pomocą porównań dat jest bardzo niewydajne,
+            powyższe zapytanie wykonuje się około 5 minut dla danych jednego użytkownika z około 3 miesięcy.
+            Taki czas jest niedopuszczalny.
+
+            Jednym z rozwiązań jest stworzenie widoku w PostgreSQL typu \verb|MATERIALIZED|.
+            SQL wykonuje się tylko podczas tworzenia widoku, a rezultat zostaje jako tymczasowa tabela.
+            Każde wywołanie danych widoku w tym przypadku kosztuje bardzo mało --- tyle samo co pobranie danych ze zwykłej tabeli.
+            Dane w tej tymczasowej tabeli nie zmienią się dopóki ręcznie nie zostanie ręcznie odświeżony komendą
+            \verb|REFRESH MATERIALIZED VIEW xyz|. Jest to rozsądne rozwiązanie gdy dane rzadko się zmieniają, a ich pobranie jest kosztowne.
+
+            Nie rozwiązuje to jednak problemu inicjalnego czasu działania tego zapytania, 5 minut to wciąż dużo - nawet gdyby wykonywał się on raz dziennie w nocy.
 
      \section{Budowa raportów na podstawie szeregów czasowych}
 
@@ -509,7 +541,6 @@ Code coverage dla całego projektu wygląda tak:
 	}
 	\label{Projekt - Code coverage}
 \end{table}
-
 
 % zakończenie
 \summary
