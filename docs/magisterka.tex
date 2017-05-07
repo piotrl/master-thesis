@@ -188,7 +188,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
             Lista przykładowych aktywności wraz z ich kategoriami. Skala produktywności od +2 do -2
             \newline Źródło: Opracowanie własne.
         }
-        \label{RescueTime - lista przykładowych aktywności}
+        \label{RescueTime --- lista przykładowych aktywności}
         \end{table}
 
             Program jest w stanie rozpoznać nie tylko tytuły aktualnie otwartych okien,
@@ -238,7 +238,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
             nie powinien on wpłynąć na agregacje innych użytkowników, ani na działanie mechanizmu w przyszłości dla tego samego użytkownika.
 
             Części błędów można się spodziewać, np. lastfm udostępnia do każdej metody API listę błędów które może zwrócić zamiast odpowiedzi.
-            Z drugiej strony, mogą wystąpić błędy po naszej stronie - zwłaszcza gdy API nie jest bardzo dobrze udokumentowane
+            Z drugiej strony, mogą wystąpić błędy po naszej stronie --- zwłaszcza gdy API nie jest bardzo dobrze udokumentowane
             lub nie mamy zbyt dużego doświadczenia z pracy z nimi, np. podczas mapowania odpowiedzi na obiekty lub przy zapisie danych do bazy.
 
             Można sobie z tym radzić na kilka sposobów, przechwytując wyjątki podczas wysyłania każdego requestu
@@ -246,7 +246,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
             Dzięki kilku poziomom przechtywywania wyjątków, mamy możliwość różnicowania o ich krytyczności. 
             Możemy kolejkować nieudane requesty i po kilku minutach ponowić próbę ich wysłania. Jest to skuteczne rozwiązanie gdy API ma sztywny czas sesji po którym następuje wylogowanie.
-            RescueTime i last.fm mają autoryzację bezstanową, w pełni polegającej na raz wygenerowanym kluczu - sesja nie jest tu problem, więc zdecydowałem się porzucić pomysł kolejkowania pojedynczych requestów.
+            RescueTime i last.fm mają autoryzację bezstanową, w pełni polegającej na raz wygenerowanym kluczu --- sesja nie jest tu problem, więc zdecydowałem się porzucić pomysł kolejkowania pojedynczych requestów.
 
             % TODO: Blad w jedenej agregacji nie wplywa na nastepne / kolejnych uzytkownikow
 
@@ -364,17 +364,19 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
 \section{Opis zebranych danych}
 
+    \subsection*{RescueTime --- aktywności}
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/db-rescuetime-schema.png}
         \caption{Schemat relacji danych o aktywnościach}
-        \label{fig:Dane z RescueTime - Schemat relacji}
+        \label{fig:Dane z RescueTime --- Schemat relacji}
     \end{figure}
 
     Najważniejszą tabelą wśród tych powiązanych z aktywnościami jest \verb|rescuetime_activity|,
     to do niej w pierwszej kolejności trafiają dane z API bez żadnej obróbki,
     następnie nazwa akcji oraz kategoria są przyporządkowywane do istniejących rekordów w tabelach
     \verb|rescuetime_action| oraz \verb|rescuetime_category| lub utworzone nowe w razie konieczości.
-    Ma to na celu łatwiejsze przygotowanie danych i wykresów na podstawie konkretnej kategorii.
+    Ma to na celu wygodniejsze przygotowanie danych i wykresów na podstawie konkretnej kategorii
+    oraz ograniczenie nadmiarowości danych w przyszłości.
 
     \begin{table}
     \centering
@@ -393,24 +395,53 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         \verb|category_name|& Writing              & Music              \\ \hline
     \end{tabular}
         \caption{Przykładowy rekord z tabeli rescuetime\_activity}
-        \label{RescueTime - Przykładowy rekord z tabeli rescuetime_activity}
+        \label{RescueTime --- Przykładowy rekord z tabeli rescuetime_activity}
     \end{table}
 
-    Dane zapisywane są w 5 minutowych okienkach ze względu na ograniczenia API, pojawiają się duplikaty
+    \subsection*{Last.fm --- Muzyka}
 
-    \section{Data fusion - Łączenie danych w czasie}
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/db-lastfm-schema.png}
+        \caption{Schemat relacji danych o muzyce}
+        \label{fig:Schemat relacji tabel z last.fm}
+    \end{figure}
+
+    Dane muzyczne są dużo bardziej rozproszone od aktywności, zapisuje je do 5 połączonych tabel.
+    Jej sercem jest tabela \verb|lastfm_scrobble|, przechowująca każde pojedynczy odsłuch piosenki przez użytkownika.
+    Zawiera ono moment startu odsłuchu oraz jest punktem startowym do pozostałych relacji (poprzez tabelę \verb|lastfm_track|).
+    Ważnym polem jest \verb|api_data| w którym zapisuję wszystkie zwrócone dane z API w czystej postaci dla danego scrobbla (rekordu).
+    Pomaga ono przy debuggowaniu mapowań pomiędzy API a opisywanym serwisem.
+
+    \section{Data fusion --- Łączenie danych w czasie}
 
         \subsection*{Korekta}
+
+            Dane zapisywane są w 5 minutowych okienkach ze względu na ograniczenia API, to dobry moment na sprawdzenie duplikatów.
+            Suma wszystkich aktywności w każdym oknie nie powinna przekroczyć 300 sekund.
+            Okazuje się, że w 1337 5-minutowych okresach, istniały duplikaty.
+            Nie jest określone czy pochodzą one bezpośrednio z API, czy z powodu błędu w kodzie.
+
+            Postanowiłem je omijać w momencie generowania danych bazując na trzech unikalnych polach \verb|DISTINCT ON (start_time, activity_name, spent_time)|.
+            Możliwe jest, że tą metodą usuniemy również aktywności które w rzeczywistości niebyłby duplikatami,
+            prawdopodobieństwo jest wysokie przy czynnościach trwających bardzo krótko np. dwa razy otwarta wszukiwarka na 3 sekundy.
+            Jest to akceptowalne ryzyko błędu, jako że bardzo krótkie aktywności mają mniejsze znaczenie dla dalszej analizy.
+
+            W przypadku last.fm, często piosenki są dodawane z tytułami w różnych wersjach, np. wersje koncertowe, radiowe lub odświeżone.
+            W takich przypadkach brakuje informacji o długości piosenki.
+            Brakuje ich również gdy artysta jest niszowy i dane nie zostały uzupełnione przez społeczność last.fm.
+            Zorientowałem się o tym podczas budowania wykresu najpopularniejszych artystów,
+            kiedy artysta ``Scott BradLee's Postmodern Jukebox'' mając 33 odtworzenia, ma zarejestrowane zaledwie 9 minut odsłuchu.
+            Zdecydowałem się policzyć średnią długość piosenki wśród wszystkich piosenek przesłuchanych przez użytkownika i nadać im go.
+            W moim przypadku średnia wynosi 232 sekundy (liczone tylko z piosenek o długości dłuższej od zera).
 
         \subsection*{Integracja dwóch źródeł danych}
 
      \section{Budowa raportów na podstawie szeregów czasowych}
 
 
-
 \chapter{Wizualizacja danych}
 
-     \section{Jeden zbiór danych - wiele interpretacji}
+     \section{Jeden zbiór danych --- wiele interpretacji}
 
      \section{Wybór odpowiednich metod wizualizacji danych}
 
@@ -439,7 +470,7 @@ Code coverage dla całego projektu wygląda tak:
 	Code coverage projektu Java
 	\newline Źródło: Opracowanie własne.
 	}
-\label{Projekt - Code coverage}
+\label{Projekt --- Code coverage}
 \end{table}
 
 \section{Narzędzia}
