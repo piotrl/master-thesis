@@ -414,7 +414,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
     \section{Data fusion --- Łączenie danych w czasie}
 
-        \subsection*{Korekta}
+        \subsection{Korekta}
 
             Dane zapisywane są w 5 minutowych okienkach ze względu na ograniczenia API, to dobry moment na sprawdzenie duplikatów.
             Suma wszystkich aktywności w każdym oknie nie powinna przekroczyć 300 sekund.
@@ -434,7 +434,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
             Zdecydowałem nadać im średnią długość ze wszystkich piosenek przesłuchanych przez użytkownika.
             W moim przypadku średnia wynosi 232 sekundy (liczone tylko z piosenek o długości dłuższej od zera).
 
-        \subsection*{Integracja dwóch źródeł danych}
+        \subsection{Integracja źródeł danych}
 
             Najważniejszym elementem tej pracy jest połączenie obu źródeł danych,
             dopiero na tej podstawie możemy wysnóć tytułowy wpływ muzyki na aktywności wykonywane przy komputerze.
@@ -453,6 +453,7 @@ SELECT *
          AND scrobble.account_id = activity.account_id
   ORDER BY played_when DESC;
 \end{lstlisting}
+
             Warto zaznaczyć, że zapytanie napisane w ten sposób zduplikuje dane aktywności
             jeżeli podczas ich wykonywania będzie odsłuchiwana więcej niż jedna piosenka.
 
@@ -467,21 +468,25 @@ SELECT *
             \verb|REFRESH MATERIALIZED VIEW xyz|. Jest to rozsądne rozwiązanie gdy dane rzadko się zmieniają, a ich pobranie jest kosztowne.
 
             Nie rozwiązuje to jednak problemu inicjalnego czasu działania tego zapytania, 5 minut to wciąż dużo - nawet gdyby wykonywał się on raz dziennie w nocy.
+            Rozwiązaniem długiego czasu łączenia jest nałożenie indeksów \cite{postgresql:efficient-indexes}, nadanie ich na kolumny dat w tabeli \verb|rescuetime_activity| przyspiesza zapytanie do 1 minuty.
+            Dodanie indeksów na tabeli \verb|lastfm_scrobble| na kolumnę \verb|played_when| powoduje czas wykonania poniżej 300ms.
 
-     \section{Budowa raportów na podstawie szeregów czasowych}
-
+\begin{lstlisting}[language=sql]
+CREATE INDEX rescuetime_activity_start_end_time_index
+  ON rescuetime_activity (start_time, end_time);
+CREATE INDEX lastfm_scrobble_played_when_index
+  ON lastfm_scrobble (played_when);
+\end{lstlisting}
 
 \chapter{Wizualizacja danych}
 
-     \section{Jeden zbiór danych --- wiele interpretacji}
+    \section{Budowa raportów na podstawie szeregów czasowych}
 
-     \section{Wybór odpowiednich metod wizualizacji danych}
+    \section{Wybór odpowiednich metod wizualizacji danych}
 
-     \section{Analiza danych z punktu widzenia użytkownika}
+    \section{Analiza danych z punktu widzenia użytkownika}
 
 \chapter{Architektura}
-
-\section{Wydajnosc aplikacji}
 
 \section{Testy jednostkowe}
 
