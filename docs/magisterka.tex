@@ -81,19 +81,18 @@
 % streszczenie
 \begin{abstract}
     W ramach pracy magisterskiej napisano aplikację internetową,
-    wdrożoną w chmurze Digital Ocean pod adresem http://tbd.digitalocean.com/
+    wdrożoną na chmurze Digital Ocean pod adresem http://tbd.digitalocean.com/
     z przygotowanymi danymi testowymi pod kontem (user: test, login: test).
 
-    Aplikacja umożliwia agregację danych użytkownika z dwóch serwisów,
+    Aplikacja umożliwia import danych użytkownika z dwóch serwisów,
     RescueTime — lista aktywności oraz
     Last.fm — lista odsłuchiwanych utworów.
     Pobrane dane są połączone na wspólnej osi czasu i wizualizowane pod różnymi względami za pomocą wykresów oraz tabel.
 
     Mechanizm agregacji napisany jest w języku Java i frameworku Spring,
     dane przechowywane są w bazie danych PostgreSQL,
-    a warstwa wizualna została stworzona w JavaScript
-    z użyciem biblioteki generującej wykresy — C3.js
-    oraz frameworka Material Design.
+    a warstwa wizualna została stworzona w frameworku Material Design oraz JavaScript,
+    do generowania wykresów użytko biblioteki Google Charts.
 
     Kod znajduje się w prywatnym repozytorium GIT (pod adresem \url{https://github.com/piotrl/master-thesis}),
     pytania o dostęp lub o pracę można kierować na mail: poczta@piotrl.net.
@@ -116,8 +115,6 @@
 \introduction
 
 \epigraph{Without deviation from the norm, progress is not possible}{\textit{Frank Zappa}}
-
-[Work in progress]
 
 Podczas pracy często słucham muzyki, by się odciąć od zewnętrznych dźwięków oraz odpowiednio nastroić.
 Spotyka się na artykuły twierdzące, że odpowiednio dobrana muzyka wpływa na lepszą koncentrację.
@@ -488,9 +485,24 @@ CREATE INDEX lastfm_scrobble_played_when_index
 
 \chapter{Architektura}
 
+    Do uruchomienia projektu wymagana jest Java 8 JRE oraz zainstalowany PostgreSQL.
+    Pobraniem zależności i zbudowaniem paczki zajmuje się komenda \verb|./gradlew build|,
+    wygenerowany WAR można osadzić na serwerze aplikacji Tomcat lub uruchomić komendą \verb|java -jar file.war|,
+    wówczas uruchomi się wbudowany w applikację serwer \verb|Embedded tomcat|.
+
+    Projekt dzieli się na trzy główne części.
+    - Import danych do bazy, jest to główne źródło pozyskiwania danych, komunikacji z API.
+    - REST API - % TODO
+    - MVC - Aplikacja bezpośrednio widoczna dla użytkownika, zawiera prosty back-end oraz front-end który komunikuje się z REST API.
+    Obsługuje mechanizm autentykacji.
+
+    W kodzie projektu przeplata się wiele rozwiązań problemów, w 75\% kodu jest napisane w Javie
+
 \section{Testy jednostkowe}
 
-Znaczna częsć kodu była napisana metodologią TDD, kod API zwracającego przeanalizowane dane nie jest przetestowany głównie dlatego, że główna logika jest w tym przypadku w zapytaniach SQL.
+Częsć kodu była napisana metodologią TDD,
+kod API zwracającego przeanalizowane dane nie jest przetestowany głównie dlatego,
+że główna logika jest w tym przypadku w zapytaniach SQL.
 
 Code coverage dla całego projektu wygląda tak:
 \begin{table}
