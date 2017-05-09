@@ -162,88 +162,85 @@
     \section{Wybór dostawców danych}
 
     Podstawą działania aplikacji są dane z komputera użytkownika,
-    lista aktywności wykonywanych w danej jednostce czasu oraz odsłuchiwana muzyka.
-    Aby zdobyć te dane, postanowiłem nie pisać programu śledzącego procesy (daemon),
-    lecz skorzystać z istniejących serwisów, z których użytkownicy mogli już korzystać.
+    lista aktywności wykonywanych oraz odsłuchiwana muzyka w tym samym czasie.
+    Aby zdobyć te dane, należałoby napisać program śledzący aktywne procesy i logujący każdą zmianę na serwer.
+    Potrzebny byłby też plugin do odtwarzacza muzycznego który na podstawie tagów ID3 plików logował aktualnie słuchaną piosenkę.
+    Zdecydowałem się jednak skorzystać z istniejących rozwiązań, z których użytkownicy mojej aplikacji mogliby również korzystać.
 
-    Przy wyborze rozwiązania zależało mi na tym, by serwisy były już dłuższy czas na rynku
-    oraz udostępniały archiwalne dane za pomocą publicznego API.
-    Dzięki temu nie ma potrzeby oczekiwania na zbudowanie zbioru danych do analizy po rejestracji nowego użytkowniku,
-    od razu można przeanalizować dane z okresu sprzed rejestracji.
+    Podstawowym wymaganiem jest to, by serwisy były już dłuższy czas na rynku oraz udostępniały archiwalne dane za pomocą publicznego API.
+    Dzięki temu nie ma potrzeby oczekiwania na zbudowanie zbioru danych do po rejestracji nowego użytkowniku,
+    od razu można rozpocząć analizę ze zbiorem przygotowanym przed rejestracją.
 
-    Zdecydowałem się skorzystać z dwóch dobrze znanych mi serwisów --- RescueTime oraz Last.fm,
-    oba serwisy są najpopularniejsze w swojej klasie oraz dostarczają publiczne API dla danych użytkownika.
+    Wybrałem dwa dobrze mi znane serwisy --- RescueTime oraz Last.fm,
+    oba są popularne w swojej klasie oraz dostarczają publiczne API dla danych użytkownika.
 
         \section*{RescueTime}
 
-%        \begin{figure}
-%          \includegraphics[width=\linewidth]{fig/rescuetime-daily-dashboard.png}
-%          \caption{Codzienny raport aktywności RescueTime}
-%          \label{fig:RescueTime}
-%        \end{figure}
+        \begin{figure}
+          \includegraphics[width=\linewidth]{fig/rescuetime-daily-dashboard.png}
+          \caption{Tygodniowy raport aktywności RescueTime}
+          \label{fig:RescueTime}
+        \end{figure}
 
-        RescueTime to program, który loguje aktualnie otwarte okna
-        i raz na minutę wysyła te dane do serwisu internetowego RescueTime.com.
-        Podstawową cechą tego serwisu jest automatyczne kategoryzowanie aktywności oraz ustawienie produktywności w 5 punktowej skali:
-        „Bardzo produktywny”, „Produktywny”, „Neutralny”, „Rozpraszający” i „Bardzo rozpraszający”.
+            RescueTime to program, który loguje aktualnie otwarte i aktywne okno
+            i wysyła te dane do serwisu internetowego RescueTime.com.
+            Podstawową cechą tego serwisu jest automatyczne kategoryzowanie aktywności oraz ustawienie produktywności w 5 punktowej skali:
+            „Bardzo produktywny”, „Produktywny”, „Neutralny”, „Rozpraszający” i „Bardzo rozpraszający”.
 
-        Serwis uczy się dopasowywać aktywności do kategorii na podstawie wcześniejszych oznaczeń użytkowników.
-        Dla przykładu odtwarzacz wideo VLC jest przypisany do kategorii „Entertainment” ze statusem „Bardzo rozpraszający”,
-        natomiast przeglądanie plików programem Windows Explorer jest w kategorii „Utilities” ze statusem „Neutralny”.
+            Serwis uczy się dopasowywać aktywności do kategorii na podstawie wcześniejszych oznaczeń użytkowników.
+            Dla przykładu odtwarzacz wideo VLC jest przypisany do kategorii „Entertainment” ze statusem „Bardzo rozpraszający”,
+            natomiast przeglądanie plików programem Windows Explorer jest w kategorii „Utilities” ze statusem „Neutralny”.
 
-        Dzięki temu jesteśmy w stanie obliczyć nasz codzienny współczynnik produktywności,
-        sumując czas spędzony na aktywnościach z każdej kategorii.
+            Dzięki temu jesteśmy w stanie obliczyć nasz codzienny współczynnik produktywności,
+            sumując czas spędzony na aktywnościach z każdej kategorii.
 
-        \begin{table}[]
-        \centering
-        \begin{tabular}{lll}
-        \hline
-        \multicolumn{1}{l|}{Aktywność} & \multicolumn{1}{l|}{Kategoria} & Produktywność \\ \hline
-        idea64                         & Software Development           & +2            \\
-        NotePad++                      & Software Development           & +2            \\
-        postgresql.org                 & Reference \& Learning          & 0             \\
-        twitter.com                    & Social Networking              & -1            \\
-        analytics.twitter.com          & Social Networking              & -2            \\
-        youtube.com                    & Entertainment                  & -2            \\
-        outlook.office.com             & Communication \& Scheduling    & 0             \\
-        wunderlist                     & Business                       & +2
-        \end{tabular}
-        \caption{
-            Lista przykładowych aktywności wraz z ich kategoriami. Skala produktywności od +2 do -2
-            \newline Źródło: Opracowanie własne.
-        }
-        \label{RescueTime --- lista przykładowych aktywności}
-        \end{table}
+            \begin{table}[]
+            \centering
+            \begin{tabular}{lll}
+                \hline
+                \multicolumn{1}{l|}{Aktywność} & \multicolumn{1}{l|}{Kategoria} & Produktywność \\ \hline
+                idea64                         & Software Development           & +2            \\
+                NotePad++                      & Software Development           & +2            \\
+                postgresql.org                 & Reference \& Learning          & 0             \\
+                twitter.com                    & Social Networking              & -1            \\
+                analytics.twitter.com          & Social Networking              & -2            \\
+                youtube.com                    & Entertainment                  & -2            \\
+                outlook.office.com             & Communication \& Scheduling    & 0             \\
+                wunderlist                     & Business                       & +2
+                \end{tabular}
+                \caption{
+                    Lista przykładowych aktywności wraz z ich kategoriami. Skala produktywności od +2 do -2
+                    \newline Źródło: Opracowanie własne.
+                }
+                \label{RescueTime --- lista przykładowych aktywności}
+            \end{table}
 
             Program jest w stanie rozpoznać nie tylko tytuły aktualnie otwartych okien,
             ale również w przypadku przeglądarki – adresy odwiedzanych stron internetowych,
             jest to bardzo ważne ze względu na dominującą ilość czasu spędzonego w samej przeglądarce.
 
-            Dostęp do informacji użytkownika odbywa się po REST API z tokenem uwierzytelniającym,
-            który użytkownik musi wygenerować na stronie RescueTime.com.
-            Po poprawnym uwierzytelnieniu, mamy dostęp do danych sprzed 3 miesięcy w formacie JSON.
+            Dostęp do informacji użytkownika odbywa się po REST API z tokenem uwierzytelniającym.
+            W przypadku darmowego konta mamy dostęp do danych sprzed 3 miesięcy w formacie JSON.
 
         \section*{Last.fm}
 
-            Last.fm to serwis społecznościowy dla fanów muzyki,
-            pomagający odkrywać nowych artystów na podstawie historii użytkownika.
+            \begin{figure}
+                \includegraphics[width=\linewidth]{fig/lastfm-now-listening.png}
+                \caption{Raport słuchanej muzyki w Last.fm}
+                \label{fig:Last.fm}
+            \end{figure}
 
-            Wtyczka "Last.fm Scrobbler"\cite{lastfm:trackmymusic} integruje się z wieloma odtwarzaczami muzycznymi, np. Spotify.
+            Last.fm to serwis społecznościowy pomagający odkrywać nowych artystów na podstawie poprzednich odsłuchów użytkownika.
+
+            Wtyczka "Last.fm Scrobbler"\cite{lastfm:trackmymusic} integruje się z odtwarzaczami muzycznymi, np. Spotify.
             Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
-            w której na podstawie meta-tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
+            w której na podstawie ID3 tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
 
-            Last.fm udostępnia szereg metod REST API \cite{lastfm:apidoc},
+            Serwis udostępnia szereg metod REST API \cite{lastfm:apidoc},
             dla mnie szczególnie istotne są te związane z odtworzeniami użytkownika oraz szczegółowych informacji o piosenkach i artystach.
 
-            Metoda user.getRecentTracks % TODO
-
-		% identyfikuje swoje dane za pomocą MBID \cite{lastfm:mbid}
-
-        \begin{figure}
-          \includegraphics[width=\linewidth]{fig/lastfm-now-listening.png}
-          \caption{Raport słuchanej muzyki w Last.fm}
-          \label{fig:Last.fm}
-        \end{figure}
+            Szczegółowe informacje na temat artysty lub piosenki dostępne są po podaniu ich MBID\cite{lastfm:mbid} lub nazwy artysty.
+            Pierwszy sposób jest preferowany, gwarantujący unikalność identyfikatora oraz uniknięcie problemów kodowania znaków.
 
     \section{Mechanizm importu danych}
         Oba z wymienionych serwisów udostępniają część danych, które użytkownik zgromadził na swoim koncie.
