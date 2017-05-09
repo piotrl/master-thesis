@@ -439,38 +439,36 @@
     Ważnym polem jest \verb|api_data| w którym zapisuję wszystkie zwrócone dane z API w czystej postaci dla danego scrobbla (rekordu).
     Pomaga ono przy debugowaniu mapowań pomiędzy API a opisywanym serwisem.
 
-    \section{Data fusion --- Łączenie danych w czasie}
+    \section{Korekta}
 
-        \subsection{Korekta}
+        Dane zapisywane są w 5-minutowych okienkach ze względu na ograniczenia API, to dobry moment na sprawdzenie duplikatów.
+        Suma wszystkich aktywności w każdym oknie nie powinna przekroczyć 300 sekund.
+        Okazuje się, że w 1337 5-minutowych okresach, istniały duplikaty.
+        Nie jest określone czy pochodzą one bezpośrednio z API, czy z powodu błędu w kodzie.
 
-            Dane zapisywane są w 5-minutowych okienkach ze względu na ograniczenia API, to dobry moment na sprawdzenie duplikatów.
-            Suma wszystkich aktywności w każdym oknie nie powinna przekroczyć 300 sekund.
-            Okazuje się, że w 1337 5-minutowych okresach, istniały duplikaty.
-            Nie jest określone czy pochodzą one bezpośrednio z API, czy z powodu błędu w kodzie.
+        Postanowiłem je omijać w momencie generowania danych, bazując na trzech unikalnych polach:
+        \verb|DISTINCT ON (start_time, activity_name, spent_time)|.
+        Możliwe jest, że tą metodą usuniemy również aktywności, które w rzeczywistości nie byłyby duplikatami,
+        prawdopodobieństwo jest wysokie przy czynnościach trwających bardzo krótko np. dwa razy otwarta wyszukiwarka na 3 sekundy.
+        Jest to akceptowalne ryzyko błędu, jako że bardzo krótkie aktywności mają mniejsze znaczenie dla dalszej analizy.
 
-            Postanowiłem je omijać w momencie generowania danych, bazując na trzech unikalnych polach:
-            \verb|DISTINCT ON (start_time, activity_name, spent_time)|.
-            Możliwe jest, że tą metodą usuniemy również aktywności, które w rzeczywistości nie byłyby duplikatami,
-            prawdopodobieństwo jest wysokie przy czynnościach trwających bardzo krótko np. dwa razy otwarta wyszukiwarka na 3 sekundy.
-            Jest to akceptowalne ryzyko błędu, jako że bardzo krótkie aktywności mają mniejsze znaczenie dla dalszej analizy.
+        W przypadku Last.fm często piosenki są dodawane z tytułami w różnych wersjach, np. wersje koncertowe, radiowe lub odświeżone.
+        W takich przypadkach brakuje informacji o długości piosenki.
+        Brakuje ich również, gdy artysta jest niszowy i dane nie zostały uzupełnione przez społeczność Last.fm.
+        Zorientowałem się o tym podczas budowania wykresu najpopularniejszych artystów,
+        kiedy artysta ``Scott BradLee's Postmodern Jukebox'' mając 33 odtworzenia, ma zarejestrowane zaledwie 9 minut odsłuchu.
+        Zdecydowałem nadać im średnią długość ze wszystkich piosenek przesłuchanych przez użytkownika.
+        W moim przypadku średnia wynosi 232 sekundy (liczone tylko z piosenek o długości dłuższej od zera).
 
-            W przypadku Last.fm często piosenki są dodawane z tytułami w różnych wersjach, np. wersje koncertowe, radiowe lub odświeżone.
-            W takich przypadkach brakuje informacji o długości piosenki.
-            Brakuje ich również, gdy artysta jest niszowy i dane nie zostały uzupełnione przez społeczność Last.fm.
-            Zorientowałem się o tym podczas budowania wykresu najpopularniejszych artystów,
-            kiedy artysta ``Scott BradLee's Postmodern Jukebox'' mając 33 odtworzenia, ma zarejestrowane zaledwie 9 minut odsłuchu.
-            Zdecydowałem nadać im średnią długość ze wszystkich piosenek przesłuchanych przez użytkownika.
-            W moim przypadku średnia wynosi 232 sekundy (liczone tylko z piosenek o długości dłuższej od zera).
+    \section{Integracja źródeł danych}
 
-        \subsection{Integracja źródeł danych}
+        Najważniejszym elementem tej pracy jest połączenie obu źródeł danych,
+        dopiero na tej podstawie możemy wysnuć tytułowy wpływ muzyki na aktywności wykonywane przy komputerze.
 
-            Najważniejszym elementem tej pracy jest połączenie obu źródeł danych,
-            dopiero na tej podstawie możemy wysnuć tytułowy wpływ muzyki na aktywności wykonywane przy komputerze.
-
-            Jeżeli chodzi o muzykę, muzyka słuchana poza komputerem jest dla nas nieinteresująca,
-            dlatego punktem wyjścia jest lista aktywności i to do każdej z nich będziemy dopasowywać muzykę. Nie na odwrót.
-            Z drugiej strony nie chcemy ignorować aktywności, które były wykonywane w ciszy.
-            Dane wymagania doprowadzają nas do poniższego zapytania SQL (uproszczonego dla przykładu):
+        Jeżeli chodzi o muzykę, muzyka słuchana poza komputerem jest dla nas nieinteresująca,
+        dlatego punktem wyjścia jest lista aktywności i to do każdej z nich będziemy dopasowywać muzykę. Nie na odwrót.
+        Z drugiej strony nie chcemy ignorować aktywności, które były wykonywane w ciszy.
+        Dane wymagania doprowadzają nas do poniższego zapytania SQL (uproszczonego dla przykładu):
 
 \begin{lstlisting}[language=sql]
 SELECT *
@@ -482,24 +480,24 @@ SELECT *
   ORDER BY played_when DESC;
 \end{lstlisting}
 
-            Warto zaznaczyć, że zapytanie napisane w ten sposób duplikuje dane aktywności,
-            jeżeli podczas ich wykonywania będzie odsłuchiwana więcej niż jedna piosenka.
+        Warto zaznaczyć, że zapytanie napisane w ten sposób duplikuje dane aktywności,
+        jeżeli podczas ich wykonywania będzie odsłuchiwana więcej niż jedna piosenka.
 
-            Łączenie tabeli za pomocą porównań dat jest bardzo niewydajne,
-            powyższe zapytanie wykonuje się około 5 minut dla danych jednego użytkownika z około 3 miesięcy.
-            Taki czas jest niedopuszczalny.
+        Łączenie tabeli za pomocą porównań dat jest bardzo niewydajne,
+        powyższe zapytanie wykonuje się około 5 minut dla danych jednego użytkownika z około 3 miesięcy.
+        Taki czas jest niedopuszczalny.
 
-            Jednym z rozwiązań jest stworzenie widoku w PostgreSQL typu \verb|MATERIALIZED|.
-            SQL wykonuje się tylko podczas tworzenia widoku, a rezultat zostaje jako tymczasowa tabela.
-            Każde wywołanie danych widoku w tym przypadku kosztuje bardzo mało --- tyle samo co pobranie danych ze zwykłej tabeli.
-            Dane w tej tymczasowej tabeli nie zmienią się, dopóki ręcznie nie zostanie ręcznie odświeżony komendą
-            \verb|REFRESH MATERIALIZED VIEW xyz|. Jest to rozsądne rozwiązanie, gdy dane rzadko się zmieniają, a ich pobranie jest kosztowne.
+        Jednym z rozwiązań jest stworzenie widoku w PostgreSQL typu \verb|MATERIALIZED|.
+        SQL wykonuje się tylko podczas tworzenia widoku, a rezultat zostaje jako tymczasowa tabela.
+        Każde wywołanie danych widoku w tym przypadku kosztuje bardzo mało --- tyle samo co pobranie danych ze zwykłej tabeli.
+        Dane w tej tymczasowej tabeli nie zmienią się, dopóki ręcznie nie zostanie ręcznie odświeżony komendą
+        \verb|REFRESH MATERIALIZED VIEW xyz|. Jest to rozsądne rozwiązanie, gdy dane rzadko się zmieniają, a ich pobranie jest kosztowne.
 
-            Nie rozwiązuje to jednak problemu inicjalnego czasu działania tego zapytania,
-            5 minut to wciąż dużo --- nawet gdyby wykonywał się on raz dziennie w nocy.
-            Rozwiązaniem długiego czasu łączenia jest nałożenie indeksów \cite{postgresql:efficient-indexes},
-            nadanie ich na kolumny dat w tabeli \verb|rescuetime_activity| przyspiesza zapytanie do 1 minuty.
-            Dodanie indeksów na tabeli \verb|lastfm_scrobble| na kolumnę \verb|played_when| powoduje czas wykonania poniżej 300ms.
+        Nie rozwiązuje to jednak problemu inicjalnego czasu działania tego zapytania,
+        5 minut to wciąż dużo --- nawet gdyby wykonywał się on raz dziennie w nocy.
+        Rozwiązaniem długiego czasu łączenia jest nałożenie indeksów \cite{postgresql:efficient-indexes},
+        nadanie ich na kolumny dat w tabeli \verb|rescuetime_activity| przyspiesza zapytanie do 1 minuty.
+        Dodanie indeksów na tabeli \verb|lastfm_scrobble| na kolumnę \verb|played_when| powoduje czas wykonania poniżej 300ms.
 
 \begin{lstlisting}[language=sql]
 CREATE INDEX rescuetime_activity_start_end_time_index
