@@ -116,19 +116,46 @@
 
 \epigraph{Without deviation from the norm, progress is not possible}{\textit{Frank Zappa}}
 
-Podczas pracy często słucham muzyki, by się odciąć od zewnętrznych dźwięków oraz odpowiednio nastroić.
-Spotyka się na artykuły twierdzące, że odpowiednio dobrana muzyka wpływa na lepszą koncentrację.
-Popularnym przykładem jest wystąpienie Willa Henshalla na konferencji TEDx,
-którą w momencie pisania pracy obejrzano ponad 400 tysięcy razy:
+    Podczas pisania tego wstępu słucham playlisty odpowiednio dobranej pod tę czynność
+    \footnote{Playlista ``Writing --- Instrumental Hip-Hop'' jest dostępna na Spotify.
+    \url{https://open.spotify.com/user/exmortisinvictus/playlist/69GtfS8diB8bUHQ74V4yuP}}.
+    Gdy programuję, zwykle słucham muzyki, jednak innej niż podczas pisania ---
+    w pracy, by się odciąć od zewnętrznych dźwięków, a w domu, by się odpowiednio nastroić.
+    Gdy mam trudny problem do rozwiązania to preferuję absolutną ciszę.
 
-Jednym z pytań w corocznej sondzie serwisu StackOverflow jest pytanie o muzyczne preferencje podczas programowania.
-Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2017}.
+    Podobnie jak ponad 36 tysięcy innych programistów odpowiadających na pytania w corocznej ankiecie StackOverflow \cite{stackoverflow:survey2017}.
+    W pytaniu ``Ideal Auditory Environment for Coding''
+    więszkość badanych słucha muzyki, duży odsetek preferuje skrajną ciszę, natomiast niewielu preferuje rozpraszacze w tle:
+    \begin{itemize}
+        \item 59.6\% -- Turn on some music
+        \item 24.2\% -- Keep the room absolutely quiet
+        \item 7.1\% -- Put on some ambient sounds (e.g. whale songs, forest sounds)
+        \item 3.5\% -- Something else
+        \item 3.2\% -- Put on a movie or TV show
+        \item 2.3\% -- Turn on the news or talk radio
+    \end{itemize}
 
-\begin{figure}
-  \includegraphics[width=\linewidth]{fig/stack_overflow_music.png}
-  \caption{Pytanie o preferncje muzyczne na StackOverflow}
-  \label{fig:Pytanie o preferncje muzyczne na StackOverflow}
-\end{figure}
+    Will Henshall na konferencji TEDx \cite{tedx:music-at-work} stwierdza, że m.in. muzyka klasyczna i Elektro pozytywnie sprzyjają na skupienie,
+    natomiast instrumenty brzmiące jak ludzki głos, wokal i elektryczna gitara rozpraszają naszą uwagę.
+    Wideo obejrzano ponad 400 tysięcy razy, a koncepcja została rozwinięta w projekcie Focus@Will
+    \footnote{Focus@Will --- serwis sugerujący szereg playlist pomagający zwiększyć produktywność. \url{https://en.wikipedia.org/wiki/Focus@Will}}.
+
+    W tej pracy próbuję zweryfikować te założenia przez stworzenie aplikacji, którą analizuje moje własne aktywności i muzykę, którą słucham.
+    Jednym z mierników, którym próbuję się posłużyć jest Attention Span
+    \footnote{Attention Span --- moment w którym jesteśmy maksymalnie skoncentrowani, często nazywane flow. \url{https://en.wikipedia.org/wiki/Attention_span}}.
+
+    Opisuję pełny proces budowania aplikacji i analizy danych.
+    Począwszy od mechanizmu importu danych z zewnętrznych źródeł, w którym charakteryzuję dostawców API
+    oraz definiuję problemy, którym należy stawić czoła przy budowie agregatora danych.
+
+    W drugim rozdziale przeprowadzam analizę zebranych danych, zaczynając od zapoznania specyfiki struktury danych w bazie
+    oraz przeprowadzenia ogólnej statystki, by zobrazować skalę, po której się poruszam.
+    Opisałem, w jaki sposób przeprowadzam korektę w przypadku duplikatów, niepełnych lub błędnych danych.
+
+    Rozdział trzeci zawiera przedstawienie zwizualizowanych efektów analizy w postaci wykresów i screenshotów z aplikacji.
+    Definiowaniuję sposób budowania zapytań SQL, by zwracały odpowiednio uszeregowane dane w czasie z wybranym interwałem.
+
+    Rozdział czwarty poświęcam architekturze projektu, użytych narzędzi oraz instrukcję uruchomienia projektu lokalnie lub na serwerze.
 
 \chapter{Import danych}
 
@@ -335,7 +362,8 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 	Odsłuchane piosenki były przypisane przez społeczność Last.fm do 1185 różnych tagów — najpopularniejsze z nich to: rock, polish, soundtrack
 	(przyporządkowane odpowiednio do 543, 423, 347 piosenek).
 
-	Warto już na początku zwrócić uwagę na długość pojedynczych akcji, 38\% ze wszystkich pojedynczych akcji trwało poniżej 10 sekund. % TODO: 19 sekund czy 5? Decyzja.
+	Warto już na początku zwrócić uwagę na długość pojedynczych akcji, 38\% ze wszystkich pojedynczych akcji trwało poniżej 10 sekund.
+    % TODO: 19 sekund czy 5? Decyzja.
 	Duża część z nich była szybkim wyszukiwaniem w Google lub w ogóle nieskategoryzowana.
 	Natomiast zaledwie 17\% akcji trwało ponad 2 minuty, w tym przypadku częstszą kategorią są rzeczy związane z programowaniem oraz grami.
 
