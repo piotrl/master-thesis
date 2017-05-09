@@ -141,10 +141,10 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
     Przy wyborze rozwiązania zależało mi na tym, by serwisy były już dłuższy czas na rynku
     oraz udostępniały archiwalne dane za pomocą publicznego API.
-    Dzięki temu nie ma potrzeby oczekiwania na zbudowanie zioru danych do analizy po rejestracji nowego użytkowniku,
+    Dzięki temu nie ma potrzeby oczekiwania na zbudowanie zbioru danych do analizy po rejestracji nowego użytkowniku,
     od razu można przeanalizować dane z okresu sprzed rejestracji.
 
-    Zdecydowałem się skorzystać z dwóch dobrze znanych mi serwisów - RescueTime oraz last.fm,
+    Zdecydowałem się skorzystać z dwóch dobrze znanych mi serwisów --- RescueTime oraz Last.fm,
     oba serwisy są najpopularniejsze w swojej klasie oraz dostarczają publiczne API dla danych użytkownika.
 
         \section*{RescueTime}
@@ -160,7 +160,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         Podstawową cechą tego serwisu jest automatyczne kategoryzowanie aktywności oraz ustawienie produktywności w 5 punktowej skali:
         „Bardzo produktywny”, „Produktywny”, „Neutralny”, „Rozpraszający” i „Bardzo rozpraszający”.
 
-        Serwis uczy się doasowywać aktywności do kategorii na podstawie wcześniejszych oznaczeć użytkowników.
+        Serwis uczy się dopasowywać aktywności do kategorii na podstawie wcześniejszych oznaczeń użytkowników.
         Dla przykładu odtwarzacz wideo VLC jest przypisany do kategorii „Entertainment” ze statusem „Bardzo rozpraszający”,
         natomiast przeglądanie plików programem Windows Explorer jest w kategorii „Utilities” ze statusem „Neutralny”.
 
@@ -196,12 +196,12 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
             który użytkownik musi wygenerować na stronie RescueTime.com.
             Po poprawnym uwierzytelnieniu, mamy dostęp do danych sprzed 3 miesięcy w formacie JSON.
 
-        \section*{last.fm}
+        \section*{Last.fm}
 
             Last.fm to serwis społecznościowy dla fanów muzyki,
             pomagający odkrywać nowych artystów na podstawie historii użytkownika.
 
-            Wtyczka "last.fm Scrobbler"\cite{lastfm:trackmymusic} integruje się z wieloma odtwarzaczami muzycznymi, np. Spotify.
+            Wtyczka "Last.fm Scrobbler"\cite{lastfm:trackmymusic} integruje się z wieloma odtwarzaczami muzycznymi, np. Spotify.
             Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
             w której na podstawie meta-tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
 
@@ -214,7 +214,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
         \begin{figure}
           \includegraphics[width=\linewidth]{fig/lastfm-now-listening.png}
-          \caption{Raport słuchanej muzyki w last.fm}
+          \caption{Raport słuchanej muzyki w Last.fm}
           \label{fig:Last.fm}
         \end{figure}
 
@@ -234,16 +234,19 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
             Podczas pobierania danych dla jednego użytkownika może wystąpić błąd, np. poprzez tymczasową niedostępność API,
             nie powinien on wpłynąć na agregacje innych użytkowników, ani na działanie mechanizmu w przyszłości dla tego samego użytkownika.
 
-            Części błędów można się spodziewać, np. lastfm udostępnia do każdej metody API listę błędów które może zwrócić zamiast odpowiedzi.
+            Części błędów można się spodziewać, np. lastfm udostępnia do każdej metody API listę błędów, które może zwrócić zamiast odpowiedzi.
             Z drugiej strony, mogą wystąpić błędy po naszej stronie --- zwłaszcza gdy API nie jest bardzo dobrze udokumentowane
             lub nie mamy zbyt dużego doświadczenia z pracy z nimi, np. podczas mapowania odpowiedzi na obiekty lub przy zapisie danych do bazy.
 
             Można sobie z tym radzić na kilka sposobów, przechwytując wyjątki podczas wysyłania każdego requestu
             oraz dodatkowy error handler przechwytujący wszystkie wyjątki powstałe podczas budowania modelu i zapisywania danych w bazie.
 
-            Dzięki kilku poziomom przechtywywania wyjątków, mamy możliwość różnicowania o ich krytyczności. 
-            Możemy kolejkować nieudane requesty i po kilku minutach ponowić próbę ich wysłania. Jest to skuteczne rozwiązanie gdy API ma sztywny czas sesji po którym następuje wylogowanie.
-            RescueTime i last.fm mają autoryzację bezstanową, w pełni polegającej na raz wygenerowanym kluczu --- sesja nie jest tu problem, więc zdecydowałem się porzucić pomysł kolejkowania pojedynczych requestów.
+            Dzięki kilku poziomom przechtywywania wyjątków, mamy możliwość różnicowania o ich krytyczności.
+            Nieudane requesty możemy dodawać do kolejki i po kilku minutach ponowić próbę ich wysłania.
+            Jest to skuteczne rozwiązanie, gdy API ma sztywny czas sesji, po którym następuje wylogowanie.
+            RescueTime i Last.fm mają autoryzację bezstanową,
+            w pełni polegającej na raz wygenerowanym kluczu --- sesja nie jest tu problem,
+            więc zdecydowałem się porzucić pomysł kolejkowania pojedynczych requestów.
 
             % TODO: Blad w jedenej agregacji nie wplywa na nastepne / kolejnych uzytkownikow
 
@@ -264,12 +267,11 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
         \subsection*{Specyfika API}
             Przy projektowaniu rozwiązania warto pamiętać o tym, że nie istnieje powszechnie wykorzystywany standard budowania API,
-            a każdy dostawca implementuje je w sposób specyficzny dla swojego stystemu i danych jakie udostępnia.
+            a każdy dostawca implementuje je w sposób specyficzny dla swojego systemu i danych, jakie udostępnia.
 
-            RescueTime mimo, że co do sekundy loguje start i koniec aktywności,
+            RescueTime, mimo że co do sekundy loguje start i koniec aktywności,
             jego najwyższa dokładność oferowana użytkownikowi to 5 minut \footnote{TODO: rescuetime:apidoc-precision},
             a w darmowej wersji zezwala na dostęp maksymalnie trzy miesiące wstecz.
-            Jest możliwość sterowania formatem odpowiedzi z serwera, CSV lub JSON - jednak JSON	
 
             \begin{lstlisting}[language=json,firstnumber=1]
 {"menu": {
@@ -288,14 +290,14 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
 
         \subsection*{Autoryzacja}
-        
-        Do każdego requestu należy dodać klucze autoryzujące, które użytkownik musi wygenerować w serwisach Last.fm i RescueTime \cite{rescuetime:apidoc-keymanagment} oraz dodać w ustawieniach aplikacji. Klucze zapisywane są ws tabeli \textit{aggregation\_metadata}.
-        
+
+        Do każdego requestu należy dodać klucze autoryzujące,
+        które użytkownik musi wygenerować w serwisach Last.fm i RescueTime \cite{rescuetime:apidoc-keymanagment} oraz dodać w ustawieniach aplikacji.
+        Klucze zapisywane są ws tabeli \textit{aggregation\_metadata}.
         Last.fm wymaga rejestracji aplikacji, po którym otrzymujesz dwa klucze: sekretny i normalny.
-        
-        W obu serwisach dostępne jest logowanie za pomocą OAuth, dzięki temu użytkownik nie musi samodzielnie generować kluczy, 
+        W obu serwisach dostępne jest logowanie za pomocą OAuth, dzięki temu użytkownik nie musi samodzielnie generować kluczy,
         a jedynie potwierdzić chęć udostępnienia swoich danych w aplikacji. W obecnej wersji applikacji nie używam tego mechanizmu.
-        
+
         \begin{figure}
         	\includegraphics[width=\linewidth]{fig/db-aggregation-metadata.png}
         	\caption{Schemat relacji aggregation\_metadata}
@@ -304,7 +306,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 
         \subsection*{Niepełne dane}
         API nie gwarantuje istnienia ani poprawności wszystkich informacji.
-        Przykładowo last.fm do identyfikacji utworu dostarcza jego MBID oraz pełną nazwę.
+        Przykładowo Last.fm do identyfikacji utworu dostarcza jego MBID oraz pełną nazwę.
         Bezpieczniej jest korzystać z identyfikatora mbid, ponieważ w nazwie mogą występować problematyczne znaki UTF-8 np. w przypadku Chińskich artystów.
         Niekiedy nie jest to możliwe, istnieją bowiem rekordy, dla których identyfikator jest pusty.
 
@@ -324,17 +326,17 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
 	Zaimportowane dane są z okresu od 31 stycznia do 4 maja 2017 z aktywności wykonywanych na prywatnym laptopie
 	oraz od 3 lutego do 4 maja 2017 ze słuchanej muzyki z wielu urządzeń i komputerów.
 
-	W tym 3 miesięcznym okresie wykonałem 34611 akcji, które są przypisane do 1916 programów lub stron internetowych z podziałem na 62 kategorie.
+	W tym 3-miesięcznym okresie wykonałem 34611 akcji, które są przypisane do 1916 programów lub stron internetowych z podziałem na 62 kategorie.
 	Łącznie 588 godzin w ciągu 94 dni, średnio 6.2 godziny dziennie.
 	Z czego 60.5\% to aktywności oznaczone jako produktywne, a 39.5\% jako rozpraszające lub neutralne.
 
 	W ciągu 91 przeanalizowanych dni przesłuchałem 395 godzin muzyki — średnio 4.3 godziny dziennie.
 	Składa się na to 5203 odtworzeń piosenek, z czego 2303 unikalnych wśród 1155 artystów.
-	Odsłuchane piosenki były przypisane przez społeczność last.fm do 1185 różnych tagów — najpopularniejsze z nich to: rock, polish, soundtrack
+	Odsłuchane piosenki były przypisane przez społeczność Last.fm do 1185 różnych tagów — najpopularniejsze z nich to: rock, polish, soundtrack
 	(przyporządkowane odpowiednio do 543, 423, 347 piosenek).
 
 	Warto już na początku zwrócić uwagę na długość pojedynczych akcji, 38\% ze wszystkich pojedynczych akcji trwało poniżej 10 sekund. % TODO: 19 sekund czy 5? Decyzja.
-	Duża część z nich byłą nieskategoryzowana, lub szybkim wyszukiwaniem.
+	Duża część z nich była szybkim wyszukiwaniem w Google lub w ogóle nieskategoryzowana.
 	Natomiast zaledwie 17\% akcji trwało ponad 2 minuty, w tym przypadku częstszą kategorią są rzeczy związane z programowaniem oraz grami.
 
 	    \begin{table}[]
@@ -371,7 +373,7 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
     Najważniejszą tabelą wśród tych powiązanych z aktywnościami jest \verb|rescuetime_activity|,
     to do niej w pierwszej kolejności trafiają dane z API bez żadnej obróbki,
     następnie nazwa akcji oraz kategoria są przyporządkowywane do istniejących rekordów w tabelach
-    \verb|rescuetime_action| oraz \verb|rescuetime_category| lub utworzone nowe w razie konieczości.
+    \verb|rescuetime_action|, oraz \verb|rescuetime_category| lub utworzone nowe w razie konieczności.
     Ma to na celu wygodniejsze przygotowanie danych i wykresów na podstawie konkretnej kategorii
     oraz ograniczenie nadmiarowości danych w przyszłości.
 
@@ -400,32 +402,33 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/db-lastfm-schema.png}
         \caption{Schemat relacji danych o muzyce}
-        \label{fig:Schemat relacji tabel z last.fm}
+        \label{fig:Schemat relacji tabel z Last.fm}
     \end{figure}
 
     Dane muzyczne są dużo bardziej rozproszone od aktywności, zapisuje je do 5 połączonych tabel.
     Jej sercem jest tabela \verb|lastfm_scrobble|, przechowująca każde pojedynczy odsłuch piosenki przez użytkownika.
     Zawiera ono moment startu odsłuchu oraz jest punktem startowym do pozostałych relacji (poprzez tabelę \verb|lastfm_track|).
     Ważnym polem jest \verb|api_data| w którym zapisuję wszystkie zwrócone dane z API w czystej postaci dla danego scrobbla (rekordu).
-    Pomaga ono przy debuggowaniu mapowań pomiędzy API a opisywanym serwisem.
+    Pomaga ono przy debugowaniu mapowań pomiędzy API a opisywanym serwisem.
 
     \section{Data fusion --- Łączenie danych w czasie}
 
         \subsection{Korekta}
 
-            Dane zapisywane są w 5 minutowych okienkach ze względu na ograniczenia API, to dobry moment na sprawdzenie duplikatów.
+            Dane zapisywane są w 5-minutowych okienkach ze względu na ograniczenia API, to dobry moment na sprawdzenie duplikatów.
             Suma wszystkich aktywności w każdym oknie nie powinna przekroczyć 300 sekund.
             Okazuje się, że w 1337 5-minutowych okresach, istniały duplikaty.
             Nie jest określone czy pochodzą one bezpośrednio z API, czy z powodu błędu w kodzie.
 
-            Postanowiłem je omijać w momencie generowania danych bazując na trzech unikalnych polach \verb|DISTINCT ON (start_time, activity_name, spent_time)|.
-            Możliwe jest, że tą metodą usuniemy również aktywności które w rzeczywistości niebyłby duplikatami,
-            prawdopodobieństwo jest wysokie przy czynnościach trwających bardzo krótko np. dwa razy otwarta wszukiwarka na 3 sekundy.
+            Postanowiłem je omijać w momencie generowania danych, bazując na trzech unikalnych polach:
+            \verb|DISTINCT ON (start_time, activity_name, spent_time)|.
+            Możliwe jest, że tą metodą usuniemy również aktywności, które w rzeczywistości nie byłyby duplikatami,
+            prawdopodobieństwo jest wysokie przy czynnościach trwających bardzo krótko np. dwa razy otwarta wyszukiwarka na 3 sekundy.
             Jest to akceptowalne ryzyko błędu, jako że bardzo krótkie aktywności mają mniejsze znaczenie dla dalszej analizy.
 
-            W przypadku last.fm, często piosenki są dodawane z tytułami w różnych wersjach, np. wersje koncertowe, radiowe lub odświeżone.
+            W przypadku Last.fm często piosenki są dodawane z tytułami w różnych wersjach, np. wersje koncertowe, radiowe lub odświeżone.
             W takich przypadkach brakuje informacji o długości piosenki.
-            Brakuje ich również gdy artysta jest niszowy i dane nie zostały uzupełnione przez społeczność last.fm.
+            Brakuje ich również, gdy artysta jest niszowy i dane nie zostały uzupełnione przez społeczność Last.fm.
             Zorientowałem się o tym podczas budowania wykresu najpopularniejszych artystów,
             kiedy artysta ``Scott BradLee's Postmodern Jukebox'' mając 33 odtworzenia, ma zarejestrowane zaledwie 9 minut odsłuchu.
             Zdecydowałem nadać im średnią długość ze wszystkich piosenek przesłuchanych przez użytkownika.
@@ -434,11 +437,11 @@ Na to pytanie odpowiedziało ponad 36 tysięcy osób \cite{stackoverflow:survey2
         \subsection{Integracja źródeł danych}
 
             Najważniejszym elementem tej pracy jest połączenie obu źródeł danych,
-            dopiero na tej podstawie możemy wysnóć tytułowy wpływ muzyki na aktywności wykonywane przy komputerze.
+            dopiero na tej podstawie możemy wysnuć tytułowy wpływ muzyki na aktywności wykonywane przy komputerze.
 
             Jeżeli chodzi o muzykę, muzyka słuchana poza komputerem jest dla nas nieinteresująca,
             dlatego punktem wyjścia jest lista aktywności i to do każdej z nich będziemy dopasowywać muzykę. Nie na odwrót.
-            Z drugiej strony nie chcemy ignorować aktywności które były wykonywane w ciszy.
+            Z drugiej strony nie chcemy ignorować aktywności, które były wykonywane w ciszy.
             Dane wymagania doprowadzają nas do poniższego zapytania SQL (uproszczonego dla przykładu):
 
 \begin{lstlisting}[language=sql]
@@ -451,7 +454,7 @@ SELECT *
   ORDER BY played_when DESC;
 \end{lstlisting}
 
-            Warto zaznaczyć, że zapytanie napisane w ten sposób zduplikuje dane aktywności
+            Warto zaznaczyć, że zapytanie napisane w ten sposób duplikuje dane aktywności,
             jeżeli podczas ich wykonywania będzie odsłuchiwana więcej niż jedna piosenka.
 
             Łączenie tabeli za pomocą porównań dat jest bardzo niewydajne,
@@ -461,11 +464,13 @@ SELECT *
             Jednym z rozwiązań jest stworzenie widoku w PostgreSQL typu \verb|MATERIALIZED|.
             SQL wykonuje się tylko podczas tworzenia widoku, a rezultat zostaje jako tymczasowa tabela.
             Każde wywołanie danych widoku w tym przypadku kosztuje bardzo mało --- tyle samo co pobranie danych ze zwykłej tabeli.
-            Dane w tej tymczasowej tabeli nie zmienią się dopóki ręcznie nie zostanie ręcznie odświeżony komendą
-            \verb|REFRESH MATERIALIZED VIEW xyz|. Jest to rozsądne rozwiązanie gdy dane rzadko się zmieniają, a ich pobranie jest kosztowne.
+            Dane w tej tymczasowej tabeli nie zmienią się, dopóki ręcznie nie zostanie ręcznie odświeżony komendą
+            \verb|REFRESH MATERIALIZED VIEW xyz|. Jest to rozsądne rozwiązanie, gdy dane rzadko się zmieniają, a ich pobranie jest kosztowne.
 
-            Nie rozwiązuje to jednak problemu inicjalnego czasu działania tego zapytania, 5 minut to wciąż dużo - nawet gdyby wykonywał się on raz dziennie w nocy.
-            Rozwiązaniem długiego czasu łączenia jest nałożenie indeksów \cite{postgresql:efficient-indexes}, nadanie ich na kolumny dat w tabeli \verb|rescuetime_activity| przyspiesza zapytanie do 1 minuty.
+            Nie rozwiązuje to jednak problemu inicjalnego czasu działania tego zapytania,
+            5 minut to wciąż dużo --- nawet gdyby wykonywał się on raz dziennie w nocy.
+            Rozwiązaniem długiego czasu łączenia jest nałożenie indeksów \cite{postgresql:efficient-indexes},
+            nadanie ich na kolumny dat w tabeli \verb|rescuetime_activity| przyspiesza zapytanie do 1 minuty.
             Dodanie indeksów na tabeli \verb|lastfm_scrobble| na kolumnę \verb|played_when| powoduje czas wykonania poniżej 300ms.
 
 \begin{lstlisting}[language=sql]
@@ -500,7 +505,7 @@ CREATE INDEX lastfm_scrobble_played_when_index
 
 \section{Testy jednostkowe}
 
-Częsć kodu była napisana metodologią TDD,
+Część kodu była napisana metodologią TDD,
 kod API zwracającego przeanalizowane dane nie jest przetestowany głównie dlatego,
 że główna logika jest w tym przypadku w zapytaniach SQL.
 
@@ -510,8 +515,8 @@ Code coverage dla całego projektu wygląda tak:
 	\begin{tabular}{|r|c|c|c|}
 		\hline
 		Moduł & Pokrycie klas & Pokrycie metod & Pokrycie operacji \\ \hline
-		Średnia projektu & 75\% (58 na 77) & 42\% (159 na 378) & 53\% (473 na 891) \\  
-		Moduł agregacji & 94\% (37 na 39) & 61\% (134 na 219) & 73\% (385 na 521) \\  
+		Średnia projektu & 75\% (58 na 77) & 42\% (159 na 378) & 53\% (473 na 891) \\
+		Moduł agregacji & 94\% (37 na 39) & 61\% (134 na 219) & 73\% (385 na 521) \\
 		API & 43\% (10 na 23) & 8\% (10 na 122) & 12\% (35 na 270) \\  \hline
 	\end{tabular}
 
@@ -537,7 +542,7 @@ Code coverage dla całego projektu wygląda tak:
 	\hline
 	Thymeleaf & 3.0 & Silnik szablonów \\
 	\hline
-	u-mass:lastfm-java & 0.1.2 & Komunikacja z last.fm API \\
+	u-mass:lastfm-java & 0.1.2 & Komunikacja z Last.fm API \\
 	\hline
 	GSON & 2.8 & Serializacja JSON to POJO \\
 	\hline
