@@ -116,16 +116,17 @@
 
 \epigraph{Without deviation from the norm, progress is not possible}{\textit{Frank Zappa}}
 
-    Podczas pisania tego wstępu słucham playlisty odpowiednio dobranej pod tę czynność
+    Właśnie słucham playlisty
     \footnote{Playlista ``Writing --- Instrumental Hip-Hop'' jest dostępna na Spotify.
-    \url{https://open.spotify.com/user/exmortisinvictus/playlist/69GtfS8diB8bUHQ74V4yuP}}.
-    Gdy programuję, zwykle słucham muzyki, jednak innej niż podczas pisania ---
+    \url{https://open.spotify.com/user/exmortisinvictus/playlist/69GtfS8diB8bUHQ74V4yuP}}
+    z muzyką odpowiednio dobraną pod pisanie tekstów.
+    Gdy programuję, zwykle słucham muzyki innej niż podczas pisania ---
     w pracy, by się odciąć od zewnętrznych dźwięków, a w domu, by się odpowiednio nastroić.
     Gdy mam trudny problem do rozwiązania to preferuję absolutną ciszę.
 
     Podobnie jak ponad 36 tysięcy innych programistów odpowiadających na pytania w corocznej ankiecie StackOverflow \cite{stackoverflow:survey2017}.
     W pytaniu ``Ideal Auditory Environment for Coding''
-    więszkość badanych słucha muzyki, duży odsetek preferuje skrajną ciszę, natomiast niewielu preferuje rozpraszacze w tle:
+    więszkość badanych słucha muzyki, duży odsetek preferuje skrajną ciszę w pracy, natomiast niewielu preferuje rozpraszacze w tle:
     \begin{itemize}
         \item 59.6\% -- Turn on some music
         \item 24.2\% -- Keep the room absolutely quiet
@@ -137,17 +138,17 @@
 
     Will Henshall na konferencji TEDx \cite{tedx:music-at-work} stwierdza, że m.in. muzyka klasyczna i Elektro pozytywnie sprzyjają na skupienie,
     natomiast instrumenty brzmiące jak ludzki głos, wokal i elektryczna gitara rozpraszają naszą uwagę.
-    Wideo obejrzano ponad 400 tysięcy razy, a koncepcja została rozwinięta w projekcie Focus@Will
+    Wideo obejrzano ponad 400 tysięcy razy, a sama koncepcja została rozwinięta w projekcie Focus@Will
     \footnote{Focus@Will --- serwis sugerujący szereg playlist pomagający zwiększyć produktywność. \url{https://en.wikipedia.org/wiki/Focus@Will}}.
 
-    W tej pracy próbuję zweryfikować te założenia przez stworzenie aplikacji, którą analizuje moje własne aktywności i muzykę, którą słucham.
-    Jednym z mierników, którym próbuję się posłużyć jest Attention Span
+    Próbuję zweryfikować te założenia przez stworzenie aplikacji, którą analizuje moje własne aktywności i muzykę, którą słucham.
+    Jednym z mierników, którym się posługuję jest ``Attention Span''
     \footnote{Attention Span --- moment w którym jesteśmy maksymalnie skoncentrowani, często nazywane flow. \url{https://en.wikipedia.org/wiki/Attention_span}}.
+    Dla uproszczenia tego projektu, przyjmuję założenie, że ``Attention Span'' to czas od początku rozpoczęcia zadania do momentu zmiany aktywnego okna.
 
-    % TODO: Wspomnieć o starcie pracy nad aplikacji w NodeJS / MongoDB
+    Celem pracy jest opis pełnego procesu budowy aplikacji opartej o analizę danych wraz z ich interpretacją i wizualizacją.
 
-    Opisuję pełny proces budowania aplikacji i analizy danych.
-    Począwszy od mechanizmu importu danych z zewnętrznych źródeł, w którym charakteryzuję dostawców API
+    Opis zaczynam od mechanizmu importu danych z zewnętrznych źródeł, w którym charakteryzuję sposób komunikacji z dostawcami API
     oraz definiuję problemy, którym należy stawić czoła przy budowie agregatora danych.
 
     W drugim rozdziale przeprowadzam analizę zebranych danych, zaczynając od zapoznania specyfiki struktury danych w bazie
@@ -234,7 +235,7 @@
 
             Last.fm to serwis społecznościowy pomagający odkrywać nowych artystów na podstawie poprzednich odsłuchów użytkownika.
 
-            Wtyczka "Last.fm Scrobbler"\cite{lastfm:trackmymusic} integruje się z odtwarzaczami muzycznymi, np. Spotify.
+            Wtyczka "Last.fm Scrobbler" \cite{lastfm:trackmymusic} integruje się z odtwarzaczami muzycznymi, np. Spotify.
             Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
             w której na podstawie ID3 tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
 
