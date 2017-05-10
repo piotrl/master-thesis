@@ -144,6 +144,8 @@
     Jednym z mierników, którym próbuję się posłużyć jest Attention Span
     \footnote{Attention Span --- moment w którym jesteśmy maksymalnie skoncentrowani, często nazywane flow. \url{https://en.wikipedia.org/wiki/Attention_span}}.
 
+    % TODO: Wspomnieć o starcie pracy nad aplikacji w NodeJS / MongoDB
+
     Opisuję pełny proces budowania aplikacji i analizy danych.
     Począwszy od mechanizmu importu danych z zewnętrznych źródeł, w którym charakteryzuję dostawców API
     oraz definiuję problemy, którym należy stawić czoła przy budowie agregatora danych.
@@ -276,17 +278,40 @@
         \subsection*{Ciągłość}
 
             \begin{figure}
-                \includegraphics[width=\linewidth]{fig/db-aggregation.png}
+                \centering
+                \includegraphics[width=\textwidth]{fig/db-aggregation.png}
                 \caption{Schemat relacji aggregation}
                 \label{fig:Relacja aggregation}
             \end{figure}
+
             Celem codzienne uruchamianie procedury i pobranie najnowszych lub brakujących danych do systemu,
             API pozwalają nam na wybranie tylko małego fragmentu danych, istotne jest więc by zacząć import
             od momentu ostatniego poprawnie wczytanego rekordu dla danego użytkownika.
 
+            Podczas pierwszej agregacji, domyślnie pobierane są dane sprzed trzech miesięcy.
+            Czas startu jest zapisywany do tabeli \verb|aggregation|,
+            a każda następna aggregacja będzie zaczynała się od momentu skończenia poprzedniej.
+
+            W przypadku niepowodzenia, błąd zapisywany jest w bazie danych - ale nie wpływa na kolejne agregacje,
+            takie rekordy mają charakter informacyjny dla developera i są ignorowane w późniejszych agregacjach.
+
+            Pobrane rekordy nie są bezpośrednio połączone z konkretną agregacją,
+            chcąc się dowiedzieć jakie rekordy były pobrane, należy pobrać wszystkie rekordy pomiędzy datą konkretnej agregacji oraz poprzedzającej ją.
+
+            Na poziomie aplikacji, regularne odpalanie procedury importu zajmuje się klasa \verb|AggregationScheduler|
+            która korzysta z Spring Schedulera i CRONa, codziennie o 3 w nocy puszcza agregacje dla użytkowników z poprawnie wypełnioną konfiguracją.
+
         \subsection*{Powtarzalność}
 
-            % TODO: Unit testy + poziomy abstrakcji
+            Ważna jest możliwość uruchomienia fragmentu kodu niezależnie od całości agregacji, np. chcąc sprawdzić połączenie API z konkretnymi parametrami
+            lub uruchomić tylko fragment mapowania odpowiedzi na bazodanowe encje.
+            Dzięki temu, w przypadku problemów jesteśmy w stanie przeanalizować działanie od wybranego przez nas momentu,
+            bez uruchamiania całej 20-minutowej procedury.
+
+            Podczas pisania pierwszej wersji programu w NodeJS, zignorowałem ten aspekt co poskutkowało czasochłonną analizą błędów,
+            a w ostateczności przepisaniem kodu.
+
+            % TODO: Wspomnieć o TDD
 
     \section{Komunikacja z API}
 
@@ -297,22 +322,6 @@
             RescueTime, mimo że co do sekundy loguje start i koniec aktywności,
             jego najwyższa dokładność oferowana użytkownikowi to 5 minut \footnote{TODO: rescuetime:apidoc-precision},
             a w darmowej wersji zezwala na dostęp maksymalnie trzy miesiące wstecz.
-
-            \begin{lstlisting}[language=json,firstnumber=1]
-{"menu": {
-  "id": "file",
-  "value": "File",
-  "popup": {
-    "menuitem": [
-      {"value": "New", "onclick": "CreateNewDoc()"},
-      {"value": "Open", "onclick": "OpenDoc()"},
-      {"value": "Close", "onclick": "CloseDoc()"}
-    ]
-  }
-}}
-0123456789
-            \end{lstlisting}
-
 
         \subsection*{Autoryzacja}
 
