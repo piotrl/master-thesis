@@ -177,7 +177,7 @@
         \section*{RescueTime}
 
         \begin{figure}
-          \includegraphics[width=\linewidth]{fig/rescuetime-daily-dashboard.png}
+          \includegraphics[width=\linewidth]{fig/rescuetime-dashboard.png}
           \caption{Tygodniowy raport aktywności RescueTime}
           \label{fig:RescueTime}
         \end{figure}
@@ -225,8 +225,8 @@
         \section*{Last.fm}
 
             \begin{figure}
-                \includegraphics[width=\linewidth]{fig/lastfm-now-listening.png}
-                \caption{Raport słuchanej muzyki w Last.fm}
+                \includegraphics[width=\linewidth]{fig/lastfm-weekly.png}
+                \caption{Tygodniowy raport słuchanej muzyki w Last.fm}
                 \label{fig:Last.fm}
             \end{figure}
 
@@ -236,23 +236,21 @@
             Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
             w której na podstawie ID3 tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
 
-            Serwis udostępnia szereg metod REST API \cite{lastfm:apidoc},
-            dla mnie szczególnie istotne są te związane z odtworzeniami użytkownika oraz szczegółowych informacji o piosenkach i artystach.
+            Serwis by korzystać z API wymaga rejestracji aplikacji do której jest przypisany klucz.
+            Po tym jest dostępne szereg metod REST API \cite{lastfm:apidoc}, dla mnie szczególnie istotne są te
+            związane z odtworzeniami użytkownika oraz szczegółowych informacji o piosenkach i artystach.
 
             Szczegółowe informacje na temat artysty lub piosenki dostępne są po podaniu ich MBID\cite{lastfm:mbid} lub nazwy artysty.
-            Pierwszy sposób jest preferowany, gwarantujący unikalność identyfikatora oraz uniknięcie problemów kodowania znaków.
+            Pierwszy sposób jest preferowany, choć nie zawsze dostępny. Gwarantuje unikalność identyfikatora oraz uniknięcie problemów kodowania znaków.
 
     \section{Mechanizm importu danych}
-        Oba z wymienionych serwisów udostępniają część danych, które użytkownik zgromadził na swoim koncie.
-        Dostęp ten jest realizowany przez API, po okazaniu odpowiednich tokenów uwierzytelniających, mamy dostęp do danych użytkownika.
-
         Przed analizą, konieczne jest pobranie danych do własnej bazy danych oraz stworzenie modelu relacji pomiędzy nimi.
         Proces pobierania nazywam agregacją danych lub importem danych i jest on podstawą działania aplikacji,
         ponieważ to w nim zdobywamy interesujące nas informacje wykorzystywane do późniejszych obliczeń.
 
         Aby aplikacja nie była jednorazowego użytku, wraz z upływem czasu należy dla każdego użytkownika dostarczać
         kolejne porcje danych z zewnętrznych serwisów.
-        Rodzi to szereg problemów oraz wyznacza pewne cechy, które napisany mechanizm musi spełniać.
+        Rodzi to szereg problemów oraz wyznacza pewne cechy, które implementacja powinna spełniać.
 
         \subsection*{Niezależność}
             Podczas pobierania danych dla jednego użytkownika może wystąpić błąd, np. poprzez tymczasową niedostępność API,
@@ -263,16 +261,17 @@
             lub nie mamy zbyt dużego doświadczenia z pracy z nimi, np. podczas mapowania odpowiedzi na obiekty lub przy zapisie danych do bazy.
 
             Można sobie z tym radzić na kilka sposobów, przechwytując wyjątki podczas wysyłania każdego requestu
-            oraz dodatkowy error handler przechwytujący wszystkie wyjątki powstałe podczas budowania modelu i zapisywania danych w bazie.
+            oraz dodatkowy error handler przechwytujący wszystkie wyjątki powstałe podczas budowania modelu i zapisywania danych w bazie,
+            tak by błąd w agregacji jednego użytkownika nie wpływał na innych (oraz na jego następne).
 
-            Dzięki kilku poziomom przechtywywania wyjątków, mamy możliwość różnicowania o ich krytyczności.
+            Dzięki kilku poziomom przechtywywania wyjątków, mamy możliwość decydowania o ich krytyczności.
             Nieudane requesty możemy dodawać do kolejki i po kilku minutach ponowić próbę ich wysłania.
-            Jest to skuteczne rozwiązanie, gdy API ma sztywny czas sesji, po którym następuje wylogowanie.
+            W przypadku błędu zapisu do bazy możemy zignorować jeden request lub oznaczyć całą aggregację do powtórzenia.
+
+            Kolejkowanie requestow jest skuteczne, gdy API ma sztywny czas sesji np. 5 minut, po którym następuje wylogowanie.
             RescueTime i Last.fm mają autoryzację bezstanową,
             w pełni polegającej na raz wygenerowanym kluczu --- sesja nie jest tu problem,
             więc zdecydowałem się porzucić pomysł kolejkowania pojedynczych requestów.
-
-            % TODO: Blad w jedenej agregacji nie wplywa na nastepne / kolejnych uzytkownikow
 
         \subsection*{Ciągłość}
 
@@ -286,6 +285,8 @@
             od momentu ostatniego poprawnie wczytanego rekordu dla danego użytkownika.
 
         \subsection*{Powtarzalność}
+
+            % TODO: Unit testy + poziomy abstrakcji
 
     \section{Komunikacja z API}
 
