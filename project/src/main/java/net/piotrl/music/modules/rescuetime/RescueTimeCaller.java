@@ -11,8 +11,8 @@ import java.net.URI;
 
 public class RescueTimeCaller {
 
-    public ResponseEntity<RescueTimeResponse> call(RescueTimeRequest api) {
-        URI requestUri = url(api);
+    public ResponseEntity<RescueTimeResponse> call(RescueTimeRequest requestConfig) {
+        URI requestUri = url(requestConfig);
         RestTemplate restTemplate = new RestTemplate();
 
         return restTemplate.getForEntity(requestUri, RescueTimeResponse.class);

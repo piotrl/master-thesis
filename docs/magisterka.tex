@@ -238,11 +238,10 @@
             Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
             w której na podstawie ID3 tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
 
-            Serwis by korzystać z API wymaga rejestracji aplikacji do której jest przypisany klucz.
-            Po tym jest dostępne szereg metod REST API \cite{lastfm:apidoc}, dla mnie szczególnie istotne są te
+            Serwis udostępnia szereg metod REST API \cite{lastfm:apidoc}, dla mnie szczególnie istotne są te
             związane z odtworzeniami użytkownika oraz szczegółowych informacji o piosenkach i artystach.
 
-            Szczegółowe informacje na temat artysty lub piosenki dostępne są po podaniu ich MBID\cite{lastfm:mbid} lub nazwy artysty.
+            Szczegółowe informacje są dostępne po podaniu ich MBID\cite{lastfm:mbid} lub nazwy (piosenki lub artysty).
             Pierwszy sposób jest preferowany, choć nie zawsze dostępny. Gwarantuje unikalność identyfikatora oraz uniknięcie problemów kodowania znaków.
 
     \section{Mechanizm importu danych}
@@ -258,7 +257,7 @@
             Podczas pobierania danych dla jednego użytkownika może wystąpić błąd, np. poprzez tymczasową niedostępność API,
             nie powinien on wpłynąć na agregacje innych użytkowników, ani na działanie mechanizmu w przyszłości dla tego samego użytkownika.
 
-            Części błędów można się spodziewać, np. lastfm udostępnia do każdej metody API listę błędów, które może zwrócić zamiast odpowiedzi.
+            Części błędów można się spodziewać, np. Last.fm udostępnia do każdej metody API listę błędów, które może zwrócić zamiast odpowiedzi.
             Z drugiej strony, mogą wystąpić błędy po naszej stronie --- zwłaszcza gdy API nie jest bardzo dobrze udokumentowane
             lub nie mamy zbyt dużego doświadczenia z pracy z nimi, np. podczas mapowania odpowiedzi na obiekty lub przy zapisie danych do bazy.
 
@@ -315,7 +314,7 @@
 
     \section{Komunikacja z API}
 
-        \subsection*{Specyfika API}
+        \subsection*{Specyfika odpowiedzi API}
             Przy projektowaniu rozwiązania warto pamiętać o tym, że nie istnieje powszechnie wykorzystywany standard budowania API,
             a każdy dostawca implementuje je w sposób specyficzny dla swojego systemu i danych, jakie udostępnia.
 
@@ -323,14 +322,48 @@
             jego najwyższa dokładność oferowana użytkownikowi to 5 minut \footnote{TODO: rescuetime:apidoc-precision},
             a w darmowej wersji zezwala na dostęp maksymalnie trzy miesiące wstecz.
 
+            RescueTime oferuje jeden, mocno konfigurowalny endpoint, który obsługuje wszystkie zapytania.
+            Struktura odpowiedzi również jest bardzo generyczna, przypominająca CSV.
+            W zależności od konfiguracji, zmieniają się nagłówki i schemat wierszy, należy napisać dodatkowy parser na własne API.
+
+            \begin{lstlisting}[language=java]
+@Data
+public class RescueTimeResponse {
+    private String notes;
+    private List<String> row_headers;
+    private List<List<String>> rows;
+}
+            \end{lstlisting}
+
+            Do bezpośredniej komunikacji stworzyłem klasę \verb|RescueTimeCaller|, która buduje parametry requesta
+            oraz przetwarza go za pomocą klienta \verb|Spring RestTemplate|. Zestaw testów jest w klasie \verb|RescueTimeCallerTest|.
+
+            W przypadku Last.fm, wynik odpowiedzi jest stronnicowany - jednym rządaniem możemy pobrać maksymalnie 100 utworów.
+            Do wysyłania requestów i deserializacji odpowiedzi na obiekty
+            wykorzystuję bibliotekę \verb|Last.fm API Bindings for Java|\cite{lastfm:java-bindings}.
+
+            \begin{lstlisting}[language=java]
+public class PaginatedResult<T> implements Iterable<T> {
+	private int page;
+	private int totalPages;
+	private Collection<T> pageResults;
+}
+            \end{lstlisting}
+
+            Schemat odpowiedzi XML w przypadku endpointów których używam jest taki sam, lecz w zależności od konfiguracji - różne pola są wypełniane.
+            Przykładowo pole \verb|duration| zawierające długość piosenki jest puste, gdy używa się metody \verb|User.getRecentTracks|,
+            a dostępne podczas używania metody \verb|Track.getInfo|.
+
         \subsection*{Autoryzacja}
 
         Do każdego requestu należy dodać klucze autoryzujące,
         które użytkownik musi wygenerować w serwisach Last.fm i RescueTime \cite{rescuetime:apidoc-keymanagment} oraz dodać w ustawieniach aplikacji.
         Klucze zapisywane są ws tabeli \textit{aggregation\_metadata}.
         Last.fm wymaga rejestracji aplikacji, po którym otrzymujesz dwa klucze: sekretny i normalny.
+
         W obu serwisach dostępne jest logowanie za pomocą OAuth, dzięki temu użytkownik nie musi samodzielnie generować kluczy,
-        a jedynie potwierdzić chęć udostępnienia swoich danych w aplikacji. W obecnej wersji applikacji nie używam tego mechanizmu.
+        a jedynie potwierdzić chęć udostępnienia swoich danych w aplikacji. Zdecydowanie skraca i ułatwia proces konfiguracji.
+        W obecnej wersji applikacji nie używam tego mechanizmu, ale byłby on konieczny przed udostępnieniem aplikacji publicznie.
 
         \begin{figure}
         	\includegraphics[width=\linewidth]{fig/db-aggregation-metadata.png}
@@ -339,19 +372,31 @@
         \end{figure}
 
         \subsection*{Niepełne dane}
-        API nie gwarantuje istnienia ani poprawności wszystkich informacji.
-        Przykładowo Last.fm do identyfikacji utworu dostarcza jego MBID oraz pełną nazwę.
+        API mimo starań dostawców, może zawierać nieścisłości i luki informacji.
+        Last.fm do identyfikacji utworu dostarcza jego MBID oraz pełną nazwę.
         Bezpieczniej jest korzystać z identyfikatora mbid, ponieważ w nazwie mogą występować problematyczne znaki UTF-8 np. w przypadku Chińskich artystów.
         Niekiedy nie jest to możliwe, istnieją bowiem rekordy, dla których identyfikator jest pusty.
 
-        W przypadku RescueTime nie doszukałem się danych, które mógłbym uznać za niepełne.
+        W przypadku braku MBID jest możliwe,
+        że tytuł utworu zawiera zbyt dużo informacji (np. oznaczenie wersji koncertowej lub radiowej),
+        lub utwór jest zbyt świeży. W takich przypadkach często brakuje informacji o długości takich piosenek.
+        W bazie danych mam 505 takich utworów (21\% wszystkich).
+
+        W danych RescueTime odnalazłem, że wyjątkowo dużo zadań jest przypisanych do akcji ``Google Chrome''.
+        Według idei tego seriwsu wszystkie strony powinny mieć swoje akcje. Sugeruje to błąd podczas sczytywania przez program.
+        Problem jest znany i opisany na stronie z pomocą \cite{rescuetime:help-browser-time}.
 
         \subsection*{Wydajność}
-        Dobrze jest kopiować wszystkie powtarzalne informacje do własnej bazy danych,
+        Dobrą praktyką jest kopiowanie wszystkich pobranych informacji do własnej bazy danych,
         dzięki temu możemy ograniczyć ilość żądań do API tylko do nieznanych nam obiektów i zmniejszyć ryzyko wyczerpania limitu requestów.
 
-		Jest to istotna optymalizacja, przy skali tysięcy requestów i średnim czasie requestu wahającym się między 0.5s a 2s,
-		robi to różnicę minut.
+		Żądania są wysyłane synchronicznie, jeden po drugim.
+		Przy skali tysięcy requestów i średnim czasie requestu wahającym się między pół a dwiema sekundami, jest to istotna optymalizacja.
+		Przeprowadziłem test dla danych z 90 dni Last.fm. Do pobrania 5992 rekordów, należało wysłać 60 requestów (60 stron) i trwało to około minuty.
+		Dla każdego z nich należy pobrać dodatkowe szczegóły, co trwa około 26 minut.
+
+		Wiele z tych 5992 rekordów się powtarza, dlatego po zapamiętaniu powtarzających się rekordów --- pełna agregacja trwa 13 minut.
+		Im więcej rekordów w bazie, tym mniej żądań potrzeba wysłać i czas importu będzie coraz krótszy dla kolejnych użytkowników.
 
 \chapter{Analiza danych}
 
@@ -459,9 +504,8 @@
         prawdopodobieństwo jest wysokie przy czynnościach trwających bardzo krótko np. dwa razy otwarta wyszukiwarka na 3 sekundy.
         Jest to akceptowalne ryzyko błędu, jako że bardzo krótkie aktywności mają mniejsze znaczenie dla dalszej analizy.
 
-        W przypadku Last.fm często piosenki są dodawane z tytułami w różnych wersjach, np. wersje koncertowe, radiowe lub odświeżone.
-        W takich przypadkach brakuje informacji o długości piosenki.
-        Brakuje ich również, gdy artysta jest niszowy i dane nie zostały uzupełnione przez społeczność Last.fm.
+        Dane utworów z Last.fm często nie zawierają informacji o długości piosenki.
+        Brakuje ich, gdy nazwa jest niestandardowa lub gdy artysta jest niszowy i dane nie zostały uzupełnione przez społeczność Last.fm.
         Zorientowałem się o tym podczas budowania wykresu najpopularniejszych artystów,
         kiedy artysta ``Scott BradLee's Postmodern Jukebox'' mając 33 odtworzenia, ma zarejestrowane zaledwie 9 minut odsłuchu.
         Zdecydowałem nadać im średnią długość ze wszystkich piosenek przesłuchanych przez użytkownika.
