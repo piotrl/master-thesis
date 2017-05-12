@@ -102,7 +102,7 @@
 \keywords{
     Aggregation,
     Data Integration,
-    Data Visualisation,
+    Visualisation,
     PostgreSQL,
     JavaScript,
     Java
@@ -182,7 +182,7 @@
         \begin{figure}
           \includegraphics[width=\linewidth]{fig/rescuetime-dashboard.png}
           \caption{Tygodniowy raport aktywności RescueTime}
-          \label{fig:RescueTime}
+          \label{fig:rescuetime-dashboard}
         \end{figure}
 
             RescueTime to program, który loguje aktualnie otwarte i aktywne okno
@@ -230,7 +230,7 @@
             \begin{figure}
                 \includegraphics[width=\linewidth]{fig/lastfm-weekly.png}
                 \caption{Tygodniowy raport słuchanej muzyki w Last.fm}
-                \label{fig:Last.fm}
+                \label{fig:lastfm-weekly}
             \end{figure}
 
             Last.fm to serwis społecznościowy pomagający odkrywać nowych artystów na podstawie poprzednich odsłuchów użytkownika.
@@ -281,7 +281,7 @@
                 \centering
                 \includegraphics[width=\textwidth]{fig/db-aggregation.png}
                 \caption{Schemat relacji aggregation}
-                \label{fig:Relacja aggregation}
+                \label{fig:db-aggregation}
             \end{figure}
 
             Celem codzienne uruchamianie procedury i pobranie najnowszych lub brakujących danych do systemu,
@@ -369,7 +369,7 @@ public class PaginatedResult<T> implements Iterable<T> {
         \begin{figure}
         	\includegraphics[width=\linewidth]{fig/db-aggregation-metadata.png}
         	\caption{Schemat relacji aggregation\_metadata}
-        	\label{fig:}
+        	\label{fig:db-aggregation-metadata}
         \end{figure}
 
         \subsection*{Niepełne dane}
@@ -449,7 +449,7 @@ public class PaginatedResult<T> implements Iterable<T> {
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/db-rescuetime-schema.png}
         \caption{Schemat relacji danych o aktywnościach}
-        \label{fig:Dane z RescueTime --- Schemat relacji}
+        \label{fig:db-rescuetime-schema}
     \end{figure}
 
     Najważniejszą tabelą wśród tych powiązanych z aktywnościami jest \verb|rescuetime_activity|,
@@ -484,7 +484,7 @@ public class PaginatedResult<T> implements Iterable<T> {
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/db-lastfm-schema.png}
         \caption{Schemat relacji danych o muzyce}
-        \label{fig:Schemat relacji tabel z Last.fm}
+        \label{fig:db-lastfm-schema}
     \end{figure}
 
     Dane muzyczne są dużo bardziej rozproszone od aktywności, zapisuje je do 5 połączonych tabel.
@@ -573,7 +573,7 @@ CREATE INDEX lastfm_scrobble_played_when_index
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
         \caption{Wykres: Dzienna długość wykonywanych aktywności i przesłuchanej muzyki (czas trwania muzyki może być większy od aktywności)}
-        \label{fig:Dzienny wykres całości przesłuchanej muzyki }
+        \label{fig:ui:chart-music-all}
     \end{figure}
 
     \begin{figure}
