@@ -95,7 +95,7 @@
     do generowania wykresów użytko biblioteki Google Charts.
 
     Kod znajduje się w prywatnym repozytorium GIT (pod adresem \url{https://github.com/piotrl/master-thesis}),
-    pytania o dostęp lub o pracę można kierować na mail: poczta@piotrl.net.
+    pytania o dostęp lub o pracę można kierować na mail: \url{mail@piotrl.net}.
 \end{abstract}
 
 % słowa kluczowe
@@ -119,7 +119,7 @@
     Właśnie słucham playlisty
     \footnote{Playlista ``Writing --- Instrumental Hip-Hop'' jest dostępna na Spotify.
     \url{https://open.spotify.com/user/exmortisinvictus/playlist/69GtfS8diB8bUHQ74V4yuP}}
-    z muzyką odpowiednio dobraną pod pisanie tekstów.
+    z muzyką która pomaga mi się skupić podczas pisania tego wstępu.
     Gdy programuję, zwykle słucham muzyki innej niż podczas pisania ---
     w pracy, by się odciąć od zewnętrznych dźwięków, a w domu, by się odpowiednio nastroić.
     Gdy mam trudny problem do rozwiązania to preferuję absolutną ciszę.
@@ -388,6 +388,7 @@ public class PaginatedResult<T> implements Iterable<T> {
         Problem jest znany i opisany na stronie z pomocą \cite{rescuetime:help-browser-time}.
 
         \subsection*{Wydajność}
+        Agregacja jest czasochłonnym procesem, nie ma powodu by dwa razy pobierać te same dane.
         Dobrą praktyką jest kopiowanie wszystkich pobranych informacji do własnej bazy danych,
         dzięki temu możemy ograniczyć ilość żądań do API tylko do nieznanych nam obiektów i zmniejszyć ryzyko wyczerpania limitu requestów.
 
@@ -560,11 +561,61 @@ CREATE INDEX lastfm_scrobble_played_when_index
 
 \chapter{Wizualizacja danych}
 
+    Produktem dla końcowego użytkownika jest aplikacja webowa, która podsumowuje zebrane wcześniej dane.
+    Jest ona oparta na klasycznym podejściu MVC z kilkoma podstronami.
+
+    \section{Wiarygodność}
+
+    - Należy sprawdzić, czy dane w systemie są wiarygodne i poprawne
+    - Zestaw podsumowań:
+    -- Lista
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
+        \caption{Wykres: Dzienna długość wykonywanych aktywności i przesłuchanej muzyki (czas trwania muzyki może być większy od aktywności)}
+        \label{fig:Dzienny wykres całości przesłuchanej muzyki }
+    \end{figure}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-music-only-during-activities.png}
+        \caption{Wykres: Dzienna długość przesłuchanej muzyki tylko podczas wykonywanych aktywności na laptopie}
+        \label{fig:ui:chart-music-only-during-activities}
+    \end{figure}
+
     \section{Budowa raportów na podstawie szeregów czasowych}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-tasks-productive.png}
+        \caption{Wykres: Wpływ ilości zadań w ciągu 15minut na długość produktywnych zadań}
+        \label{fig:ui:chart-tasks-productive}
+    \end{figure}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-tasks-neutral.png}
+        \caption{Wykres: Wpływ ilości zadań w ciągu 15minut na długość neutralnych zadań}
+        \label{fig:ui:chart-tasks-neutral}
+    \end{figure}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-tasks-distractions.png}
+        \caption{Wykres: Wpływ ilości zadań w ciągu 15minut na długość rozpraszających zadań}
+        \label{fig:ui:chart-tasks-distractions}
+    \end{figure}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-productivity-summary.png}
+        \caption{Wykres kołowy: }
+        \label{fig:ui:chart-productivity-summary}
+    \end{figure}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/table-popular-music-tags.png}
+        \caption{Tabela z najpopularniejszymi tagami i artystami w miesiącu w raz z łączną długością odtworzeń}
+        \label{fig:ui:table-popular-music-tags}
+    \end{figure}
 
     \section{Wybór odpowiednich metod wizualizacji danych}
 
-    \section{Analiza danych z punktu widzenia użytkownika}
 
 \chapter{Architektura}
 
