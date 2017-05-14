@@ -566,9 +566,7 @@ CREATE INDEX lastfm_scrobble_played_when_index
 
     \section{Wiarygodność}
 
-    - Należy sprawdzić, czy dane w systemie są wiarygodne i poprawne
-    - Zestaw podsumowań:
-    -- Lista
+    Zanim przystąpi się do wyciągnięcia wniosków, należy sprawdzić czy dane w systemie są wiarygodne.
 
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
@@ -583,6 +581,39 @@ CREATE INDEX lastfm_scrobble_played_when_index
     \end{figure}
 
     \section{Budowa raportów na podstawie szeregów czasowych}
+
+    Wyświetlane na raportach wykresy mogą mieć różną granularność w zależności od naszych potrzeb.
+    Powiedzenie ze statystyki, "Jeden zbiór dancyh -- wiele interpretacji" możemy przedstawić wile rzeczy odpowiednio posługując się danymi.
+
+    \begin{lstlisting}[language=sql]
+    SELECT *
+    FROM generate_series(
+         date_trunc('day', :from :: TIMESTAMP),
+         date_trunc('day', :to :: TIMESTAMP),
+         '1 day' :: INTERVAL
+     ) date
+    \end{lstlisting}
+
+    Powyższy przykład generuje zbiór dat z jednodniowym interwałem,
+    który możemy połączyć z innymi tabelami za pomocą \verb|LEFT JOIN|.
+    Wtedy mamy pewność, że ilość rekordów będzie zawsze stała i niezależna od danych z innych tabel.
+    Nawet w przypadku gdy dla danej daty, nie ma żadnych odpowiedników - rekord z datą będzie widoczny.
+
+    Funkcja \verb|generate_series(start, stop, step)| tworzy zbiór elementów
+    zaczynających się od pierwszego argumentu do drugiego z zadanym interwałem.
+    Funkcja \verb|date_trunc(precision, timestamp)| ucina datę do zadanej precyzji.
+    \verb|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \verb|2017-05-01 23:00:00|
+
+    Zakres dat podawany jest w parametrze \verb|:from| i \verb|:to|, jest generowany przez serwis w zależności od potrzeb raportu.
+    Dla metody zwracającej raport z całego miesiąca, oblicza się pierwszy i ostatni jego dzień.
+
+    \begin{lstlisting}[language=java]
+List<ArtistsSummary> mostPopularArtists(int year, int month, long accountId) {
+    LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
+    LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
+    return artistsRepository.mostPopularArtists(firstDayOfMonth, lastDayOfMonth, accountId);
+}
+    \end{lstlisting}
 
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-tasks-productive.png}
@@ -631,6 +662,10 @@ CREATE INDEX lastfm_scrobble_played_when_index
     Obsługuje mechanizm autentykacji.
 
     W kodzie projektu przeplata się wiele rozwiązań problemów, w 75\% kodu jest napisane w Javie
+
+    %TODO - wspomnieć o migracjach sql
+    %TODO - rozrysować przepływ danych jako sekcja
+    %TODO - opisać strukturę paczek (opcjonalne)
 
 \section{Testy jednostkowe}
 
