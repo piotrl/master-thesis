@@ -143,7 +143,8 @@
 
     Próbuję zweryfikować te założenia przez stworzenie aplikacji, którą analizuje moje własne aktywności i muzykę, którą słucham.
     Jednym z mierników, którym się posługuję jest ``Attention Span''
-    \footnote{Attention Span --- moment w którym jesteśmy maksymalnie skoncentrowani, często nazywane flow. \url{https://en.wikipedia.org/wiki/Attention_span}}.
+    \footnote{Attention Span --- moment w którym jesteśmy maksymalnie skoncentrowani,
+    często nazywane flow. \url{https://en.wikipedia.org/wiki/Attention_span}}.
     Dla uproszczenia tego projektu, przyjmuję założenie, że ``Attention Span'' to czas od początku rozpoczęcia zadania do momentu zmiany aktywnego okna.
 
     Celem pracy jest opis pełnego procesu budowy aplikacji opartej o analizę danych wraz z ich interpretacją i wizualizacją.
@@ -608,10 +609,16 @@ CREATE INDEX lastfm_scrobble_played_when_index
     Dla metody zwracającej raport z całego miesiąca, oblicza się pierwszy i ostatni jego dzień.
 
     \begin{lstlisting}[language=java]
-List<ArtistsSummary> mostPopularArtists(int year, int month, long accountId) {
+List<ArtistsSummary> mostPopularArtists(
+        int year, int month, long accountId) {
     LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
-    LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
-    return artistsRepository.mostPopularArtists(firstDayOfMonth, lastDayOfMonth, accountId);
+    LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(
+        firstDayOfMonth.lengthOfMonth()
+    );
+
+    return artistsRepository.mostPopularArtists(
+        firstDayOfMonth, lastDayOfMonth, accountId
+    );
 }
     \end{lstlisting}
 
@@ -639,16 +646,35 @@ List<ArtistsSummary> mostPopularArtists(int year, int month, long accountId) {
         \label{fig:ui:chart-productivity-summary}
     \end{figure}
 
+    \section{Wybór metod wizualizacji danych}
+
+    Wizualna reprezentacja pozwala na lepsze zrozumienie genezy danych, skategoryzować je i znaleźć korelację.
+    Można wykrywać nieprawidłowości oraz starać się definiować trendy, wiele zależy od interpretacji i intencji analityka.
+    \cite{charts:excel-comparsion}
+
+    W aplikacji, do reprezentacji danych użyłem kilku powszechnie stosowanych typów wykresów.
+    Tabele służą mi do pokazania niedużej liczby danych w określonym porządku,
+    np. lista najpopularniejszych artystów lub tagów ze zdjęcia \ref{fig:ui:table-popular-music-tags}.
+    Wyłania to najważniejszych przedstawicieli danych, omijając potencjalnie długą listę rekordów.
+
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/table-popular-music-tags.png}
-        \caption{Tabela z najpopularniejszymi tagami i artystami w miesiącu w raz z łączną długością odtworzeń}
+        \caption{Tabela z najpopularniejszymi tagami i artystami w miesiącu w raz z łączną długością odtworzeń. Screenshot z aplikacji.}
         \label{fig:ui:table-popular-music-tags}
     \end{figure}
 
-    \section{Wybór odpowiednich metod wizualizacji danych}
-
+    Wykresy łączone, jak te pokazane na rysunku \ref{fig:ui:chart-music-all} i \ref{fig:ui:chart-music-only-during-activities},
+    użyłem w celu wyróżnienia jednej kategorii (czasu ciszy) i podkreślenia jej stosunku wobec dwóch pozostałych (czasu aktywności oraz słuchania muzyki).
+    Na pierwszym wyrkesie \ref{fig:ui:chart-music-all} wskazuje również nieprawidłowość jaką jest ujemny czas ciszy,
+    który występuje gdy słuchamy na urządzeniach innych niż na których pracujemy.
 
 \chapter{Architektura}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/data-flow.png}
+        \caption{Przepływ danych w aplikacji podzielony na części importu, analizy i wizualizacji}
+        \label{fig:data-flow}
+    \end{figure}
 
     Do uruchomienia projektu wymagana jest Java 8 JRE oraz zainstalowany PostgreSQL.
     Pobraniem zależności i zbudowaniem paczki zajmuje się komenda \verb|./gradlew build|,
