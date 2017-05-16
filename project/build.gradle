@@ -15,10 +15,13 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
-jar {
+apply plugin: 'war'
+
+war {
     baseName = 'music'
-    version = '0.0.1-SNAPSHOT'
+    version =  '0.1'
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
