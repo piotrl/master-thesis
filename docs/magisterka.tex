@@ -681,13 +681,14 @@ List<ArtistsSummary> mostPopularArtists(
     wygenerowany WAR można osadzić na serwerze aplikacji Tomcat lub uruchomić komendą \verb|java -jar file.war|,
     wówczas uruchomi się wbudowany w applikację serwer \verb|Embedded tomcat|.
 
+    Z każdą zmianą w bazie danych, należy stworzyć nowy plik migracji SQL oraz uruchomić.
+    Obecne są przechowywane w katalogu projektu: \verb|/main/resources/migration/|
+
     Projekt dzieli się na trzy główne części.
     - Import danych do bazy, jest to główne źródło pozyskiwania danych, komunikacji z API.
-    - REST API - % TODO
+    - REST API - przeznaczone do wybierania już przetworzonych danych w postaci przyjaznej dla front-endu
     - MVC - Aplikacja bezpośrednio widoczna dla użytkownika, zawiera prosty back-end oraz front-end który komunikuje się z REST API.
     Obsługuje mechanizm autentykacji.
-
-    W kodzie projektu przeplata się wiele rozwiązań problemów, w 75\% kodu jest napisane w Javie
 
     %TODO - wspomnieć o migracjach sql
     %TODO - rozrysować przepływ danych jako sekcja
