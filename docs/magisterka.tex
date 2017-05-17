@@ -4,6 +4,9 @@
 % nieparzystych:
 %\documentclass[openright]{xmgr}
 
+% install minted package to highlight source code
+\usepackage{minted}
+
 \usepackage{epigraph}
 \usepackage{url}
 \usepackage{float}
@@ -12,50 +15,9 @@
 \setmainfont[Numbers=OldStyle,Ligatures=TeX]{Minion Pro}
 \setsansfont[Numbers=OldStyle,Ligatures=TeX]{Myriad Pro}
 % for fontspec version < 2.0
-%\setmainfont[Numbers=OldStyle,Mapping=tex-text]{Minion Pro}
+\setmainfont[Numbers=OldStyle,Mapping=tex-text]{Minion Pro}
 \setsansfont[Numbers=OldStyle,Mapping=tex-text]{Myriad Pro}
 %\setmonofont[Scale=0.75]{Monaco}
-
-% Code listing
-%\usepackage{bera}% optional: just to have a nice mono-spaced font
-\usepackage{listings}
-\usepackage{xcolor}
-
-\colorlet{punct}{red!60!black}
-\definecolor{background}{HTML}{EEEEEE}
-\definecolor{delim}{RGB}{20,105,176}
-\colorlet{numb}{magenta!60!black}
-
-\lstdefinelanguage{json}{
-    basicstyle=\normalfont\ttfamily,
-    numbers=left,
-    numberstyle=\scriptsize,
-    stepnumber=1,
-    numbersep=8pt,
-    showstringspaces=false,
-    breaklines=true,
-    frame=lines,
-    backgroundcolor=\color{background},
-    literate=
-        *{0}{{{\color{numb}0}}}{1}
-        {1}{{{\color{numb}1}}}{1}
-        {2}{{{\color{numb}2}}}{1}
-        {3}{{{\color{numb}3}}}{1}
-        {4}{{{\color{numb}4}}}{1}
-        {5}{{{\color{numb}5}}}{1}
-        {6}{{{\color{numb}6}}}{1}
-        {7}{{{\color{numb}7}}}{1}
-        {8}{{{\color{numb}8}}}{1}
-        {9}{{{\color{numb}9}}}{1}
-        {:}{{{\color{punct}{:}}}}{1}
-        {,}{{{\color{punct}{,}}}}{1}
-        {\{}{{{\color{delim}{\{}}}}{1}
-        {\}}{{{\color{delim}{\}}}}}{1}
-        {[}{{{\color{delim}{[}}}}{1}
-        {]}{{{\color{delim}{]}}}}{1},
-}
-
-% END Code listing
 
 % Opcjonalnie identyfikator dokumentu
 % drukowany tylko z włączoną opcją 'brudnopis':
@@ -141,7 +103,7 @@
     Wideo obejrzano ponad 400 tysięcy razy, a sama koncepcja została rozwinięta w projekcie Focus@Will
     \footnote{Focus@Will --- serwis sugerujący szereg playlist pomagający zwiększyć produktywność. \url{https://en.wikipedia.org/wiki/Focus@Will}}.
 
-    Próbuję zweryfikować te założenia przez stworzenie aplikacji, którą analizuje moje własne aktywności i muzykę, którą słucham.
+    Próbuję zweryfikować te założenia przez stworzenie aplikacji, która analizuje moje własne aktywności i muzykę, którą słucham.
     Jednym z mierników, którym się posługuję jest ``Attention Span''
     \footnote{Attention Span --- moment w którym jesteśmy maksymalnie skoncentrowani,
     często nazywane flow. \url{https://en.wikipedia.org/wiki/Attention_span}}.
@@ -160,6 +122,8 @@
     Definiowaniuję sposób budowania zapytań SQL, by zwracały odpowiednio uszeregowane dane w czasie z wybranym interwałem.
 
     Rozdział czwarty poświęcam architekturze projektu, użytych narzędzi oraz instrukcję uruchomienia projektu lokalnie lub na serwerze.
+
+    Rysunki i tabele są opracowania własnego, chyba że oznaczyłem inaczej.
 
 \chapter{Import danych}
 
@@ -214,7 +178,6 @@
                 \end{tabular}
                 \caption{
                     Lista przykładowych aktywności wraz z ich kategoriami. Skala produktywności od +2 do -2
-                    \newline Źródło: Opracowanie własne.
                 }
                 \label{RescueTime --- lista przykładowych aktywności}
             \end{table}
@@ -290,7 +253,7 @@
             od momentu ostatniego poprawnie wczytanego rekordu dla danego użytkownika.
 
             Podczas pierwszej agregacji, domyślnie pobierane są dane sprzed trzech miesięcy.
-            Czas startu jest zapisywany do tabeli \verb|aggregation|,
+            Czas startu jest zapisywany do tabeli \mintinline{sql}|aggregation|,
             a każda następna aggregacja będzie zaczynała się od momentu skończenia poprzedniej.
 
             W przypadku niepowodzenia, błąd zapisywany jest w bazie danych - ale nie wpływa na kolejne agregacje,
@@ -299,7 +262,7 @@
             Pobrane rekordy nie są bezpośrednio połączone z konkretną agregacją,
             chcąc się dowiedzieć jakie rekordy były pobrane, należy pobrać wszystkie rekordy pomiędzy datą konkretnej agregacji oraz poprzedzającej ją.
 
-            Na poziomie aplikacji, regularne odpalanie procedury importu zajmuje się klasa \verb|AggregationScheduler|
+            Na poziomie aplikacji, regularne odpalanie procedury importu zajmuje się klasa \mintinline{java}|AggregationScheduler|
             która korzysta z Spring Schedulera i CRONa, codziennie o 3 w nocy puszcza agregacje dla użytkowników z poprawnie wypełnioną konfiguracją.
 
         \subsection*{Powtarzalność}
@@ -328,29 +291,29 @@
             Struktura odpowiedzi również jest bardzo generyczna, przypominająca CSV.
             W zależności od konfiguracji, zmieniają się nagłówki i schemat wierszy, należy napisać dodatkowy parser na własne API.
 
-            \begin{lstlisting}[language=java]
+\begin{minted}{java}
 @Data
 public class RescueTimeResponse {
     private String notes;
     private List<String> row_headers;
     private List<List<String>> rows;
 }
-            \end{lstlisting}
+\end{minted}
 
-            Do bezpośredniej komunikacji stworzyłem klasę \verb|RescueTimeCaller|, która buduje parametry requesta
-            oraz przetwarza go za pomocą klienta \verb|Spring RestTemplate|. Zestaw testów jest w klasie \verb|RescueTimeCallerTest|.
+            Do bezpośredniej komunikacji stworzyłem klasę \mintinline{java}|RescueTimeCaller|, która buduje parametry requesta
+            oraz przetwarza go za pomocą klienta ``Spring RestTemplate''. Zestaw testów jest w klasie \mintinline{java}|RescueTimeCallerTest|.
 
             W przypadku Last.fm, wynik odpowiedzi jest stronnicowany - jednym rządaniem możemy pobrać maksymalnie 100 utworów.
             Do wysyłania requestów i deserializacji odpowiedzi na obiekty
-            wykorzystuję bibliotekę \verb|Last.fm API Bindings for Java|\cite{lastfm:java-bindings}.
+            wykorzystuję bibliotekę ``Last.fm API Bindings for Java''\cite{lastfm:java-bindings}.
 
-            \begin{lstlisting}[language=java]
+            \begin{minted}{java}
 public class PaginatedResult<T> implements Iterable<T> {
-	private int page;
-	private int totalPages;
-	private Collection<T> pageResults;
+    private int page;
+    private int totalPages;
+    private Collection<T> pageResults;
 }
-            \end{lstlisting}
+            \end{minted}
 
             Schemat odpowiedzi XML w przypadku endpointów których używam jest taki sam, lecz w zależności od konfiguracji - różne pola są wypełniane.
             Przykładowo pole \verb|duration| zawierające długość piosenki jest puste, gdy używa się metody \verb|User.getRecentTracks|,
@@ -524,7 +487,7 @@ public class PaginatedResult<T> implements Iterable<T> {
         Z drugiej strony nie chcemy ignorować aktywności, które były wykonywane w ciszy.
         Dane wymagania doprowadzają nas do poniższego zapytania SQL (uproszczonego dla przykładu):
 
-\begin{lstlisting}[language=sql]
+\begin{minted}{sql}
 SELECT *
   FROM rescuetime_activity activity
     LEFT JOIN lastfm_scrobble scrobble
@@ -532,7 +495,7 @@ SELECT *
          AND scrobble.played_when <= activity.end_time
          AND scrobble.account_id = activity.account_id
   ORDER BY played_when DESC;
-\end{lstlisting}
+\end{minted}
 
         Warto zaznaczyć, że zapytanie napisane w ten sposób duplikuje dane aktywności,
         jeżeli podczas ich wykonywania będzie odsłuchiwana więcej niż jedna piosenka.
@@ -553,62 +516,47 @@ SELECT *
         nadanie ich na kolumny dat w tabeli \verb|rescuetime_activity| przyspiesza zapytanie do 1 minuty.
         Dodanie indeksów na tabeli \verb|lastfm_scrobble| na kolumnę \verb|played_when| powoduje czas wykonania poniżej 300ms.
 
-\begin{lstlisting}[language=sql]
+\begin{minted}{sql}
 CREATE INDEX rescuetime_activity_start_end_time_index
   ON rescuetime_activity (start_time, end_time);
 CREATE INDEX lastfm_scrobble_played_when_index
   ON lastfm_scrobble (played_when);
-\end{lstlisting}
+\end{minted}
 
 \chapter{Wizualizacja danych}
 
     Produktem dla końcowego użytkownika jest aplikacja webowa, która podsumowuje zebrane wcześniej dane.
     Jest ona oparta na klasycznym podejściu MVC z kilkoma podstronami.
 
-    \section{Wiarygodność}
-
-    Zanim przystąpi się do wyciągnięcia wniosków, należy sprawdzić czy dane w systemie są wiarygodne.
-
-    \begin{figure}
-        \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
-        \caption{Wykres: Dzienna długość wykonywanych aktywności i przesłuchanej muzyki (czas trwania muzyki może być większy od aktywności)}
-        \label{fig:ui:chart-music-all}
-    \end{figure}
-
-    \begin{figure}
-        \includegraphics[width=\linewidth]{fig/ui/chart-music-only-during-activities.png}
-        \caption{Wykres: Dzienna długość przesłuchanej muzyki tylko podczas wykonywanych aktywności na laptopie}
-        \label{fig:ui:chart-music-only-during-activities}
-    \end{figure}
-
     \section{Budowa raportów na podstawie szeregów czasowych}
 
     Wyświetlane na raportach wykresy mogą mieć różną granularność w zależności od naszych potrzeb.
     Powiedzenie ze statystyki, "Jeden zbiór dancyh -- wiele interpretacji" możemy przedstawić wile rzeczy odpowiednio posługując się danymi.
 
-    \begin{lstlisting}[language=sql]
+    \begin{minted}{sql}
     SELECT *
     FROM generate_series(
          date_trunc('day', :from :: TIMESTAMP),
          date_trunc('day', :to :: TIMESTAMP),
          '1 day' :: INTERVAL
      ) date
-    \end{lstlisting}
+    \end{minted}
 
     Powyższy przykład generuje zbiór dat z jednodniowym interwałem,
-    który możemy połączyć z innymi tabelami za pomocą \verb|LEFT JOIN|.
+    który możemy połączyć z innymi tabelami za pomocą \mintinline{sql}|LEFT JOIN|.
     Wtedy mamy pewność, że ilość rekordów będzie zawsze stała i niezależna od danych z innych tabel.
     Nawet w przypadku gdy dla danej daty, nie ma żadnych odpowiedników - rekord z datą będzie widoczny.
 
-    Funkcja \verb|generate_series(start, stop, step)| tworzy zbiór elementów
+    Funkcja \mintinline{sql}{generate_series(start, stop, step)} tworzy zbiór elementów
     zaczynających się od pierwszego argumentu do drugiego z zadanym interwałem.
-    Funkcja \verb|date_trunc(precision, timestamp)| ucina datę do zadanej precyzji.
-    \verb|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \verb|2017-05-01 23:00:00|
+    Funkcja \mintinline{sql}|date_trunc(precision, timestamp)| ucina datę do zadanej precyzji.
+    \mintinline{sql}|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \mintinline{sql}|2017-05-01 23:00:00|
 
-    Zakres dat podawany jest w parametrze \verb|:from| i \verb|:to|, jest generowany przez serwis w zależności od potrzeb raportu.
+    Zakres dat podawany jest w parametrze \mintinline{sql}|:from| i \mintinline{sql}|:to|,
+    jest generowany przez serwis w zależności od potrzeb raportu.
     Dla metody zwracającej raport z całego miesiąca, oblicza się pierwszy i ostatni jego dzień.
 
-    \begin{lstlisting}[language=java]
+    \begin{minted}{java}
 List<ArtistsSummary> mostPopularArtists(
         int year, int month, long accountId) {
     LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
@@ -620,7 +568,7 @@ List<ArtistsSummary> mostPopularArtists(
         firstDayOfMonth, lastDayOfMonth, accountId
     );
 }
-    \end{lstlisting}
+    \end{minted}
 
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-tasks-productive.png}
@@ -644,6 +592,22 @@ List<ArtistsSummary> mostPopularArtists(
         \includegraphics[width=\linewidth]{fig/ui/chart-productivity-summary.png}
         \caption{Wykres kołowy: }
         \label{fig:ui:chart-productivity-summary}
+    \end{figure}
+
+    \section{Wiarygodność}
+
+    Zanim przystąpi się do wyciągnięcia wniosków, należy sprawdzić czy dane w systemie są wiarygodne.
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
+        \caption{Wykres: Dzienna długość wykonywanych aktywności i przesłuchanej muzyki (czas trwania muzyki może być większy od aktywności)}
+        \label{fig:ui:chart-music-all}
+    \end{figure}
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-music-only-during-activities.png}
+        \caption{Wykres: Dzienna długość przesłuchanej muzyki tylko podczas wykonywanych aktywności na laptopie}
+        \label{fig:ui:chart-music-only-during-activities}
     \end{figure}
 
     \section{Wybór metod wizualizacji danych}
@@ -677,12 +641,12 @@ List<ArtistsSummary> mostPopularArtists(
     \end{figure}
 
     Do uruchomienia projektu wymagana jest Java 8 JRE oraz zainstalowany PostgreSQL.
-    Pobraniem zależności i zbudowaniem paczki zajmuje się komenda \verb|./gradlew build|,
-    wygenerowany WAR można osadzić na serwerze aplikacji Tomcat lub uruchomić komendą \verb|java -jar file.war|,
-    wówczas uruchomi się wbudowany w applikację serwer \verb|Embedded tomcat|.
+    Pobraniem zależności i zbudowaniem paczki zajmuje się komenda \mintinline{bash}|./gradlew build|,
+    wygenerowany WAR można osadzić na serwerze aplikacji Tomcat lub uruchomić komendą \mintinline{bash}|java -jar file.war|,
+    wówczas uruchomi się wbudowany w applikację serwer ``Embedded tomcat''.
 
     Z każdą zmianą w bazie danych, należy stworzyć nowy plik migracji SQL oraz uruchomić.
-    Obecne są przechowywane w katalogu projektu: \verb|/main/resources/migration/|
+    Obecne są przechowywane w katalogu projektu: \mintinline{bash}|/main/resources/migration/|
 
     Projekt dzieli się na trzy główne części.
     - Import danych do bazy, jest to główne źródło pozyskiwania danych, komunikacji z API.
@@ -713,7 +677,6 @@ Code coverage dla całego projektu wygląda tak:
 
     \caption{
 	Code coverage projektu Java
-	\newline Źródło: Opracowanie własne.
 	}
 \label{Projekt --- Code coverage}
 \end{table}
@@ -748,10 +711,7 @@ Code coverage dla całego projektu wygląda tak:
 	Assertj & 3.5 & Biblioteka assercji testów \\
 	\hline
 \end{tabular}
-    \caption{
-	Code coverage projektu Java
-	\newline Źródło: Opracowanie własne.
-	}
+    \caption{Code coverage projektu Java}
 	\label{Projekt - Code coverage}
 \end{table}
 
