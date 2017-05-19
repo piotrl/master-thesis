@@ -45,8 +45,8 @@
 % streszczenie
 \begin{abstract}
     W ramach pracy magisterskiej napisano aplikację internetową,
-    wdrożoną na chmurze Digital Ocean pod adresem \url{http://tbd.digitalocean.com/}
-    z przygotowanymi danymi testowymi pod kontem (user: test, password: test).
+    wdrożoną na chmurze Digital Ocean pod adresem \url{mgr.piotrl.net}
+    z przygotowanymi danymi testowymi (user: test, password: test).
 
     Aplikacja umożliwia import danych użytkownika z dwóch serwisów,
     RescueTime — lista aktywności oraz
@@ -58,7 +58,7 @@
     a warstwa wizualna została stworzona w frameworku Material Design oraz JavaScript,
     do generowania wykresów użytko biblioteki Google Charts.
 
-    Kod znajduje się w prywatnym repozytorium GIT (pod adresem \url{https://github.com/piotrl/master-thesis}),
+    Kod znajduje się w prywatnym repozytorium GIT (pod adresem \url{github.com/piotrl/master-thesis}),
     pytania o dostęp lub o pracę można kierować na mail: \url{mail@piotrl.net}.
 \end{abstract}
 
@@ -68,8 +68,8 @@
     Data Integration,
     Visualisation,
     PostgreSQL,
-    JavaScript,
-    Java
+    Java,
+    JavaScript
 }
 
 % tytuł i spis treści
@@ -82,7 +82,7 @@
 
     Właśnie słucham playlisty
     \footnote{Playlista ``Writing --- Instrumental Hip-Hop'' jest dostępna na Spotify.
-    \url{https://open.spotify.com/user/exmortisinvictus/playlist/69GtfS8diB8bUHQ74V4yuP}}
+    \url{open.spotify.com/user/exmortisinvictus/playlist/69GtfS8diB8bUHQ74V4yuP}}
     z muzyką która pomaga mi się skupić podczas pisania tego wstępu.
     Gdy programuję, zwykle słucham muzyki innej niż podczas pisania ---
     w pracy, by się odciąć od zewnętrznych dźwięków, a w domu, by się odpowiednio nastroić.
@@ -103,12 +103,12 @@
     Will Henshall na konferencji TEDx \cite{tedx:music-at-work} stwierdza, że m.in. muzyka klasyczna i Elektro pozytywnie sprzyjają na skupienie,
     natomiast instrumenty brzmiące jak ludzki głos, wokal i elektryczna gitara rozpraszają naszą uwagę.
     Wideo obejrzano ponad 400 tysięcy razy, a sama koncepcja została rozwinięta w projekcie Focus@Will
-    \footnote{Focus@Will --- serwis sugerujący szereg playlist pomagający zwiększyć produktywność. \url{https://en.wikipedia.org/wiki/Focus@Will}}.
+    \footnote{Focus@Will --- serwis sugerujący szereg playlist pomagający zwiększyć produktywność. \url{en.wikipedia.org/wiki/Focus@Will}}.
 
     Próbuję zweryfikować te założenia przez stworzenie aplikacji, która analizuje moje własne aktywności i muzykę, którą słucham.
     Jednym z mierników, którym się posługuję jest ``Attention Span''
     \footnote{Attention Span --- moment w którym jesteśmy maksymalnie skoncentrowani,
-    często nazywane flow. \url{https://en.wikipedia.org/wiki/Attention_span}}.
+    często nazywane flow. \url{en.wikipedia.org/wiki/Attention_span}}.
     Dla uproszczenia tego projektu, przyjmuję założenie, że ``Attention Span'' to czas od początku rozpoczęcia zadania do momentu zmiany aktywnego okna.
 
     Celem pracy jest opis pełnego procesu budowy aplikacji opartej o analizę danych wraz z ich interpretacją i wizualizacją.
@@ -529,6 +529,7 @@ CREATE INDEX lastfm_scrobble_played_when_index
 
     Produktem dla końcowego użytkownika jest aplikacja webowa, która podsumowuje zebrane wcześniej dane.
     Jest ona oparta na klasycznym podejściu MVC z kilkoma podstronami z częścią dynamicznych komponentów.
+    Rozdział przeplatam zdjęciami fragmentów wykresów aplikacji.
 
     Jeden zbiór danych może mieć wiele interpretacji, przedstawione w tym rozdziale wykresy
     są efektem moich eksperymentów i poszukiwań, niekoniecznie obiektywnie odzwierciedlających rzeczywistość.
@@ -553,6 +554,7 @@ CREATE INDEX lastfm_scrobble_played_when_index
 
     Funkcja \mintinline{sql}{generate_series(start, stop, step)} tworzy zbiór elementów
     zaczynających się od pierwszego argumentu do drugiego z zadanym interwałem.
+
     Funkcja \mintinline{sql}|date_trunc(precision, timestamp)| ucina datę do zadanej precyzji.
     \mintinline{sql}|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \\ \mintinline{sql}|2017-05-01 23:00:00|
 
@@ -645,7 +647,7 @@ List<ArtistsSummary> mostPopularArtists(
     \end{figure}
 
     Do uruchomienia projektu wymagana jest Java 8 JRE oraz zainstalowany PostgreSQL.
-    Pobraniem zależności i zbudowaniem paczki zajmuje się komenda \mintinline{bash}|./gradlew build|,
+    Pobraniem zależności i zbudowaniem paczki zajmuje się skrypt \mintinline{bash}|./gradlew build|,
     wygenerowany WAR można osadzić na serwerze aplikacji Tomcat lub uruchomić komendą \mintinline{bash}|java -jar file.war|,
     wówczas uruchomi się wbudowany w aplikację serwer ``Embedded tomcat''.
 
@@ -690,7 +692,7 @@ Code coverage dla całego projektu wygląda tak:
     Projekt zrealizowano dzięki wielu projekom open-source, w tej sekcji listuję najważniejsze z nich.
 
 %TODO: Licencja
-\begin{table}
+\begin{table}[h]
 \begin{tabular}{|l|c|l|}
 	\hline
 	Nazwa narzędzia & Wersja & Opis zastosowania \\
@@ -713,7 +715,7 @@ Code coverage dla całego projektu wygląda tak:
 	\hline
 	Lombok & 1.16 & Java boilerplate-free code generator \\
 	\hline
-	Junit & TODO & Unit tests runner \\
+	JUnit & TODO & Unit tests runner \\
 	\hline
 	Assertj & 3.5 & Biblioteka assercji testów \\
 	\hline
