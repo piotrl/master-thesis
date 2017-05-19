@@ -58,7 +58,7 @@
     a warstwa wizualna została stworzona w frameworku Material Design oraz JavaScript,
     do generowania wykresów użytko biblioteki Google Charts.
 
-    Kod znajduje się w prywatnym repozytorium GIT (pod adresem \url{github.com/piotrl/master-thesis}),
+    Kod znajduje się w prywatnym repozytorium GIT (pod adresem \url{http://github.com/piotrl/master-thesis}),
     pytania o dostęp lub o pracę można kierować na mail: \url{mail@piotrl.net}.
 \end{abstract}
 
@@ -286,7 +286,7 @@
             a każdy dostawca implementuje je w sposób specyficzny dla swojego systemu i danych, jakie udostępnia.
 
             RescueTime, mimo że co do sekundy loguje start i koniec aktywności,
-            jego najwyższa dokładność oferowana użytkownikowi to 5 minut \footnote{TODO: rescuetime:apidoc-precision},
+            jego najwyższa dokładność oferowana użytkownikowi to 5 minut \cite{rescuetime:apidoc-precision},
             a w darmowej wersji zezwala na dostęp maksymalnie trzy miesiące wstecz.
 
             RescueTime oferuje jeden, mocno konfigurowalny endpoint, który obsługuje wszystkie zapytania.
@@ -294,11 +294,11 @@
             W zależności od konfiguracji, zmieniają się nagłówki i schemat wierszy, należy napisać dodatkowy parser na własne API.
 
             \begin{minted}{java}
-    @Data
     public class RescueTimeResponse {
         private String notes;
         private List<String> row_headers;
         private List<List<String>> rows;
+        // ...
     }
             \end{minted}
 
@@ -310,6 +310,7 @@
         private int page;
         private int totalPages;
         private Collection<T> pageResults;
+        // ...
     }
             \end{minted}
 
@@ -552,11 +553,11 @@ CREATE INDEX lastfm_scrobble_played_when_index
     Dzięki teumu mamy pewność, że ilość rekordów będzie zawsze stała i niezależna od danych z innych tabel.
     Nawet w przypadku gdy dla danej daty, nie ma żadnych odpowiedników - rekord z datą będzie widoczny.
 
-    Funkcja \mintinline{sql}{generate_series(start, stop, step)} tworzy zbiór elementów
+    Funkcja \mintinline{text}{generate_series(start, stop, step)} tworzy zbiór elementów
     zaczynających się od pierwszego argumentu do drugiego z zadanym interwałem.
 
     Funkcja \mintinline{sql}|date_trunc(precision, timestamp)| ucina datę do zadanej precyzji.
-    \mintinline{sql}|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \\ \mintinline{sql}|2017-05-01 23:00:00|
+    \mintinline{sql}|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \\ \mintinline{sql}|2017-05-01 23:00:00|.
 
     Zakres dat podawany jest w parametrze \mintinline{sql}|:from| i \mintinline{sql}|:to|,
     jest generowany przez serwis w zależności od potrzeb raportu.
@@ -596,7 +597,7 @@ List<ArtistsSummary> mostPopularArtists(
 
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-productivity-summary.png}
-        \caption{Wykres kołowy: }
+        \caption{Dzienne procentowe rozłożenie aktywności z podziałem na produktywność}
         \label{fig:ui:chart-productivity-summary}
     \end{figure}
 
@@ -627,6 +628,8 @@ List<ArtistsSummary> mostPopularArtists(
     np. lista najpopularniejszych artystów lub tagów ze zdjęcia \ref{fig:ui:table-popular-music-tags}.
     Wyłania to najważniejszych przedstawicieli danych, omijając potencjalnie długą listę rekordów.
 
+    %TODO - Diagramy kołowe
+
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/table-popular-music-tags.png}
         \caption{Tabela z najpopularniejszymi tagami i artystami w miesiącu w raz z łączną długością odtworzeń. Screenshot z aplikacji.}
@@ -651,24 +654,29 @@ List<ArtistsSummary> mostPopularArtists(
     wygenerowany WAR można osadzić na serwerze aplikacji Tomcat lub uruchomić komendą \mintinline{bash}|java -jar file.war|,
     wówczas uruchomi się wbudowany w aplikację serwer ``Embedded tomcat''.
 
-    Z każdą zmianą w bazie danych, należy stworzyć nowy plik migracji SQL oraz uruchomić.
-    Obecne są przechowywane w katalogu projektu: \mintinline{bash}|/main/resources/migration/|
-
     Projekt dzieli się na trzy główne części.
     - Import danych do bazy, jest to główne źródło pozyskiwania danych, komunikacji z API.
     - REST API - przeznaczone do wybierania już przetworzonych danych w postaci przyjaznej dla front-endu
     - MVC - Aplikacja bezpośrednio widoczna dla użytkownika, zawiera prosty back-end oraz front-end który komunikuje się z REST API.
     Obsługuje mechanizm autentykacji.
 
-    %TODO - wspomnieć o migracjach sql
-    %TODO - rozrysować przepływ danych jako sekcja
+    Inicjalna kopia bazy danych oraz skrypt do tworzenia backupu
+    znajduje się w katalogu \mintinline{bash}|/db_dumps/|.
+    Każdą zmianię w strukturze bazy danych należy dodać jako nowy plik z migracją, w katalogu projektu:
+    \mintinline{bash}|/main/resources/migration/|
+
     %TODO - opisać strukturę paczek (opcjonalne)
 
 \section{Testy jednostkowe}
 
-Część kodu była napisana metodologią TDD,
-kod API zwracającego przeanalizowane dane nie jest przetestowany głównie dlatego,
-że główna logika jest w tym przypadku w zapytaniach SQL.
+% TODO: Bibliografia TDD
+Część kodu była napisana metodologią TDD
+\footnote{TDD --- Test Driven Development},
+głównie metody łączące i prasujące dane z zewnętrznych API oraz zawierająe logikę samego mechanizmu agregacji.
+
+Metody kontrollerów nie były testowane integracyjnie,
+a operacje na bazie danych były testowane w podstawowym stopniu umożliwającym sprawdzenie niepustości wyników,
+dlatego kod API ma stosunkowo niskie pokrycie operacji 12\%.
 
 Code coverage dla całego projektu wygląda tak:
 \begin{table}
@@ -719,15 +727,17 @@ Code coverage dla całego projektu wygląda tak:
 	\hline
 	Assertj & 3.5 & Biblioteka assercji testów \\
 	\hline
-    ECMAScript & 2016 & Renderowanie raportów \\
+    JavaScript & ES2015 & Renderowanie raportów \\
     \hline
     fetch API & - & Standard komunikacji HTTP w przeglądarce \\
     \hline
     Google Charts & TODO & Renderowanie wykresów \\
     \hline
+    Material Design Light & - & Framework komponentów CSS \& JS \\
+    \hline
 \end{tabular}
-    \caption{Code coverage projektu Java}
-	\label{Projekt - Code coverage}
+    \caption{Lista bibliotek i frameworków użytych w projekcie}
+	\label{tools-used}
 \end{table}
 
 % zakończenie
