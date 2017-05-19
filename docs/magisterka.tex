@@ -1,8 +1,8 @@
 % !TeX spellcheck = <none>
-\documentclass[brudnopis]{xmgr}
+%\documentclass[brudnopis]{xmgr}
 % Jeśli nowe rozdziały mają się zaczynać na stronach
 % nieparzystych:
-%\documentclass[openright]{xmgr}
+\documentclass[openright]{xmgr}
 
 % install minted package to highlight source code
 \usepackage{minted}
@@ -46,7 +46,7 @@
 \begin{abstract}
     W ramach pracy magisterskiej napisano aplikację internetową,
     wdrożoną na chmurze Digital Ocean pod adresem \url{http://tbd.digitalocean.com/}
-    z przygotowanymi danymi testowymi pod kontem (user: test, login: test).
+    z przygotowanymi danymi testowymi pod kontem (user: test, password: test).
 
     Aplikacja umożliwia import danych użytkownika z dwóch serwisów,
     RescueTime — lista aktywności oraz
@@ -188,7 +188,7 @@
             ale również w przypadku przeglądarki – adresy odwiedzanych stron internetowych,
             jest to bardzo ważne ze względu na dominującą ilość czasu spędzonego w samej przeglądarce.
 
-            Dostęp do informacji użytkownika odbywa się po REST API z tokenem uwierzytelniającym.
+            Dostęp do informacji użytkownika odbywa się za pomocą REST API z tokenem uwierzytelniającym.
             W przypadku darmowego konta mamy dostęp do danych sprzed 3 miesięcy w formacie JSON.
 
         \section*{Last.fm}
@@ -293,29 +293,29 @@
             Struktura odpowiedzi również jest bardzo generyczna, przypominająca CSV.
             W zależności od konfiguracji, zmieniają się nagłówki i schemat wierszy, należy napisać dodatkowy parser na własne API.
 
-\begin{minted}{java}
-@Data
-public class RescueTimeResponse {
-    private String notes;
-    private List<String> row_headers;
-    private List<List<String>> rows;
-}
-\end{minted}
+            \begin{minted}{java}
+    @Data
+    public class RescueTimeResponse {
+        private String notes;
+        private List<String> row_headers;
+        private List<List<String>> rows;
+    }
+            \end{minted}
 
             Do bezpośredniej komunikacji stworzyłem klasę \mintinline{java}|RescueTimeCaller|, która buduje parametry requesta
             oraz przetwarza go za pomocą klienta ``Spring RestTemplate''. Zestaw testów jest w klasie \mintinline{java}|RescueTimeCallerTest|.
 
+            \begin{minted}{java}
+    public class PaginatedResult<T> implements Iterable<T> {
+        private int page;
+        private int totalPages;
+        private Collection<T> pageResults;
+    }
+            \end{minted}
+
             W przypadku Last.fm, wynik odpowiedzi jest stronnicowany - jednym rządaniem możemy pobrać maksymalnie 100 utworów.
             Do wysyłania requestów i deserializacji odpowiedzi na obiekty
             wykorzystuję bibliotekę ``Last.fm API Bindings for Java''\cite{lastfm:java-bindings}.
-
-            \begin{minted}{java}
-public class PaginatedResult<T> implements Iterable<T> {
-    private int page;
-    private int totalPages;
-    private Collection<T> pageResults;
-}
-            \end{minted}
 
             Schemat odpowiedzi XML w przypadku endpointów których używam jest taki sam, lecz w zależności od konfiguracji - różne pola są wypełniane.
             Przykładowo pole \verb|duration| zawierające długość piosenki jest puste, gdy używa się metody \verb|User.getRecentTracks|,
@@ -330,7 +330,7 @@ public class PaginatedResult<T> implements Iterable<T> {
 
         W obu serwisach dostępne jest logowanie za pomocą OAuth, dzięki temu użytkownik nie musi samodzielnie generować kluczy,
         a jedynie potwierdzić chęć udostępnienia swoich danych w aplikacji. Zdecydowanie skraca i ułatwia proces konfiguracji.
-        W obecnej wersji applikacji nie używam tego mechanizmu, ale byłby on konieczny przed udostępnieniem aplikacji publicznie.
+        W obecnej wersji aplikacji nie używam tego mechanizmu, ale byłby on konieczny przed udostępnieniem jej publicznie.
 
         \begin{figure}
         	\includegraphics[width=\linewidth]{fig/db-aggregation-metadata.png}
@@ -528,31 +528,33 @@ CREATE INDEX lastfm_scrobble_played_when_index
 \chapter{Wizualizacja danych}
 
     Produktem dla końcowego użytkownika jest aplikacja webowa, która podsumowuje zebrane wcześniej dane.
-    Jest ona oparta na klasycznym podejściu MVC z kilkoma podstronami.
+    Jest ona oparta na klasycznym podejściu MVC z kilkoma podstronami z częścią dynamicznych komponentów.
+
+    Jeden zbiór danych może mieć wiele interpretacji, przedstawione w tym rozdziale wykresy
+    są efektem moich eksperymentów i poszukiwań, niekoniecznie obiektywnie odzwierciedlających rzeczywistość.
 
     \section{Budowa raportów na podstawie szeregów czasowych}
 
     Wyświetlane na raportach wykresy mogą mieć różną granularność w zależności od naszych potrzeb.
-    Powiedzenie ze statystyki, "Jeden zbiór dancyh -- wiele interpretacji" możemy przedstawić wile rzeczy odpowiednio posługując się danymi.
 
     \begin{minted}{sql}
     SELECT *
     FROM generate_series(
-         date_trunc('day', :from :: TIMESTAMP),
-         date_trunc('day', :to :: TIMESTAMP),
+         date_trunc('day', :from ::TIMESTAMP),
+         date_trunc('day', :to ::TIMESTAMP),
          '1 day' :: INTERVAL
      ) date
     \end{minted}
 
     Powyższy przykład generuje zbiór dat z jednodniowym interwałem,
     który możemy połączyć z innymi tabelami za pomocą \mintinline{sql}|LEFT JOIN|.
-    Wtedy mamy pewność, że ilość rekordów będzie zawsze stała i niezależna od danych z innych tabel.
+    Dzięki teumu mamy pewność, że ilość rekordów będzie zawsze stała i niezależna od danych z innych tabel.
     Nawet w przypadku gdy dla danej daty, nie ma żadnych odpowiedników - rekord z datą będzie widoczny.
 
     Funkcja \mintinline{sql}{generate_series(start, stop, step)} tworzy zbiór elementów
     zaczynających się od pierwszego argumentu do drugiego z zadanym interwałem.
     Funkcja \mintinline{sql}|date_trunc(precision, timestamp)| ucina datę do zadanej precyzji.
-    \mintinline{sql}|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \mintinline{sql}|2017-05-01 23:00:00|
+    \mintinline{sql}|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \\ \mintinline{sql}|2017-05-01 23:00:00|
 
     Zakres dat podawany jest w parametrze \mintinline{sql}|:from| i \mintinline{sql}|:to|,
     jest generowany przez serwis w zależności od potrzeb raportu.
@@ -645,7 +647,7 @@ List<ArtistsSummary> mostPopularArtists(
     Do uruchomienia projektu wymagana jest Java 8 JRE oraz zainstalowany PostgreSQL.
     Pobraniem zależności i zbudowaniem paczki zajmuje się komenda \mintinline{bash}|./gradlew build|,
     wygenerowany WAR można osadzić na serwerze aplikacji Tomcat lub uruchomić komendą \mintinline{bash}|java -jar file.war|,
-    wówczas uruchomi się wbudowany w applikację serwer ``Embedded tomcat''.
+    wówczas uruchomi się wbudowany w aplikację serwer ``Embedded tomcat''.
 
     Z każdą zmianą w bazie danych, należy stworzyć nowy plik migracji SQL oraz uruchomić.
     Obecne są przechowywane w katalogu projektu: \mintinline{bash}|/main/resources/migration/|
@@ -685,6 +687,9 @@ Code coverage dla całego projektu wygląda tak:
 
 \section{Narzędzia}
 
+    Projekt zrealizowano dzięki wielu projekom open-source, w tej sekcji listuję najważniejsze z nich.
+
+%TODO: Licencja
 \begin{table}
 \begin{tabular}{|l|c|l|}
 	\hline
@@ -692,7 +697,9 @@ Code coverage dla całego projektu wygląda tak:
 	\hline
 	Java & 8 & Główny język programowania \\
 	\hline
-	Spring Boot & 1.4 & Framework IoT + MVC + REST \\
+	Spring Boot & 1.4 & Framework IoC + MVC + REST \\
+    \hline
+	Spring Security & TODO & Autoryzacja użytkowników \\
 	\hline
 	PostgreSQL & 9.6 & Silnik bazy danych \\
 	\hline
@@ -700,18 +707,22 @@ Code coverage dla całego projektu wygląda tak:
 	\hline
 	u-mass:lastfm-java & 0.1.2 & Komunikacja z Last.fm API \\
 	\hline
-	GSON & 2.8 & Serializacja JSON to POJO \\
+	GSON & 2.8 & Serializacja JSON \\
 	\hline
-	guava & 20.0 & Utilities \\
+	guava & 20.0 & Metody pomocnicze \\
 	\hline
 	Lombok & 1.16 & Java boilerplate-free code generator \\
-	\hline
-	Spring Security & TODO & Autoryzacja użytkowników \\
 	\hline
 	Junit & TODO & Unit tests runner \\
 	\hline
 	Assertj & 3.5 & Biblioteka assercji testów \\
 	\hline
+    ECMAScript & 2016 & Renderowanie raportów \\
+    \hline
+    fetch API & - & Standard komunikacji HTTP w przeglądarce \\
+    \hline
+    Google Charts & TODO & Renderowanie wykresów \\
+    \hline
 \end{tabular}
     \caption{Code coverage projektu Java}
 	\label{Projekt - Code coverage}
