@@ -1,6 +1,5 @@
 package net.piotrl.music.web.home;
 
-import net.piotrl.music.api.dashboard.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,11 +11,11 @@ import java.security.Principal;
 @Controller
 class HomeController {
 
-    private final DashboardService dashboardService;
+    private final HomeService homeService;
 
     @Autowired
-    public HomeController(DashboardService dashboardService) {
-        this.dashboardService = dashboardService;
+    public HomeController(HomeService homeService) {
+        this.homeService = homeService;
     }
 
     @ModelAttribute("module")
@@ -30,8 +29,7 @@ class HomeController {
             return "home/homeNotSignedIn";
         }
         model.addAttribute("userName", principal.getName());
-        model.addAttribute("scrobblesCount", dashboardService.countScrobbles(1L));
-        model.addAttribute("activitiesTimeSum", dashboardService.countActivities( 1l));
+        model.addAttribute("summary", homeService.summary(1L));
         return "home/homeSignedIn";
     }
 }

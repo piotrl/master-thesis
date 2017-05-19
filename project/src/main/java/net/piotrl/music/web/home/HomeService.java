@@ -1,4 +1,4 @@
-package net.piotrl.music.api.dashboard;
+package net.piotrl.music.web.home;
 
 import net.piotrl.music.modules.lastfm.track.repository.ScrobbleCrudRepository;
 import net.piotrl.music.modules.rescuetime.activity.repository.ActivityCrudRepository;
@@ -9,29 +9,31 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DashboardService {
+public class HomeService {
 
     private final ActivityCrudRepository activityRepository;
     private final ScrobbleCrudRepository scrobbleRepository;
 
     @Autowired
-    public DashboardService(ActivityCrudRepository activityRepository,
-                            ScrobbleCrudRepository scrobbleRepository) {
+    public HomeService(ActivityCrudRepository activityRepository,
+                       ScrobbleCrudRepository scrobbleRepository) {
         this.activityRepository = activityRepository;
         this.scrobbleRepository = scrobbleRepository;
     }
 
-    public long countScrobbles(long accountId) {
-        return scrobbleRepository.countByAccountId(accountId);
-    }
-
-    public long countActivities(long accountId) {
+    public FullDataSummary summary(long accountId) {
+        int countScrobbles = scrobbleRepository.countByAccountId(accountId);
         List<ActivityEntity> allByAccountId = activityRepository.findAllByAccountId(accountId);
         int count = allByAccountId.size();
         Integer spentTime = allByAccountId.stream()
                 .map(ActivityEntity::getSpentTime)
                 .reduce(0, Integer::sum);
 
-        return spentTime;
+        FullDataSummary dto = new FullDataSummary();
+        dto.setCountTracks(countScrobbles);
+        dto.setCountActivities(count);
+        dto.setCountActivitiesTime(spentTime / 3600);
+
+        return dto;
     }
 }

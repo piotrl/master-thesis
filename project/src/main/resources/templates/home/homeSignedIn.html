@@ -6,16 +6,35 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="mdl-cell mdl-cell--12-col">
+    <div class="mdl-cell mdl-cell--4-col">
         <div class="mdl-card mdl-shadow--2dp">
             <div class="mdl-card__title mdl-card--expand">
                 <h4>
-                    You have listened <br />
-                    14 tracks
+                    You have listened <br/>
+                    <span th:text="${summary.countTracks}"></span>
+                    tracks
                 </h4>
-                <span th:text="${userName}"></span>
-                <span th:text="${activitiesTimeSum}"></span>
-                <span th:text="${scrobblesCount}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="mdl-cell mdl-cell--4-col">
+
+        <div class="mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <h4>
+                    You have were working <br/>
+                    <span th:text="${summary.countActivitiesTime}"></span> hours
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <h4>
+                    You've switched between windows:<br/>
+                    <span th:text="${summary.countActivities}"></span>
+                </h4>
             </div>
         </div>
     </div>

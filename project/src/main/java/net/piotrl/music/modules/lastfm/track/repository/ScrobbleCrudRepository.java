@@ -11,7 +11,7 @@ import java.util.List;
 public interface ScrobbleCrudRepository extends CrudRepository<ScrobbleEntity, Integer> {
 
     List<ScrobbleEntity> findAllByAccountId(long accountId);
-    long countByAccountId(long accountId);
+    int countByAccountId(long accountId);
 
 
 }
