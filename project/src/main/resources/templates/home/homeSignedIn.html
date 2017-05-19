@@ -7,17 +7,15 @@
 <body>
 <div layout:fragment="content">
     <div class="mdl-cell mdl-cell--12-col">
-        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-            <div class="mdl-tabs__tab-bar">
-                <a href="#starks-panel" class="mdl-tabs__tab is-active">Lastfm</a>
-                <a href="#lannisters-panel" class="mdl-tabs__tab">Rescue time</a>
-            </div>
-
-            <div class="mdl-tabs__panel is-active" id="starks-panel">
-                <div th:replace="dashboard/summary :: summary-day"></div>
-            </div>
-            <div class="mdl-tabs__panel" id="lannisters-panel">
-                <div th:replace="dashboard/summary :: summary-month"></div>
+        <div class="mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title mdl-card--expand">
+                <h4>
+                    You have listened <br />
+                    14 tracks
+                </h4>
+                <span th:text="${userName}"></span>
+                <span th:text="${activitiesTimeSum}"></span>
+                <span th:text="${scrobblesCount}"></span>
             </div>
         </div>
     </div>

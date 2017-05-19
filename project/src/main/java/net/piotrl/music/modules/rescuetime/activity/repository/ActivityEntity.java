@@ -1,5 +1,6 @@
 package net.piotrl.music.modules.rescuetime.activity.repository;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import java.util.Date;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "rescuetime_activity")
 public class ActivityEntity {
