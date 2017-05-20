@@ -550,8 +550,8 @@ CREATE INDEX lastfm_scrobble_played_when_index
 
     Powyższy przykład generuje zbiór dat z jednodniowym interwałem,
     który możemy połączyć z innymi tabelami za pomocą \mintinline{sql}|LEFT JOIN|.
-    Dzięki teumu mamy pewność, że ilość rekordów będzie zawsze stała i niezależna od danych z innych tabel.
-    Nawet w przypadku gdy dla danej daty, nie ma żadnych odpowiedników - rekord z datą będzie widoczny.
+    Dzięki temu mamy pewność, że ilość rekordów będzie zawsze stała i niezależna od danych z innych tabel.
+    Nawet w przypadku gdy dla danej daty, nie ma żadnych odpowiedników --- rekord z datą będzie widoczny.
 
     Funkcja \mintinline{text}{generate_series(start, stop, step)} tworzy zbiór elementów
     zaczynających się od pierwszego argumentu do drugiego z zadanym interwałem.
@@ -561,7 +561,7 @@ CREATE INDEX lastfm_scrobble_played_when_index
 
     Zakres dat podawany jest w parametrze \mintinline{sql}|:from| i \mintinline{sql}|:to|,
     jest generowany przez serwis w zależności od potrzeb raportu.
-    Dla metody zwracającej raport z całego miesiąca, oblicza się pierwszy i ostatni jego dzień.
+    Dla metody zwracającej raport z całego miesiąca oblicza się pierwszy i ostatni jego dzień.
 
     \begin{minted}{java}
 List<ArtistsSummary> mostPopularArtists(
@@ -603,7 +603,7 @@ List<ArtistsSummary> mostPopularArtists(
 
     \section{Wiarygodność}
 
-    Zanim przystąpi się do wyciągnięcia wniosków, należy sprawdzić czy dane w systemie są wiarygodne.
+    Zanim przystąpi się do wyciągnięcia wniosków, należy sprawdzić, czy dane w systemie są wiarygodne.
 
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
@@ -638,8 +638,8 @@ List<ArtistsSummary> mostPopularArtists(
 
     Wykresy łączone, jak te pokazane na rysunku \ref{fig:ui:chart-music-all} i \ref{fig:ui:chart-music-only-during-activities},
     użyłem w celu wyróżnienia jednej kategorii (czasu ciszy) i podkreślenia jej stosunku wobec dwóch pozostałych (czasu aktywności oraz słuchania muzyki).
-    Na pierwszym wyrkesie \ref{fig:ui:chart-music-all} wskazuje również nieprawidłowość jaką jest ujemny czas ciszy,
-    który występuje gdy słuchamy na urządzeniach innych niż na których pracujemy.
+    Na pierwszym wyrkesie \ref{fig:ui:chart-music-all} wskazuje również nieprawidłowość, jaką jest ujemny czas ciszy,
+    który występuje, gdy słuchamy na urządzeniach innych niż na których pracujemy.
 
 \chapter{Architektura}
 
@@ -657,7 +657,7 @@ List<ArtistsSummary> mostPopularArtists(
     Projekt dzieli się na trzy główne części.
     - Import danych do bazy, jest to główne źródło pozyskiwania danych, komunikacji z API.
     - REST API - przeznaczone do wybierania już przetworzonych danych w postaci przyjaznej dla front-endu
-    - MVC - Aplikacja bezpośrednio widoczna dla użytkownika, zawiera prosty back-end oraz front-end który komunikuje się z REST API.
+    - MVC - Aplikacja bezpośrednio widoczna dla użytkownika, zawiera prosty back-end oraz front-end, który komunikuje się z REST API.
     Obsługuje mechanizm autentykacji.
 
     Inicjalna kopia bazy danych oraz skrypt do tworzenia backupu
@@ -695,9 +695,11 @@ Code coverage dla całego projektu wygląda tak:
 \label{Projekt --- Code coverage}
 \end{table}
 
-\section{Narzędzia}
+\section{Stos technologiczny}
 
     Projekt zrealizowano dzięki wielu projekom open-source, w tej sekcji listuję najważniejsze z nich.
+
+    %TODO: Dodaj cos o konfiguracji DigitalOcean
 
 %TODO: Licencja
 \begin{table}[h]
