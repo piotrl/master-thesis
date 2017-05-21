@@ -19,7 +19,6 @@ apply plugin: 'war'
 
 war {
     baseName = 'music'
-    version =  '0.1'
 }
 
 sourceCompatibility = 1.8
@@ -38,6 +37,7 @@ dependencies {
     compile 'org.springframework.security:spring-security-web'
     compile 'org.springframework.security:spring-security-config'
     compileOnly ("org.springframework.boot:spring-boot-starter-tomcat")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
     compile 'org.springframework.boot:spring-boot-devtools'
 
