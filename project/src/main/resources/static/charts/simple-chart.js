@@ -15,7 +15,7 @@ const chart = c3.generate({
         const year = date.getFullYear();
         const month = date.getMonth();
 
-        const monthlyActivityChart = `http://localhost:8080/api/raw/activities/year/${year}/month/${month}`;
+        const monthlyActivityChart = `./api/raw/activities/year/${year}/month/${month}`;
 
         fetch(monthlyActivityChart)
             .then(res => res.json())

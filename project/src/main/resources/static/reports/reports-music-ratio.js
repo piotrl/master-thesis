@@ -15,7 +15,7 @@
         const date = dateFns.parse(reports.$filterDateInput.value);
         const year = dateFns.getYear(date);
         const month = dateFns.getMonth(date) + 1;
-        fetch(`http://localhost:8080/api/stats/music/year/${year}/month/${month}/summary`)
+        fetch(`./api/stats/music/year/${year}/month/${month}/summary`)
             .then(response => response.json())
             .then(data => {
                 google.charts.setOnLoadCallback(drawChart(data, 'reports-music-ratio'));
@@ -26,7 +26,7 @@
         const date = dateFns.parse(reports.$filterDateInput.value);
         const year = dateFns.getYear(date);
         const month = dateFns.getMonth(date) + 1;
-        fetch(`http://localhost:8080/api/stats/music/year/${year}/month/${month}/musicPlayedDuringActivities`)
+        fetch(`./api/stats/music/year/${year}/month/${month}/musicPlayedDuringActivities`)
             .then(response => response.json())
             .then(data => {
                 google.charts.setOnLoadCallback(drawChart(data, 'reports-music-during-activities'));

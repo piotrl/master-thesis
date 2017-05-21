@@ -15,7 +15,7 @@
         const year = dateFns.format(date, "YYYY");
         const month = dateFns.format(date, "MM");
         const day = dateFns.format(date, "DD");
-        fetch(`http://localhost:8080/api/stats/activities/year/${year}/month/${month}/day/${day}/multitasking`)
+        fetch(`./api/stats/activities/year/${year}/month/${month}/day/${day}/multitasking`)
             .then(response => response.json())
             .then(data => {
                 google.charts.setOnLoadCallback(drawChart(data, 'productivity-multitasking-activities'));
@@ -27,7 +27,7 @@
         const year = dateFns.format(date, "YYYY");
         const month = dateFns.format(date, "MM");
         const day = dateFns.format(date, "DD");
-        fetch(`http://localhost:8080/api/stats/activities/year/${year}/month/${month}/day/${day}/spentTimeTasksScatter`)
+        fetch(`./api/stats/activities/year/${year}/month/${month}/day/${day}/spentTimeTasksScatter`)
             .then(response => response.json())
             .then(data => {
                 google.charts.setOnLoadCallback(drawScatterChart(data.productive, 'activities-multitasking-scatter-productive'));

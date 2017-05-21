@@ -12,7 +12,7 @@
         const date = dateFns.parse(reports.$filterDateInput.value);
         const year = dateFns.getYear(date);
         const month = dateFns.getMonth(date) + 1;
-        fetch(`http://localhost:8080/api/stats/tags/year/${year}/month/${month}/popular`)
+        fetch(`./api/stats/tags/year/${year}/month/${month}/popular`)
             .then(response => response.json())
             .then(data => {
                 drawTagsTable(data);
@@ -23,7 +23,7 @@
         const date = dateFns.parse(reports.$filterDateInput.value);
         const year = dateFns.getYear(date);
         const month = dateFns.getMonth(date) + 1;
-        fetch(`http://localhost:8080/api/stats/artists/year/${year}/month/${month}/popular`)
+        fetch(`./api/stats/artists/year/${year}/month/${month}/popular`)
             .then(response => response.json())
             .then(drawArtistsTable);
     }
