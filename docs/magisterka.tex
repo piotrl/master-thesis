@@ -102,7 +102,7 @@
 
     Will Henshall na konferencji TEDx \cite{tedx:music-at-work} stwierdza, że m.in. muzyka klasyczna i Elektro pozytywnie sprzyjają na skupienie,
     natomiast instrumenty brzmiące jak ludzki głos, wokal i elektryczna gitara rozpraszają naszą uwagę.
-    Wideo obejrzano ponad 400 tysięcy razy, a sama koncepcja została rozwinięta w projekcie Focus@Will
+    Wideo obejrzano ponad 400 tysięcy razy, a koncepcja została rozwinięta w projekcie Focus@Will
     \footnote{Focus@Will --- serwis sugerujący szereg playlist pomagający zwiększyć produktywność. \url{en.wikipedia.org/wiki/Focus@Will}}.
 
     Próbuję zweryfikować te założenia przez stworzenie aplikacji, która analizuje moje własne aktywności i muzykę, którą słucham.
@@ -364,8 +364,8 @@
 		Przeprowadziłem test dla danych z 90 dni Last.fm. Do pobrania 5992 rekordów, należało wysłać 60 requestów (60 stron) i trwało to około minuty.
 		Dla każdego z nich należy pobrać dodatkowe szczegóły, co trwa około 26 minut.
 
-		Wiele z tych 5992 rekordów się powtarza, dlatego po zapamiętaniu powtarzających się rekordów --- pełna agregacja trwa 13 minut.
-		Im więcej rekordów w bazie, tym mniej żądań potrzeba wysłać i czas importu będzie coraz krótszy dla kolejnych użytkowników.
+		Wiele rekordów się powtarza, dlatego po użyciu zapamiętanych w bazie rekordów pełna agregacja trwa 13 minut.
+		Im bardziej baza jest zapełniona, tym mniej żądań potrzeba wysłać i czas importu będzie coraz krótszy dla kolejnych użytkowników.
 
 \chapter{Analiza danych}
 
@@ -417,6 +417,13 @@
         \includegraphics[width=\linewidth]{fig/db-rescuetime-schema.png}
         \caption{Schemat relacji danych o aktywnościach}
         \label{fig:db-rescuetime-schema}
+
+        \vspace*{\floatsep}% https://tex.stackexchange.com/q/26521/5764
+
+        \includegraphics[width=\linewidth]{fig/db-lastfm-schema.png}
+        \caption{Schemat relacji danych o muzyce}
+        \label{fig:db-lastfm-schema}
+
     \end{figure}
 
     Najważniejszą tabelą wśród tych powiązanych z aktywnościami jest \verb|rescuetime_activity|,
@@ -448,14 +455,8 @@
 
     \subsection*{Last.fm --- Muzyka}
 
-    \begin{figure}
-        \includegraphics[width=\linewidth]{fig/db-lastfm-schema.png}
-        \caption{Schemat relacji danych o muzyce}
-        \label{fig:db-lastfm-schema}
-    \end{figure}
-
     Dane muzyczne są dużo bardziej rozproszone od aktywności, zapisuje je do 5 połączonych tabel.
-    Jej sercem jest tabela \verb|lastfm_scrobble|, przechowująca każde pojedynczy odsłuch piosenki przez użytkownika.
+    Jej trzonem jest tabela \verb|lastfm_scrobble|, przechowująca każde pojedynczy odsłuch piosenki przez użytkownika.
     Zawiera ono moment startu odsłuchu oraz jest punktem startowym do pozostałych relacji (poprzez tabelę \verb|lastfm_track|).
     Ważnym polem jest \verb|api_data| w którym zapisuję wszystkie zwrócone dane z API w czystej postaci dla danego scrobbla (rekordu).
     Pomaga ono przy debugowaniu mapowań pomiędzy API a opisywanym serwisem.
@@ -468,7 +469,7 @@
         Nie jest określone czy pochodzą one bezpośrednio z API, czy z powodu błędu w kodzie.
 
         Postanowiłem je omijać w momencie generowania danych, bazując na trzech unikalnych polach:
-        \verb|DISTINCT ON (start_time, activity_name, spent_time)|.
+        \mintinline{sql}|DISTINCT ON (start_time, activity_name, spent_time)|.
         Możliwe jest, że tą metodą usuniemy również aktywności, które w rzeczywistości nie byłyby duplikatami,
         prawdopodobieństwo jest wysokie przy czynnościach trwających bardzo krótko np. dwa razy otwarta wyszukiwarka na 3 sekundy.
         Jest to akceptowalne ryzyko błędu, jako że bardzo krótkie aktywności mają mniejsze znaczenie dla dalszej analizy.
@@ -511,7 +512,7 @@ SELECT *
         SQL wykonuje się tylko podczas tworzenia widoku, a rezultat zostaje jako tymczasowa tabela.
         Każde wywołanie danych widoku w tym przypadku kosztuje bardzo mało --- tyle samo co pobranie danych ze zwykłej tabeli.
         Dane w tej tymczasowej tabeli nie zmienią się, dopóki ręcznie nie zostanie ręcznie odświeżony komendą
-        \verb|REFRESH MATERIALIZED VIEW xyz|. Jest to rozsądne rozwiązanie, gdy dane rzadko się zmieniają, a ich pobranie jest kosztowne.
+        \mintinline{sql}|REFRESH MATERIALIZED VIEW xyz|. Jest to rozsądne rozwiązanie, gdy dane rzadko się zmieniają, a ich pobranie jest kosztowne.
 
         Nie rozwiązuje to jednak problemu inicjalnego czasu działania tego zapytania,
         5 minut to wciąż dużo --- nawet gdyby wykonywał się on raz dziennie w nocy.
@@ -556,10 +557,10 @@ CREATE INDEX lastfm_scrobble_played_when_index
     Funkcja \mintinline{text}{generate_series(start, stop, step)} tworzy zbiór elementów
     zaczynających się od pierwszego argumentu do drugiego z zadanym interwałem.
 
-    Funkcja \mintinline{sql}|date_trunc(precision, timestamp)| ucina datę do zadanej precyzji.
+    Funkcja \mintinline{text}|date_trunc(precision, timestamp)| ucina datę do zadanej precyzji.
     \mintinline{sql}|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \\ \mintinline{sql}|2017-05-01 23:00:00|.
 
-    Zakres dat podawany jest w parametrze \mintinline{sql}|:from| i \mintinline{sql}|:to|,
+    Zakres dat podawany jest w parametrze \mintinline{text}|:from| i \mintinline{text}|:to|,
     jest generowany przez serwis w zależności od potrzeb raportu.
     Dla metody zwracającej raport z całego miesiąca oblicza się pierwszy i ostatni jego dzień.
 
@@ -581,37 +582,25 @@ List<ArtistsSummary> mostPopularArtists(
         \includegraphics[width=\linewidth]{fig/ui/chart-tasks-productive.png}
         \caption{Wykres: Wpływ ilości zadań w ciągu 15minut na długość produktywnych zadań}
         \label{fig:ui:chart-tasks-productive}
-    \end{figure}
 
-    \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-tasks-neutral.png}
         \caption{Wykres: Wpływ ilości zadań w ciągu 15minut na długość neutralnych zadań}
         \label{fig:ui:chart-tasks-neutral}
-    \end{figure}
 
-    \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-tasks-distractions.png}
         \caption{Wykres: Wpływ ilości zadań w ciągu 15minut na długość rozpraszających zadań}
         \label{fig:ui:chart-tasks-distractions}
     \end{figure}
 
-    \begin{figure}
-        \includegraphics[width=\linewidth]{fig/ui/chart-productivity-summary.png}
-        \caption{Dzienne procentowe rozłożenie aktywności z podziałem na produktywność}
-        \label{fig:ui:chart-productivity-summary}
-    \end{figure}
-
-    \section{Wiarygodność}
-
-    Zanim przystąpi się do wyciągnięcia wniosków, należy sprawdzić, czy dane w systemie są wiarygodne.
+%    \section{Wiarygodność}
+%
+%    Zanim przystąpi się do wyciągnięcia wniosków, należy sprawdzić, czy dane w systemie są wiarygodne.
 
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
         \caption{Wykres: Dzienna długość wykonywanych aktywności i przesłuchanej muzyki (czas trwania muzyki może być większy od aktywności)}
         \label{fig:ui:chart-music-all}
-    \end{figure}
 
-    \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-music-only-during-activities.png}
         \caption{Wykres: Dzienna długość przesłuchanej muzyki tylko podczas wykonywanych aktywności na laptopie}
         \label{fig:ui:chart-music-only-during-activities}
@@ -631,6 +620,11 @@ List<ArtistsSummary> mostPopularArtists(
     %TODO - Diagramy kołowe
 
     \begin{figure}
+
+        \includegraphics[width=\linewidth]{fig/ui/chart-productivity-summary.png}
+        \caption{Dzienne procentowe rozłożenie aktywności z podziałem na produktywność}
+        \label{fig:ui:chart-productivity-summary}
+
         \includegraphics[width=\linewidth]{fig/ui/table-popular-music-tags.png}
         \caption{Tabela z najpopularniejszymi tagami i artystami w miesiącu w raz z łączną długością odtworzeń. Screenshot z aplikacji.}
         \label{fig:ui:table-popular-music-tags}
@@ -678,7 +672,6 @@ Metody kontrollerów nie były testowane integracyjnie,
 a operacje na bazie danych były testowane w podstawowym stopniu umożliwającym sprawdzenie niepustości wyników,
 dlatego kod API ma stosunkowo niskie pokrycie operacji 12\%.
 
-Code coverage dla całego projektu wygląda tak:
 \begin{table}
 
 	\begin{tabular}{|r|c|c|c|}
@@ -697,9 +690,13 @@ Code coverage dla całego projektu wygląda tak:
 
 \section{Stos technologiczny}
 
-    Projekt zrealizowano dzięki wielu projekom open-source, w tej sekcji listuję najważniejsze z nich.
+    Deployment aplikacji przygotowano na VPS\footnote{VPS --- Virtual Private Server} w chmurze
+    DigitalOcean\footnote{DigitalOcean, Inc. --- Trzeci największy na świecie dostawca hostingów VPS \cite{digitalocean:growth}. \url{http://digitalocean.com/}}
+    na maszynie zlokalizowanej we Frankfurcie, z 1GB RAM, przydzielonym jednym procesorem i 20GB dysku SSD.
+    Środowisko skonfigurowano pod kontrolą systemu Ubuntu 16.04\cite{digitalocean:server-setup},
+    aplikacja działa w konterzenrze Tomcat 8.5\cite{digitalocean:tomcat-setup}, a dane przechowywane są w PostgreSQL 9.5\cite{digitalocean:postgres-setup}.
 
-    %TODO: Dodaj cos o konfiguracji DigitalOcean
+    Projekt zrealizowano dzięki wielu projekom open-source, w tej sekcji listuję najważniejsze z nich.
 
 %TODO: Licencja
 \begin{table}[h]
@@ -713,7 +710,7 @@ Code coverage dla całego projektu wygląda tak:
     \hline
 	Spring Security & TODO & Autoryzacja użytkowników \\
 	\hline
-	PostgreSQL & 9.6 & Silnik bazy danych \\
+	PostgreSQL & 9.5 & Silnik bazy danych \\
 	\hline
 	Thymeleaf & 3.0 & Silnik szablonów \\
 	\hline
@@ -725,11 +722,11 @@ Code coverage dla całego projektu wygląda tak:
 	\hline
 	Lombok & 1.16 & Java boilerplate-free code generator \\
 	\hline
-	JUnit & TODO & Unit tests runner \\
+	JUnit & 4.12 & Unit tests runner \\
 	\hline
 	Assertj & 3.5 & Biblioteka assercji testów \\
 	\hline
-    JavaScript & ES2015 & Renderowanie raportów \\
+    JavaScript & ES2015 & Główny język programowania front-endu \\
     \hline
     fetch API & - & Standard komunikacji HTTP w przeglądarce \\
     \hline
