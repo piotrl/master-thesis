@@ -45,7 +45,7 @@
 % streszczenie
 \begin{abstract}
     W ramach pracy magisterskiej napisano aplikację internetową,
-    wdrożoną na chmurze Digital Ocean pod adresem \url{http://mgr.piotrl.net}
+    wdrożoną na chmurze Digital Ocean pod adresem \url{http://mgr.piotrl.net:8080}
     z przygotowanymi danymi testowymi (user: test, password: test).
 
     Aplikacja umożliwia import danych użytkownika z dwóch serwisów,
@@ -92,12 +92,12 @@
     W pytaniu ``Ideal Auditory Environment for Coding''
     więszkość badanych słucha muzyki, duży odsetek preferuje skrajną ciszę w pracy, natomiast niewielu preferuje rozpraszacze w tle:
     \begin{itemize}
-        \item 59.6\% -- Turn on some music
-        \item 24.2\% -- Keep the room absolutely quiet
-        \item 7.1\% -- Put on some ambient sounds (e.g. whale songs, forest sounds)
-        \item 3.5\% -- Something else
-        \item 3.2\% -- Put on a movie or TV show
-        \item 2.3\% -- Turn on the news or talk radio
+        \item 59.6\% --- Turn on some music
+        \item 24.2\% --- Keep the room absolutely quiet
+        \item 7.1\% --- Put on some ambient sounds (e.g. whale songs, forest sounds)
+        \item 3.5\% --- Something else
+        \item 3.2\% --- Put on a movie or TV show
+        \item 2.3\% --- Turn on the news or talk radio
     \end{itemize}
 
     Will Henshall na konferencji TEDx\cite{tedx:music-at-work} stwierdza, że m.in. muzyka klasyczna i Elektro pozytywnie sprzyjają na skupienie,
@@ -580,15 +580,15 @@ List<ArtistsSummary> mostPopularArtists(
 
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-tasks-productive.png}
-        \caption{Wykres: Wpływ ilości zadań w ciągu 15minut na długość produktywnych zadań}
+        \caption{Wpływ ilości zadań w ciągu 15minut na długość produktywnych zadań}
         \label{fig:ui:chart-tasks-productive}
 
         \includegraphics[width=\linewidth]{fig/ui/chart-tasks-neutral.png}
-        \caption{Wykres: Wpływ ilości zadań w ciągu 15minut na długość neutralnych zadań}
+        \caption{Wpływ ilości zadań w ciągu 15minut na długość neutralnych zadań}
         \label{fig:ui:chart-tasks-neutral}
 
         \includegraphics[width=\linewidth]{fig/ui/chart-tasks-distractions.png}
-        \caption{Wykres: Wpływ ilości zadań w ciągu 15minut na długość rozpraszających zadań}
+        \caption{Wpływ ilości zadań w ciągu 15minut na długość rozpraszających zadań}
         \label{fig:ui:chart-tasks-distractions}
     \end{figure}
 
@@ -598,11 +598,12 @@ List<ArtistsSummary> mostPopularArtists(
 
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
-        \caption{Wykres: Dzienna długość wykonywanych aktywności i przesłuchanej muzyki (czas trwania muzyki może być większy od aktywności)}
+        \caption{Dzienna długość wykonywanych aktywności i całej przesłuchanej muzyki, niezależnie od urządzenia.
+            Czas trwania muzyki może być większy od aktywności, co jest niepożądane}
         \label{fig:ui:chart-music-all}
 
         \includegraphics[width=\linewidth]{fig/ui/chart-music-only-during-activities.png}
-        \caption{Wykres: Dzienna długość przesłuchanej muzyki tylko podczas wykonywanych aktywności na laptopie}
+        \caption{Dzienna długość przesłuchanej muzyki tylko podczas wykonywanych aktywności na laptopie}
         \label{fig:ui:chart-music-only-during-activities}
     \end{figure}
 
@@ -626,7 +627,7 @@ List<ArtistsSummary> mostPopularArtists(
         \label{fig:ui:chart-productivity-summary}
 
         \includegraphics[width=\linewidth]{fig/ui/table-popular-music-tags.png}
-        \caption{Tabela z najpopularniejszymi tagami i artystami w miesiącu w raz z łączną długością odtworzeń. Screenshot z aplikacji.}
+        \caption{Tabela z najpopularniejszymi tagami i artystami w miesiącu w raz z łączną długością odtworzeń. Screenshot z aplikacji}
         \label{fig:ui:table-popular-music-tags}
     \end{figure}
 
@@ -645,30 +646,34 @@ List<ArtistsSummary> mostPopularArtists(
 
     Do uruchomienia projektu wymagana jest Java 8 JRE oraz zainstalowany PostgreSQL.
     Pobraniem zależności i zbudowaniem paczki zajmuje się skrypt \mintinline{bash}|./gradlew build|,
-    wygenerowany WAR można osadzić na serwerze aplikacji Tomcat lub uruchomić komendą \mintinline{bash}|java -jar file.war|,
+    wygenerowany WAR można osadzić na serwerze aplikacji lub uruchomić komendą \mintinline{bash}|java -jar file.war|,
     wówczas uruchomi się wbudowany w aplikację serwer ``Embedded tomcat''.
-
-    Projekt dzieli się na trzy główne części.
-    - Import danych do bazy, jest to główne źródło pozyskiwania danych, komunikacji z API.
-    - REST API - przeznaczone do wybierania już przetworzonych danych w postaci przyjaznej dla front-endu
-    - MVC - Aplikacja bezpośrednio widoczna dla użytkownika, zawiera prosty back-end oraz front-end, który komunikuje się z REST API.
-    Obsługuje mechanizm autentykacji.
 
     Inicjalna kopia bazy danych oraz skrypt do tworzenia backupu
     znajduje się w katalogu \mintinline{bash}|/db_dumps/|.
-    Każdą zmianię w strukturze bazy danych należy dodać jako nowy plik z migracją, w katalogu projektu:
+    Każdą zmianę w strukturze bazy danych należy dodać jako nowy plik z migracją, w katalogu projektu:
     \mintinline{bash}|/main/resources/migration/|
 
-    %TODO - opisać strukturę paczek (opcjonalne)
+    Projekt składa się z trzech głównych modułów, a przepływ elementów jest zobrazowany na rysunku \ref{fig:data-flow}.
+    \begin{itemize}
+        \item Import danych do bazy --- jest to główne źródło pozyskiwania danych, komunikacji z zewnętrznymi API.
+            \subitem Agregacja --- Ogolny mechanizm zapisu danych per użytkownik oraz zapis do bazy
+            \subitem Import RescueTime --- Komunikacja z API oraz parsowanie danych
+            \subitem Import Last.fm --- Komunikacja z API oraz parsowanie danych
+        \item REST API --- przeznaczone do wybierania już przetworzonych danych w postaci przyjaznej dla front-endu
+        \item MVC --- Aplikacja bezpośrednio widoczna dla użytkownika,
+                zawiera prosty back-end oraz front-end, który komunikuje się z REST API.
+                Obsługuje mechanizm autentykacji.
+    \end{itemize}
 
 \section{Testy jednostkowe}
 
 Część kodu była napisana metodologią TDD\footnote{TDD --- Test Driven Development},
-głównie metody łączące i prasujące dane z zewnętrznych API oraz zawierająe logikę samego mechanizmu agregacji.
+głównie metody łączące i prasujące dane z zewnętrznych API oraz zawierają logikę samego mechanizmu agregacji.
 
-Metody kontrollerów nie były testowane integracyjnie,
-a operacje na bazie danych były testowane w podstawowym stopniu umożliwającym sprawdzenie niepustości wyników,
-dlatego kod API ma stosunkowo niskie pokrycie operacji 12\%.
+Metody kontrolerów nie były testowane w ogóle,
+a operacje na bazie danych były testowane w podstawowym stopniu umożliwiającym sprawdzenie nie pustości wyników,
+stąd kod API ma stosunkowo niskie pokrycie operacji 12\%.
 
 \begin{table}
 
@@ -676,8 +681,10 @@ dlatego kod API ma stosunkowo niskie pokrycie operacji 12\%.
 		\hline
 		Moduł & Pokrycie klas & Pokrycie metod & Pokrycie operacji \\ \hline
 		Średnia projektu & 75\% (58 na 77) & 42\% (159 na 378) & 53\% (473 na 891) \\
+        \hline
+		API & 43\% (10 na 23) & 8\% (10 na 122) & 12\% (35 na 270) \\
 		Moduł agregacji & 94\% (37 na 39) & 61\% (134 na 219) & 73\% (385 na 521) \\
-		API & 43\% (10 na 23) & 8\% (10 na 122) & 12\% (35 na 270) \\  \hline
+        \hline
 	\end{tabular}
 
     \caption{
@@ -688,16 +695,15 @@ dlatego kod API ma stosunkowo niskie pokrycie operacji 12\%.
 
 \section{Stos technologiczny}
 
-    Deployment aplikacji przygotowano na VPS\footnote{VPS --- Virtual Private Server} w chmurze
-    DigitalOcean\footnote{DigitalOcean, Inc. --- Trzeci największy na świecie dostawca hostingów VPS \cite{digitalocean:growth}. \url{http://digitalocean.com/}}
-    na maszynie zlokalizowanej we Frankfurcie, z 1GB RAM, przydzielonym jednym procesorem i 20GB dysku SSD.
+    Wdrożenie aplikacji przygotowano na VPS\footnote{VPS --- Virtual Private Server} w chmurze
+    DigitalOcean\footnote{DigitalOcean, Inc. --- Trzeci co do wielkości na świecie hosting VPS \cite{digitalocean:growth}. \url{http://digitalocean.com/}}
+    na maszynie zlokalizowanej we Frankfurcie z 1GB RAM, przydzielonym jednym procesorem i 20GB dysku SSD.
     Środowisko skonfigurowano pod kontrolą systemu Ubuntu 16.04,
-    aplikacja działa w konterzenrze Tomcat 8.5, a dane przechowywane są w PostgreSQL 9.5
+    aplikacja działa w kontenerze Tomcat 8.5, a dane przechowywane są w PostgreSQL 9.5
     \cite{digitalocean:server-setup}\cite{digitalocean:tomcat-setup}\cite{digitalocean:postgres-setup}.
 
-    Projekt zrealizowano dzięki wielu projekom open-source, w tej sekcji listuję najważniejsze z nich.
+    Projekt zrealizowano dzięki wielu projektom open-source, w tej sekcji listuję najważniejsze z nich.
 
-%TODO: Licencja
 \begin{table}[h]
 \begin{tabular}{|l|c|l|}
 	\hline
@@ -707,7 +713,7 @@ dlatego kod API ma stosunkowo niskie pokrycie operacji 12\%.
 	\hline
 	Spring Boot & 1.4 & Framework IoC + MVC + REST \\
     \hline
-	Spring Security & TODO & Autoryzacja użytkowników \\
+	Spring Security & 4.1 & Autoryzacja użytkowników \\
 	\hline
 	PostgreSQL & 9.5 & Silnik bazy danych \\
 	\hline
@@ -717,19 +723,15 @@ dlatego kod API ma stosunkowo niskie pokrycie operacji 12\%.
 	\hline
 	GSON & 2.8 & Serializacja JSON \\
 	\hline
-	guava & 20.0 & Metody pomocnicze \\
-	\hline
 	Lombok & 1.16 & Java boilerplate-free code generator \\
 	\hline
 	JUnit & 4.12 & Unit tests runner \\
 	\hline
-	Assertj & 3.5 & Biblioteka assercji testów \\
+	AssertJ & 3.5 & Biblioteka assercji testów \\
 	\hline
     JavaScript & ES2015 & Główny język programowania front-endu \\
     \hline
-    fetch API & - & Standard komunikacji HTTP w przeglądarce \\
-    \hline
-    Google Charts & TODO & Renderowanie wykresów \\
+    Google Charts & - & Renderowanie wykresów \\
     \hline
     Material Design Light & - & Framework komponentów CSS \& JS \\
     \hline
