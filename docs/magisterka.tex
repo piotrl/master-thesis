@@ -45,7 +45,7 @@
 % streszczenie
 \begin{abstract}
     W ramach pracy magisterskiej napisano aplikację internetową,
-    wdrożoną na chmurze Digital Ocean pod adresem \url{mgr.piotrl.net}
+    wdrożoną na chmurze Digital Ocean pod adresem \url{http://mgr.piotrl.net}
     z przygotowanymi danymi testowymi (user: test, password: test).
 
     Aplikacja umożliwia import danych użytkownika z dwóch serwisów,
@@ -82,13 +82,13 @@
 
     Właśnie słucham playlisty
     \footnote{Playlista ``Writing --- Instrumental Hip-Hop'' jest dostępna na Spotify.
-    \url{open.spotify.com/user/exmortisinvictus/playlist/69GtfS8diB8bUHQ74V4yuP}}
+    \url{http://open.spotify.com/user/exmortisinvictus/playlist/69GtfS8diB8bUHQ74V4yuP}}
     z muzyką która pomaga mi się skupić podczas pisania tego wstępu.
     Gdy programuję, zwykle słucham muzyki innej niż podczas pisania ---
     w pracy, by się odciąć od zewnętrznych dźwięków, a w domu, by się odpowiednio nastroić.
     Gdy mam trudny problem do rozwiązania to preferuję absolutną ciszę.
 
-    Podobnie jak ponad 36 tysięcy innych programistów odpowiadających na pytania w corocznej ankiecie StackOverflow \cite{stackoverflow:survey2017}.
+    Podobnie jak ponad 36 tysięcy innych programistów odpowiadających na pytania w corocznej ankiecie StackOverflow\cite{stackoverflow:survey2017}.
     W pytaniu ``Ideal Auditory Environment for Coding''
     więszkość badanych słucha muzyki, duży odsetek preferuje skrajną ciszę w pracy, natomiast niewielu preferuje rozpraszacze w tle:
     \begin{itemize}
@@ -100,15 +100,15 @@
         \item 2.3\% -- Turn on the news or talk radio
     \end{itemize}
 
-    Will Henshall na konferencji TEDx \cite{tedx:music-at-work} stwierdza, że m.in. muzyka klasyczna i Elektro pozytywnie sprzyjają na skupienie,
+    Will Henshall na konferencji TEDx\cite{tedx:music-at-work} stwierdza, że m.in. muzyka klasyczna i Elektro pozytywnie sprzyjają na skupienie,
     natomiast instrumenty brzmiące jak ludzki głos, wokal i elektryczna gitara rozpraszają naszą uwagę.
-    Wideo obejrzano ponad 400 tysięcy razy, a koncepcja została rozwinięta w projekcie Focus@Will
-    \footnote{Focus@Will --- serwis sugerujący szereg playlist pomagający zwiększyć produktywność. \url{en.wikipedia.org/wiki/Focus@Will}}.
+    Wideo obejrzano ponad 400 tysięcy razy, a koncepcja została rozwinięta w projekcie
+    Focus@Will\footnote{Focus@Will --- serwis sugerujący szereg playlist pomagający zwiększyć produktywność. \url{http://en.wikipedia.org/wiki/Focus@Will}}.
 
     Próbuję zweryfikować te założenia przez stworzenie aplikacji, która analizuje moje własne aktywności i muzykę, którą słucham.
-    Jednym z mierników, którym się posługuję jest ``Attention Span''
-    \footnote{Attention Span --- moment w którym jesteśmy maksymalnie skoncentrowani,
-    często nazywane flow. \url{en.wikipedia.org/wiki/Attention_span}}.
+    Jednym z mierników, którym się posługuję jest
+    ``Attention Span''\footnote{Attention Span --- moment w którym jesteśmy maksymalnie skoncentrowani,
+    często nazywane flow. \url{http://en.wikipedia.org/wiki/Attention_span}}.
     Dla uproszczenia tego projektu, przyjmuję założenie, że ``Attention Span'' to czas od początku rozpoczęcia zadania do momentu zmiany aktywnego okna.
 
     Celem pracy jest opis pełnego procesu budowy aplikacji opartej o analizę danych wraz z ich interpretacją i wizualizacją.
@@ -201,7 +201,7 @@
 
             Last.fm to serwis społecznościowy pomagający odkrywać nowych artystów na podstawie poprzednich odsłuchów użytkownika.
 
-            Wtyczka "Last.fm Scrobbler" \cite{lastfm:trackmymusic} integruje się z odtwarzaczami muzycznymi, np. Spotify.
+            Wtyczka ``Last.fm Scrobbler''\cite{lastfm:trackmymusic} integruje się z odtwarzaczami muzycznymi, np. Spotify.
             Każdy odsłuchany w co najmniej w połowie utwór jest logowany do bazy danych,
             w której na podstawie ID3 tagów jest przypisywany do artysty, płyty oraz gatunku muzycznego.
 
@@ -663,9 +663,7 @@ List<ArtistsSummary> mostPopularArtists(
 
 \section{Testy jednostkowe}
 
-% TODO: Bibliografia TDD
-Część kodu była napisana metodologią TDD
-\footnote{TDD --- Test Driven Development},
+Część kodu była napisana metodologią TDD\footnote{TDD --- Test Driven Development},
 głównie metody łączące i prasujące dane z zewnętrznych API oraz zawierająe logikę samego mechanizmu agregacji.
 
 Metody kontrollerów nie były testowane integracyjnie,
@@ -693,8 +691,9 @@ dlatego kod API ma stosunkowo niskie pokrycie operacji 12\%.
     Deployment aplikacji przygotowano na VPS\footnote{VPS --- Virtual Private Server} w chmurze
     DigitalOcean\footnote{DigitalOcean, Inc. --- Trzeci największy na świecie dostawca hostingów VPS \cite{digitalocean:growth}. \url{http://digitalocean.com/}}
     na maszynie zlokalizowanej we Frankfurcie, z 1GB RAM, przydzielonym jednym procesorem i 20GB dysku SSD.
-    Środowisko skonfigurowano pod kontrolą systemu Ubuntu 16.04\cite{digitalocean:server-setup},
-    aplikacja działa w konterzenrze Tomcat 8.5\cite{digitalocean:tomcat-setup}, a dane przechowywane są w PostgreSQL 9.5\cite{digitalocean:postgres-setup}.
+    Środowisko skonfigurowano pod kontrolą systemu Ubuntu 16.04,
+    aplikacja działa w konterzenrze Tomcat 8.5, a dane przechowywane są w PostgreSQL 9.5
+    \cite{digitalocean:server-setup}\cite{digitalocean:tomcat-setup}\cite{digitalocean:postgres-setup}.
 
     Projekt zrealizowano dzięki wielu projekom open-source, w tej sekcji listuję najważniejsze z nich.
 
