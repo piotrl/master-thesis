@@ -592,9 +592,41 @@ List<ArtistsSummary> mostPopularArtists(
         \label{fig:ui:chart-tasks-distractions}
     \end{figure}
 
-%    \section{Wiarygodność}
-%
-%    Zanim przystąpi się do wyciągnięcia wniosków, należy sprawdzić, czy dane w systemie są wiarygodne.
+\begin{figure}
+
+\begin{minted}{sql}
+WITH amount_of_activities AS (SELECT
+      start_time AS startTime,
+      sum(CASE WHEN ra.productivity > 0 THEN ra.spent_time END)
+                 AS productive,
+      sum(CASE WHEN ra.productivity < 0 THEN ra.spent_time END)
+                 AS distraction,
+      count(*)   AS activitiesCount
+    FROM rescuetime_activity ra
+    WHERE ra.account_id = :accountId
+    GROUP BY startTime
+    ORDER BY startTime DESC)
+SELECT
+  s.date,
+  sum(summary.productive)      AS productive,
+  sum(summary.distraction)     AS distraction,
+  sum(summary.activitiesCount) AS activitiesCount
+FROM (SELECT
+         lag(date) OVER (ORDER BY date)
+                AS previous,
+         date   AS date
+       FROM generate_series(
+                date_trunc('minute', :from ::TIMESTAMP),
+                date_trunc('minute', :to ::TIMESTAMP),
+                '30 minutes' :: INTERVAL) date
+     ) s
+  LEFT JOIN amount_of_activities summary
+    ON summary.startTime <= s.date
+   AND summary.startTime >= s.previous
+GROUP BY date;
+\end{minted}
+\caption{Pełne zapytanie stworzone do wygenerowania wykresów \ref{fig:ui:chart-tasks-productive}, \ref{fig:ui:chart-tasks-neutral}, \ref{fig:ui:chart-tasks-distractions}}
+\end{figure}
 
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}

@@ -150,28 +150,22 @@ SELECT
 FROM lastfm_track
 WHERE duration = 0;
 
-WITH amoutn_of_activities AS (
-    SELECT
-      start_time :: TIMESTAMP WITHOUT TIME ZONE,
-      sum(CASE WHEN ra.productivity > 0
-        THEN ra.spent_time END) AS productive,
-      sum(CASE WHEN ra.productivity < 0
-        THEN ra.spent_time END) AS distraction,
-      count(*)                  AS activitiesCount
+WITH amoutn_of_activities AS (SELECT
+      start_time,
+      sum(CASE WHEN ra.productivity > 0 THEN ra.spent_time END) AS productive,
+      sum(CASE WHEN ra.productivity < 0 THEN ra.spent_time END) AS distraction,
+      count(*) AS activitiesCount
     FROM rescuetime_activity ra
     WHERE ra.account_id = :accountId
     GROUP BY start_time
-    ORDER BY start_time DESC )
+    ORDER BY start_time DESC)
 SELECT
   s.date,
   sum(summary.productive)      AS productive,
   sum(summary.distraction)     AS distraction,
   sum(summary.activitiesCount) AS activitiesCount
-FROM (
-       SELECT
-         lag(date)
-         OVER (
-           ORDER BY date ) AS previous,
+FROM (SELECT
+         lag(date) OVER (ORDER BY date) AS previous,
          date              AS date
        FROM generate_series(
                 DATE_TRUNC('minute', :from :: TIMESTAMP),
@@ -180,5 +174,6 @@ FROM (
      ) s
   LEFT JOIN
   amoutn_of_activities summary
-    ON summary.start_time <= s.date AND summary.start_time >= s.previous
+    ON summary.start_time <= s.date
+   AND summary.start_time >= s.previous
 GROUP BY date;
