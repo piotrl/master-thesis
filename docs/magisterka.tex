@@ -443,8 +443,8 @@
         \verb|category_id|  & 17                   & 34                 \\
         \verb|category_name|& Writing              & Music              \\ \hline
     \end{tabular}
-        \caption{Przykładowy rekord z tabeli rescuetime\_activity}
-        \label{RescueTime --- Przykładowy rekord z tabeli rescuetime_activity}
+        \caption{RescueTime --- Przykładowy rekord z tabeli rescuetime\_activity}
+        \label{rescuetime:example-record}
     \end{table}
 
     \subsection*{Last.fm --- Muzyka}
@@ -573,6 +573,17 @@ List<ArtistsSummary> mostPopularArtists(
     \end{minted}
 
     \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
+        \caption{Dzienna długość wykonywanych aktywności i całej przesłuchanej muzyki, niezależnie od urządzenia.
+                    Czas trwania muzyki może być większy od aktywności, co jest niepożądane}
+        \label{fig:ui:chart-music-all}
+
+        \includegraphics[width=\linewidth]{fig/ui/chart-music-only-during-activities.png}
+        \caption{Dzienna długość przesłuchanej muzyki tylko podczas wykonywanych aktywności na laptopie}
+        \label{fig:ui:chart-music-only-during-activities}
+    \end{figure}
+
+    \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-tasks-productive.png}
         \caption{Wpływ ilości zadań w ciągu 15minut na długość produktywnych zadań}
         \label{fig:ui:chart-tasks-productive}
@@ -621,19 +632,9 @@ FROM (SELECT
    AND summary.startTime >= serie.previous
 GROUP BY date;
 \end{minted}
-\caption{Pełne zapytanie stworzone do wygenerowania wykresów \ref{fig:ui:chart-tasks-productive}, \ref{fig:ui:chart-tasks-neutral}, \ref{fig:ui:chart-tasks-distractions}}
+\caption{Pełne zapytanie SQL z trzema parametrami :from, :to, :accountId.
+    Stworzone do wygenerowania wykresów na rysunkach \ref{fig:ui:chart-tasks-productive}, \ref{fig:ui:chart-tasks-neutral}, \ref{fig:ui:chart-tasks-distractions}}
 \end{figure}
-
-    \begin{figure}
-        \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
-        \caption{Dzienna długość wykonywanych aktywności i całej przesłuchanej muzyki, niezależnie od urządzenia.
-            Czas trwania muzyki może być większy od aktywności, co jest niepożądane}
-        \label{fig:ui:chart-music-all}
-
-        \includegraphics[width=\linewidth]{fig/ui/chart-music-only-during-activities.png}
-        \caption{Dzienna długość przesłuchanej muzyki tylko podczas wykonywanych aktywności na laptopie}
-        \label{fig:ui:chart-music-only-during-activities}
-    \end{figure}
 
     \section{Wybór metod wizualizacji danych}
 

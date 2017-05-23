@@ -1,6 +1,5 @@
 package net.piotrl.music.api.summary.artists;
 
-import net.piotrl.music.api.summary.tags.TagSummary;
 import net.piotrl.music.shared.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
