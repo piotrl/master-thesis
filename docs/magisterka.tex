@@ -333,12 +333,6 @@
         a jedynie potwierdzić chęć udostępnienia swoich danych w aplikacji. Zdecydowanie skraca i ułatwia proces konfiguracji.
         W obecnej wersji aplikacji nie używam tego mechanizmu, ale byłby on konieczny przed udostępnieniem jej publicznie.
 
-        \begin{figure}
-        	\includegraphics[width=\linewidth]{fig/db-aggregation-metadata.png}
-        	\caption{Schemat relacji aggregation\_metadata}
-        	\label{fig:db-aggregation-metadata}
-        \end{figure}
-
         \subsection*{Niepełne dane}
         API mimo starań dostawców, może zawierać nieścisłości i luki informacji.
         Last.fm do identyfikacji utworu dostarcza jego MBID oraz pełną nazwę.
@@ -595,7 +589,8 @@ List<ArtistsSummary> mostPopularArtists(
 \begin{figure}
 
 \begin{minted}{sql}
-WITH amount_of_activities AS (SELECT
+WITH amount_of_activities AS (
+    SELECT
       start_time AS startTime,
       sum(CASE WHEN ra.productivity > 0 THEN ra.spent_time END)
                  AS productive,
@@ -605,9 +600,10 @@ WITH amount_of_activities AS (SELECT
     FROM rescuetime_activity ra
     WHERE ra.account_id = :accountId
     GROUP BY startTime
-    ORDER BY startTime DESC)
+    ORDER BY startTime DESC
+)
 SELECT
-  s.date,
+  serie.date,
   sum(summary.productive)      AS productive,
   sum(summary.distraction)     AS distraction,
   sum(summary.activitiesCount) AS activitiesCount
@@ -619,10 +615,10 @@ FROM (SELECT
                 date_trunc('minute', :from ::TIMESTAMP),
                 date_trunc('minute', :to ::TIMESTAMP),
                 '30 minutes' :: INTERVAL) date
-     ) s
+     ) serie
   LEFT JOIN amount_of_activities summary
-    ON summary.startTime <= s.date
-   AND summary.startTime >= s.previous
+    ON summary.startTime <= serie.date
+   AND summary.startTime >= serie.previous
 GROUP BY date;
 \end{minted}
 \caption{Pełne zapytanie stworzone do wygenerowania wykresów \ref{fig:ui:chart-tasks-productive}, \ref{fig:ui:chart-tasks-neutral}, \ref{fig:ui:chart-tasks-distractions}}
