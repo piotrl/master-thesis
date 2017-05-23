@@ -67,6 +67,7 @@
     Aggregation,
     Data Integration,
     Visualisation,
+    API,
     PostgreSQL,
     Java,
     JavaScript
@@ -345,7 +346,7 @@
         W bazie danych mam 505 takich utworów (21\% wszystkich).
 
         W danych RescueTime odnalazłem, że wyjątkowo dużo zadań jest przypisanych do akcji ``Google Chrome''.
-        Według idei tego seriwsu wszystkie strony powinny mieć swoje akcje. Sugeruje to błąd podczas sczytywania przez program.
+        Według idei tego seriwsu wszystkie strony internetowe mają osobne akcje. Sugeruje to błąd podczas sczytywania przez program.
         Problem jest znany i opisany na stronie z pomocą \cite{rescuetime:help-browser-time}.
 
         \subsection*{Wydajność}
@@ -423,7 +424,7 @@
     Najważniejszą tabelą wśród tych powiązanych z aktywnościami jest \verb|rescuetime_activity|,
     to do niej w pierwszej kolejności trafiają dane z API bez żadnej obróbki,
     następnie nazwa akcji oraz kategoria są przyporządkowywane do istniejących rekordów w tabelach
-    \verb|rescuetime_action|, oraz \verb|rescuetime_category| lub utworzone nowe w razie konieczności.
+    \verb|rescuetime_action| i \verb|rescuetime_category| --- lub utworzone nowe w razie konieczności.
     Ma to na celu wygodniejsze przygotowanie danych i wykresów na podstawie konkretnej kategorii
     oraz ograniczenie nadmiarowości danych w przyszłości.
 
@@ -527,15 +528,17 @@ CREATE INDEX lastfm_scrobble_played_when_index
     Jest ona oparta na klasycznym podejściu MVC z kilkoma podstronami z częścią dynamicznych komponentów.
     Rozdział przeplatam zdjęciami fragmentów wykresów aplikacji.
 
-    Jeden zbiór danych może mieć wiele interpretacji, przedstawione w tym rozdziale wykresy
+    Jeden zbiór danych można różnie interpretować, przedstawione w tym rozdziale wykresy
     są efektem moich eksperymentów i poszukiwań, niekoniecznie obiektywnie odzwierciedlających rzeczywistość.
 
     \section{Budowa raportów na podstawie szeregów czasowych}
 
-    Wyświetlane na raportach wykresy mogą mieć różną granularność w zależności od naszych potrzeb.
+    Wyświetlane na raportach wykresy mają różną granularność w zależności od naszych potrzeb.
 
     \begin{minted}{sql}
-    SELECT *
+    SELECT
+        lag(date) OVER (ORDER BY date) AS previous_date
+        date                           AS current_date
     FROM generate_series(
          date_trunc('day', :from ::TIMESTAMP),
          date_trunc('day', :to ::TIMESTAMP),
@@ -550,13 +553,16 @@ CREATE INDEX lastfm_scrobble_played_when_index
 
     Funkcja \mintinline{text}{generate_series(start, stop, step)} tworzy zbiór elementów
     zaczynających się od pierwszego argumentu do drugiego z zadanym interwałem.
-
     Funkcja \mintinline{text}|date_trunc(precision, timestamp)| ucina datę do zadanej precyzji.
-    \mintinline{sql}|date_trunc('hour', timestamp '2017-05-01 23:38:40')| zwraca \\ \mintinline{sql}|2017-05-01 23:00:00|.
+
+    Gdy na wykresie chcemy grupować rekordy pomiędzy interwałąmi, używam wbudowanych w PostgreSQL ``Window Functions''\cite{postgresql:window-function}.
+    Pozwalają one na operacje na całym zbiorze wierszy w jakiś sposób powiązany z obecnie przetwarzanym.
+    \mintinline{sql}|lag(date) OVER (ORDER BY date)| zwraca wartość kolumny \verb|date| dla poprzedniego wiersza,
+    którą można później wykorzystać do grupowania i porównywania.
 
     Zakres dat podawany jest w parametrze \mintinline{text}|:from| i \mintinline{text}|:to|,
-    jest generowany przez serwis w zależności od potrzeb raportu.
-    Dla metody zwracającej raport z całego miesiąca oblicza się pierwszy i ostatni jego dzień.
+    jest generowany programistycznie w zależności od potrzeb raportu.
+    Dla metody zwracającej raport z całego miesiąca oblicza się pierwszy i ostatni jego dzień, jak w poniższym przykładzie.
 
     \begin{minted}{java}
 List<ArtistsSummary> mostPopularArtists(
@@ -572,15 +578,48 @@ List<ArtistsSummary> mostPopularArtists(
 }
     \end{minted}
 
+    \section{Wybór metod wizualizacji danych}
+
+    Wizualna reprezentacja pozwala na lepsze zrozumienie genezy danych, skategoryzować je i znaleźć korelację.
+    Można wykrywać nieprawidłowości oraz starać się definiować trendy, wiele zależy od interpretacji i intencji analityka.
+    \cite{charts:excel-comparsion}
+
+    W aplikacji, do reprezentacji danych użyłem kilku powszechnie stosowanych typów wykresów.
+    Tabele służą mi do pokazania niedużej liczby danych w określonym porządku,
+    np. lista najpopularniejszych artystów lub tagów ze zdjęcia \ref{fig:ui:table-popular-music-tags}.
+    Wyłania to najważniejszych przedstawicieli danych, omijając potencjalnie długą listę rekordów.
+
     \begin{figure}
         \includegraphics[width=\linewidth]{fig/ui/chart-music-all.png}
-        \caption{Dzienna długość wykonywanych aktywności i całej przesłuchanej muzyki, niezależnie od urządzenia.
-                    Czas trwania muzyki może być większy od aktywności, co jest niepożądane}
+        \caption{Dzienna długość wykonywanych aktywności i całej przesłuchanej muzyki, niezależnie od urządzenia}
         \label{fig:ui:chart-music-all}
 
         \includegraphics[width=\linewidth]{fig/ui/chart-music-only-during-activities.png}
-        \caption{Dzienna długość przesłuchanej muzyki tylko podczas wykonywanych aktywności na laptopie}
+        \caption{Dzienna długość przesłuchanej muzyki podczas wykonywanych aktywności tylko na laptopie}
         \label{fig:ui:chart-music-only-during-activities}
+    \end{figure}
+
+    Wykresy łączone, jak te pokazane na rysunku \ref{fig:ui:chart-music-all} i \ref{fig:ui:chart-music-only-during-activities},
+    użyłem w celu wyróżnienia jednej kategorii (czasu ciszy) i podkreślenia jej stosunku wobec dwóch pozostałych (czasu aktywności oraz słuchania muzyki).
+    Na pierwszym wyrkesie \ref{fig:ui:chart-music-all} wskazuje również nieprawidłowość, jaką jest ujemny czas ciszy,
+    który występuje, gdy słuchamy na urządzeniach innych niż na których pracujemy.
+    Natomiast na wykresie \ref{fig:ui:chart-music-only-during-activities} widać,
+    że po połączeniu słuchanej muzyki wyłącznie podczas aktywności na komputerze --- problem został wyeliminowany.
+
+    Wykresy punktowe, takie jak na rysunku \ref{fig:ui:chart-tasks-productive}, \ref{fig:ui:chart-tasks-neutral}, \ref{fig:ui:chart-tasks-distractions}
+    dobrze się sprawdzają przy badaniu relacji dwóch zmiennych oraz szukania korelacji dla dużej ilości ``punktów danych''.
+    W przytoczonych wykresach dodatkowo dodaję linię reprezentującą trend.
+    Te trzy wykresy pokazują, że zadania oznaczone jako produktywne mają tendencję do trwania dłużej.
+    Odwrotnie z zadaniami rozpraszającymi, których średni czas trwania jest bardzo krótki.
+
+    \begin{figure}
+        \includegraphics[width=\linewidth]{fig/ui/chart-productivity-summary.png}
+        \caption{Dzienne procentowe rozłożenie aktywności z podziałem na produktywność}
+        \label{fig:ui:chart-productivity-summary}
+
+        \includegraphics[width=\linewidth]{fig/ui/table-popular-music-tags.png}
+        \caption{Tabela z najpopularniejszymi tagami i artystami w miesiącu w raz z łączną długością odtworzeń}
+        \label{fig:ui:table-popular-music-tags}
     \end{figure}
 
     \begin{figure}
@@ -636,35 +675,6 @@ GROUP BY date;
     Stworzone do wygenerowania wykresów na rysunkach \ref{fig:ui:chart-tasks-productive}, \ref{fig:ui:chart-tasks-neutral}, \ref{fig:ui:chart-tasks-distractions}}
 \end{figure}
 
-    \section{Wybór metod wizualizacji danych}
-
-    Wizualna reprezentacja pozwala na lepsze zrozumienie genezy danych, skategoryzować je i znaleźć korelację.
-    Można wykrywać nieprawidłowości oraz starać się definiować trendy, wiele zależy od interpretacji i intencji analityka.
-    \cite{charts:excel-comparsion}
-
-    W aplikacji, do reprezentacji danych użyłem kilku powszechnie stosowanych typów wykresów.
-    Tabele służą mi do pokazania niedużej liczby danych w określonym porządku,
-    np. lista najpopularniejszych artystów lub tagów ze zdjęcia \ref{fig:ui:table-popular-music-tags}.
-    Wyłania to najważniejszych przedstawicieli danych, omijając potencjalnie długą listę rekordów.
-
-    %TODO - Diagramy kołowe
-
-    \begin{figure}
-
-        \includegraphics[width=\linewidth]{fig/ui/chart-productivity-summary.png}
-        \caption{Dzienne procentowe rozłożenie aktywności z podziałem na produktywność}
-        \label{fig:ui:chart-productivity-summary}
-
-        \includegraphics[width=\linewidth]{fig/ui/table-popular-music-tags.png}
-        \caption{Tabela z najpopularniejszymi tagami i artystami w miesiącu w raz z łączną długością odtworzeń. Screenshot z aplikacji}
-        \label{fig:ui:table-popular-music-tags}
-    \end{figure}
-
-    Wykresy łączone, jak te pokazane na rysunku \ref{fig:ui:chart-music-all} i \ref{fig:ui:chart-music-only-during-activities},
-    użyłem w celu wyróżnienia jednej kategorii (czasu ciszy) i podkreślenia jej stosunku wobec dwóch pozostałych (czasu aktywności oraz słuchania muzyki).
-    Na pierwszym wyrkesie \ref{fig:ui:chart-music-all} wskazuje również nieprawidłowość, jaką jest ujemny czas ciszy,
-    który występuje, gdy słuchamy na urządzeniach innych niż na których pracujemy.
-
 \chapter{Architektura}
 
     \begin{figure}
@@ -683,7 +693,7 @@ GROUP BY date;
     Każdą zmianę w strukturze bazy danych należy dodać jako nowy plik z migracją, w katalogu projektu:
     \mintinline{bash}|/main/resources/migration/|
 
-    Projekt składa się z trzech głównych modułów, a przepływ elementów jest zobrazowany na rysunku \ref{fig:data-flow}.
+    Projekt składa się z trzech głównych modułów, a przepływ danych jest zobrazowany na rysunku \ref{fig:data-flow}.
     \begin{itemize}
         \item Import danych do bazy --- jest to główne źródło pozyskiwania danych, komunikacji z zewnętrznymi API.
             \subitem Agregacja --- Ogolny mechanizm zapisu danych per użytkownik oraz zapis do bazy
@@ -697,7 +707,7 @@ GROUP BY date;
 
 \section{Testy jednostkowe}
 
-Część kodu była napisana metodologią TDD\footnote{TDD --- Test Driven Development},
+Duża część kodu była pisana metodologią TDD\footnote{TDD --- Test Driven Development},
 głównie metody łączące i prasujące dane z zewnętrznych API oraz zawierają logikę samego mechanizmu agregacji.
 
 Metody kontrolerów nie były testowane w ogóle,
@@ -768,10 +778,6 @@ stąd kod API ma stosunkowo niskie pokrycie operacji 12\%.
     \caption{Lista bibliotek i frameworków użytych w projekcie}
 	\label{tools-used}
 \end{table}
-
-% zakończenie
-\summary
-[Work in progress]
 
 % literatura (obowiązkowo):
 \bibliographystyle{unsrt}
