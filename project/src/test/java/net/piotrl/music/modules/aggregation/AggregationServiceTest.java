@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static net.piotrl.music.mocks.AggregationPropertiesMock.globalContext;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -15,8 +16,15 @@ public class AggregationServiceTest {
     private AggregationService aggregationService;
 
     @Test
-    public void startAggregation() {
-        aggregationService.startAggregation(globalContext());
+    public void aggregateAllSources() {
+        AggregationContext context = globalContext();
+
+        aggregationService.startAggregation(context);
+        AggregationResult result = context.getResult();
+
+        assertThat(result.isFailed()).isFalse();
+        assertThat(result.getErrors()).isEmpty();
+
     }
 
 }

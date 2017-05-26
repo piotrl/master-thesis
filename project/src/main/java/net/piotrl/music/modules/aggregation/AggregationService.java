@@ -3,6 +3,7 @@ package net.piotrl.music.modules.aggregation;
 import lombok.extern.slf4j.Slf4j;
 import net.piotrl.music.modules.aggregation.repository.AggregationCrudRepository;
 import net.piotrl.music.modules.aggregation.repository.AggregationEntity;
+import net.piotrl.music.modules.aggregation.repository.AggregationRepository;
 import net.piotrl.music.modules.lastfm.aggregation.LastfmAggregationService;
 import net.piotrl.music.modules.rescuetime.aggregation.RescueTimeAggregation;
 import net.piotrl.music.shared.DateUtil;
@@ -22,19 +23,27 @@ public class AggregationService {
     private final AggregationCrudRepository aggregationCrudRepository;
     private final RescueTimeAggregation rescueTimeAggregation;
     private final LastfmAggregationService lastfmAggregationService;
+    private final AggregationRepository aggregationRepository;
 
     @Autowired
     public AggregationService(AggregationCrudRepository aggregationCrudRepository,
                               RescueTimeAggregation rescueTimeAggregation,
-                              LastfmAggregationService lastfmAggregationService) {
+                              LastfmAggregationService lastfmAggregationService,
+                              AggregationRepository aggregationRepository) {
         this.aggregationCrudRepository = aggregationCrudRepository;
         this.rescueTimeAggregation = rescueTimeAggregation;
         this.lastfmAggregationService = lastfmAggregationService;
+        this.aggregationRepository = aggregationRepository;
     }
 
     public void startAggregation(AggregationContext context) {
+        log.info("Full aggregation started");
+
         startRescueTimeAggregation(context);
         startLastfmAggregation(context);
+
+        log.info("Full aggregation finished - Refresh views");
+        aggregationRepository.refreshViews();
     }
 
     private void startRescueTimeAggregation(AggregationContext context) {
