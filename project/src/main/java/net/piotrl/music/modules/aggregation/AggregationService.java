@@ -44,7 +44,7 @@ public class AggregationService {
             rescueTimeAggregation.startAggregation(context, startingPoint.toLocalDate());
             aggregationStatusFinished(entity);
         } catch (Exception e) {
-            aggregationStatusFailed(entity, e);
+            aggregationStatusFailed(entity, context.getResult(), e);
         }
     }
 
@@ -55,17 +55,18 @@ public class AggregationService {
             lastfmAggregationService.startAggregation(context, startingPoint.toLocalDate());
             aggregationStatusFinished(entity);
         } catch (Exception e) {
-            aggregationStatusFailed(entity, e);
+            aggregationStatusFailed(entity, context.getResult(), e);
         }
     }
 
-    private void aggregationStatusFailed(AggregationEntity entity, Exception e) {
+    private void aggregationStatusFailed(AggregationEntity entity, AggregationResult result, Exception e) {
         log.error("Aggregation failed | {} | User: {}", entity.getType(), entity.getAccountId());
+        log.error("Aggregation failed result | {} ", result);
         log.error("Aggregation failure exception", e);
 
         entity.setStatus(AggregationStatus.FAILED.toString());
         entity.setFinishTime(new Date());
-        entity.setDetails(e.getMessage());
+        entity.setDetails(result.getErrors().toString());
         aggregationCrudRepository.save(entity);
     }
 

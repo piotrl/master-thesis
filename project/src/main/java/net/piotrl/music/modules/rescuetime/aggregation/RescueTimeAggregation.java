@@ -1,5 +1,6 @@
 package net.piotrl.music.modules.rescuetime.aggregation;
 
+import lombok.extern.slf4j.Slf4j;
 import net.piotrl.music.modules.aggregation.AggregationContext;
 import net.piotrl.music.modules.rescuetime.RescueTimeCaller;
 import net.piotrl.music.modules.rescuetime.activity.ActivityService;
@@ -12,6 +13,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
 
+@Slf4j
 @Service
 public class RescueTimeAggregation {
 
@@ -30,6 +32,8 @@ public class RescueTimeAggregation {
             ResponseEntity<RescueTimeResponse> call = rescueTimeCaller.call(rescueTimeRequest);
             activityService.saveAggregationResult(context, call.getBody());
         } catch (HttpClientErrorException ex) {
+            log.error("RescueTime http error: {}", ex.getRawStatusCode());
+            log.error("RescueTime error response: {}", ex.getResponseBodyAsString());
             context.getResult().addError("Http error: " + ex.getRawStatusCode(), ex.getResponseBodyAsString());
             throw ex;
         }

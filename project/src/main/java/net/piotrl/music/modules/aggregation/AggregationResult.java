@@ -1,10 +1,12 @@
 package net.piotrl.music.modules.aggregation;
 
 import com.google.common.collect.Lists;
+import lombok.ToString;
 import org.springframework.data.util.Pair;
 
 import java.util.List;
 
+@ToString
 public class AggregationResult {
     private boolean failed = false;
     private List<Pair<String, String>> errors = Lists.newArrayList();
