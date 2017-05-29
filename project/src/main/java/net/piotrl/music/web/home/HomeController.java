@@ -26,10 +26,10 @@ class HomeController {
     @GetMapping("/")
     String index(Model model, Principal principal) {
         if (principal == null) {
-            return "home/homeNotSignedIn";
+            return "home/home";
         }
         model.addAttribute("userName", principal.getName());
         model.addAttribute("summary", homeService.summary(1L));
-        return "home/homeSignedIn";
+        return "home/home";
     }
 }
