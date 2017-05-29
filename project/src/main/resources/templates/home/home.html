@@ -13,9 +13,10 @@
             <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
                 <h3>README</h3>
                 <p>
-                    Czytelniku,
+                    Czytelniku, <br/>
                     to jest Proof of Concept aplikacji pisanej w ramach mojej <a
                         href="https://github.com/piotrl/master-thesis">pracy magisterskiej</a>.
+                    Ostatnia aktualizacja była dnia: <em>29.05.2017</em>.
                 </p>
                 <p th:if="${!#authorization.expression('isAuthenticated()')}">
                     Aplikacja jest zabezpieczona, należy się <a href="/signin">zalogować na testowego użytkownika</a> z
@@ -49,10 +50,9 @@
 
                 <ul>
                     <li><em>Wydajność serwera</em> — Aplikację hostuję na płatnym (i nienajtańszym) serwerze VPS, ale
-                        wydajność znacząco
-                        odbiega od wersji developerskiej. Zwłaszcza zapytania SQL sprawiają wrażenie wolnych.
-                        Zwłaszcza zapytania do REST API mogą trwać po 10-20 sekund. Proszę o cierpliwość podczas
-                        ładowania się aplikacji.
+                        wydajność znacząco odbiega od mojego prywatnego laptopa.
+                        Zwłaszcza zapytania SQL sprawiają wrażenie wolnych.
+                        Proszę o trochę cierpliwości podczas ładowania się aplikacji.
                     </li>
                     <li><em>User experience filtrowania</em> — Korzystam z najnowszych kontrolek HMTL5 (np. datepicker),
                         które są dostępne tylko w chromie.
@@ -63,8 +63,11 @@
 
                 <h3>Kontakt</h3>
                 <p>
-                    Zachęcam do pisania na mail: <a href="mailto:mail@piotrl.net">mail@piotrl.net</a>.
+                    Zachęcam do pisania na mail: <a href="mailto:mail@piotrl.net">mail@piotrl.net</a>.<br/>
                     Chętnie porozmawiam i odpowiem na pytania.
+                </p>
+                <p class="mdl-typography--text-right">
+                    Piotr Lewandowski
                 </p>
 
             </div>
