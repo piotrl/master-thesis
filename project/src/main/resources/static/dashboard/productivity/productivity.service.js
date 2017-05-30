@@ -4,6 +4,11 @@
         $filterDateInput: document.getElementById("filter-day")
     };
     const vm = app.productivity;
+
+    vm.$filterDateInput.addEventListener('input', () => {
+        vm.filterDate = dateFns.parse(vm.$filterDateInput.value);
+    });
+
     init();
 
     function init() {

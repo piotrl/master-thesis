@@ -4,6 +4,11 @@
         $filterDateInput: document.getElementById("filter-month")
     };
     const reports = app.reports;
+
+    reports.$filterDateInput.addEventListener('input', () => {
+        reports.filterDate = dateFns.parse(reports.$filterDateInput.value);
+    });
+
     init();
 
     function init() {
