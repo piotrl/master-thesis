@@ -1,5 +1,6 @@
 package net.piotrl.music.modules.account;
 
+import net.piotrl.music.core.config.ApiUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -57,8 +58,13 @@ public class AccountService implements UserDetailsService {
         return new UsernamePasswordAuthenticationToken(createUser(account), null, Collections.singleton(createAuthority(account)));
     }
 
-    private User createUser(Account account) {
-        return new User(account.getEmail(), account.getPassword(), Collections.singleton(createAuthority(account)));
+    private ApiUser createUser(Account account) {
+        return new ApiUser(
+                account.getId(),
+                account.getEmail(),
+                account.getPassword(),
+                Collections.singleton(createAuthority(account))
+        );
     }
 
     private GrantedAuthority createAuthority(Account account) {

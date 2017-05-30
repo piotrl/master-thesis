@@ -1,5 +1,6 @@
 package net.piotrl.music.web.home;
 
+import net.piotrl.music.core.config.ApiUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +12,11 @@ class HomeController {
 
 
     @GetMapping("/")
-    String index(Model model, Principal principal) {
-        if (principal == null) {
+    String index(Model model, ApiUser apiUser) {
+        if (apiUser == null) {
             return "home/home";
         }
-        model.addAttribute("userName", principal.getName());
+        model.addAttribute("userName", apiUser.getUsername());
         return "home/home";
     }
 }

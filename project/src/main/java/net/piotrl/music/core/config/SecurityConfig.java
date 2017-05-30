@@ -10,9 +10,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
 
 @Configuration
@@ -22,11 +22,6 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AccountService accountService;
-
-    @Bean
-    public TokenBasedRememberMeServices rememberMeServices() {
-        return new TokenBasedRememberMeServices("remember-me-key", accountService);
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,8 +39,11 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .and()
                 .authorizeRequests()
-                .antMatchers("/**", "/favicon.ico", "/resources/**", "/signup", "/about").permitAll()
+                .antMatchers("/**", "/favicon.ico", "/resources/**", "/signup", "/signin").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -57,11 +55,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 .permitAll()
-                .logoutSuccessUrl("/signin?logout")
-                .and()
-                .rememberMe()
-                .rememberMeServices(rememberMeServices())
-                .key("remember-me-key");
+                .logoutSuccessUrl("/signin?logout");
     }
 
     @Bean(name = "authenticationManager")
