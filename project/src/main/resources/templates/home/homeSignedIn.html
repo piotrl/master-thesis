@@ -2,41 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml"
       layout:decorator="fragments/layout">
 <head>
-    <title>Login</title>
+    <title>Import summary</title>
 </head>
 <body>
-<div layout:fragment="content" class="mdl-grid demo-content">
-    <div class="mdl-cell mdl-cell--4-col">
-        <div class="mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title mdl-card--expand">
-                <h4>
-                    You have listened <br/>
-                    <span th:text="${summary.countTracks}"></span>
-                    tracks
-                </h4>
+<div layout:fragment="content">
+    <div class="mdl-grid mdl-cell--9-col">
+        <div class="mdl-cell mdl-cell--4-col">
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title mdl-card--expand">
+                    <h4>
+                        You have listened <br/>
+                        <span th:text="${summary.countTracks}"></span>
+                        tracks
+                    </h4>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-cell mdl-cell--4-col">
 
-        <div class="mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title mdl-card--expand">
-                <h4>
-                    You have were working <br/>
-                    <span th:text="${summary.countActivitiesTime}"></span> hours
-                </h4>
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title mdl-card--expand">
+                    <h4>
+                        You have were working <br/>
+                        <span th:text="${summary.countActivitiesTime}"></span> hours
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+            <div class="mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title mdl-card--expand">
+                    <h4>
+                        You've switched between windows:<br/>
+                        <span th:text="${summary.countActivities}"></span>
+                    </h4>
+                </div>
             </div>
         </div>
     </div>
-    <div class="mdl-cell mdl-cell--4-col">
-        <div class="mdl-card mdl-shadow--2dp">
-            <div class="mdl-card__title mdl-card--expand">
-                <h4>
-                    You've switched between windows:<br/>
-                    <span th:text="${summary.countActivities}"></span>
-                </h4>
-            </div>
+    <div class="mdl-grid mdl-cell--9-col">
+        <div>
+            <h4>Lately imported data</h4>
+            <p>Check when we have imported your data and if you need to take any action.</p>
         </div>
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-cell--12-col">
+            <thead>
+            <tr>
+                <th class="mdl-data-table__cell--non-numeric">Status</th>
+                <th class="mdl-data-table__cell--non-numeric">Type</th>
+                <th class="mdl-data-table__cell--non-numeric">Start time</th>
+                <th class="mdl-data-table__cell--non-numeric">Finish time</th>
+                <th class="mdl-data-table__cell--non-numeric">Details</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="aggregation : ${summary.aggregationList}">
+                <td class="mdl-data-table__cell--non-numeric" th:text="${aggregation.status}"></td>
+                <td class="mdl-data-table__cell--non-numeric" th:text="${aggregation.type}"></td>
+                <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(aggregation.startTime, 'dd-MM, mm:hh:ss')}"></td>
+                <!--<td class="mdl-data-table__cell&#45;&#45;non-numeric" th:text="${aggregation.finishTime}"></td>-->
+                <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(aggregation.finishTime, 'dd-MM mm:hh:ss')}"></td>
+                <td class="mdl-data-table__cell--non-numeric" th:text="${aggregation.details}"></td>
+            </tr>
+            </tbody>
+        </table>
+
     </div>
 </div>
 </body>
