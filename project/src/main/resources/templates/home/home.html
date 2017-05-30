@@ -30,15 +30,14 @@
                 </p>
                 <h3>Dane</h3>
                 <p>
-                    Użytkownik jest specjalnie przygotowany, ale wsystkie dane są prawdziwe, agregowane co godzinę
-                    z moich aktywności.
+                    Mimo nazwy użytkownika <em>test</em> wszystkie dane są prawdziwe, agregowane co godzinę
+                    z moich aktywności od 31 stycznia 2017 do
+                    <em th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></em>.
                 </p>
+                <h5>Wnioski</h5>
                 <p>
                     Mogą być one mało zróżnicowane, ponieważ przez ostatnie pół roku intensywnie pracowałem nad
                     magisterką, który był dla mnie produktywnym okresem niezależnie od słuchanej muzyki.
-                </p>
-                <p>Dane są dostępne od 31 stycznia 2017 do <em
-                        th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></em>.
                 </p>
 
                 <h3>Znane problemy</h3>
