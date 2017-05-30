@@ -34,6 +34,7 @@ public class SettingsController {
         AggregationMetadataEntity settings = getSettings(apiUser);
         settings.setLastfmApiKey(newSettings.getLastfmApiKey());
         settings.setLastfmUsername(newSettings.getLastfmUsername());
+        settings.setLastfmSecureKey(newSettings.getLastfmSecureKey());
         settings.setRescuetimeApiKey(newSettings.getRescuetimeApiKey());
         metadataCrudRepository.save(settings);
 
