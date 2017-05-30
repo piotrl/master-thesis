@@ -37,7 +37,8 @@ dependencies {
     compile 'org.springframework.security:spring-security-web'
     compile 'org.springframework.security:spring-security-config'
     compileOnly ("org.springframework.boot:spring-boot-starter-tomcat")
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+//     Uncomment before build to server
+//    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
     compile 'org.springframework.boot:spring-boot-devtools'
 
