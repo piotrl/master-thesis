@@ -6,7 +6,7 @@
         get: function get(url) {
             addLoader();
 
-            var request = new Request(url, {
+            const request = new Request(url, {
                 method: 'GET',
                 mode: 'same-origin',
                 credentials: 'same-origin', // sent auth cookies over REST API
@@ -28,7 +28,6 @@
             } catch (e) {
                 removeLoader();
                 showNotification(e);
-                console.error("Http error", e);
             }
         }
     };
@@ -46,6 +45,8 @@
     }
 
     function showNotification(e) {
+        console.error("Http error", e);
+
         var notification = document.querySelector('.mdl-js-snackbar');
         notification.MaterialSnackbar.showSnackbar(
             {
