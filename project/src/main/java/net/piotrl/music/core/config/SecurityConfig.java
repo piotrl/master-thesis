@@ -43,7 +43,11 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**", "/favicon.ico", "/resources/**", "/signup", "/signin").permitAll()
+                .antMatchers(
+                        "/lib/**", "/*.css", "/*.js", "/images/**",
+                        "/favicon.ico", "/resources/**",
+                        "/", "/signup", "/signin"
+                ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
