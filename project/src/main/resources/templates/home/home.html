@@ -16,7 +16,7 @@
                     Czytelniku, <br/>
                     to jest Proof of Concept aplikacji pisanej w ramach mojej <a
                         href="https://github.com/piotrl/master-thesis">pracy magisterskiej</a>.
-                    Ostatnia aktualizacja była dnia: <em>29.05.2017</em>.
+                    Ostatnia aktualizacja była dnia: <em>30.05.2017</em>.
                 </p>
                 <p th:if="${!#authorization.expression('isAuthenticated()')}">
                     Aplikacja jest zabezpieczona, należy się <a href="/signin">zalogować na testowego użytkownika</a> z
@@ -41,11 +41,9 @@
                         th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></em>.
                 </p>
 
-                <h3>Known issues</h3>
+                <h3>Znane problemy</h3>
                 <p>
-                    Z uwagi na to, że głównym celem pracy było przeanalizowanie danych, sama aplikacja dostała trochę
-                    mniej uwagi i
-                    są w niej pewne niedociągnięcia, które należy poprawić w przyszłości.
+                    Alikacja posiada pewne niedociągnięcia, które należy poprawić w przyszłości.
                 </p>
 
                 <ul>

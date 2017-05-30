@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorator="fragments/layout">
+<head>
+    <title>Settings</title>
+</head>
+<body>
+<div layout:fragment="content" class="mdl-grid demo-content">
+    <div class="mdl-grid">
+        <div class="mdl-layout-spacer"></div>
+        <form action="#" method="post" th:action="@{/settings}" th:object="${settings}">
+
+            <h3>Last.fm API keys</h3>
+            <div class="mdl-card__supporting-text">
+                <div class="mdl-textfield mdl-js-textfield">
+                    <input class="mdl-textfield__input" type="text" id="lastfmUsername" name="lastfmUsername" th:field="*{lastfmUsername}"/>
+                    <label class="mdl-textfield__label" for="lastfmUsername">Lastfm username</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield">
+                    <input class="mdl-textfield__input" type="text" id="lastfmApiKey" name="lastfmApiKey" th:field="*{lastfmApiKey}" />
+                    <label class="mdl-textfield__label" for="lastfmApiKey">API key</label>
+                </div>
+            </div>
+
+            <h3>RescueTime API keys</h3>
+            <div class="mdl-card__supporting-text">
+                <div class="mdl-textfield mdl-js-textfield">
+                    <input class="mdl-textfield__input" type="text" id="rescuetimeApiKey" name="rescuetimeApiKey" th:field="*{rescuetimeApiKey}"/>
+                    <label class="mdl-textfield__label" for="rescuetimeApiKey">RescueTime token</label>
+                </div>
+            </div>
+
+            <div class="mdl-card__actions mdl-card--border">
+                <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                        type="submit">Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
