@@ -19,9 +19,15 @@
                         removeLoader();
                         return response;
                     })
-                    .then(response => response.json());
+                    .then(response => response.json())
+                    .catch(error => {
+                        removeLoader();
+                        showNotification(error);
+                        throw error;
+                    })
             } catch (e) {
                 removeLoader();
+                showNotification(e);
                 console.error("Http error", e);
             }
         }
@@ -37,6 +43,16 @@
     function addLoader() {
         pendingRequests++;
         $loader.classList.add("overlay");
+    }
+
+    function showNotification(e) {
+        var notification = document.querySelector('.mdl-js-snackbar');
+        notification.MaterialSnackbar.showSnackbar(
+            {
+                message: "Error: " + e
+            }
+        );
+
     }
 
 })(window.app);
