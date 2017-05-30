@@ -1,4 +1,4 @@
-(function (productivity) {
+(function (productivity, http) {
     "use strict";
     google.charts.load('current', {'packages': ['corechart']});
 
@@ -15,8 +15,7 @@
         const year = dateFns.format(date, "YYYY");
         const month = dateFns.format(date, "MM");
         const day = dateFns.format(date, "DD");
-        fetch(`./api/stats/activities/year/${year}/month/${month}/day/${day}/multitasking`)
-            .then(response => response.json())
+        http.get(`./api/stats/activities/year/${year}/month/${month}/day/${day}/multitasking`)
             .then(data => {
                 google.charts.setOnLoadCallback(drawChart(data, 'productivity-multitasking-activities'));
             });
@@ -27,8 +26,7 @@
         const year = dateFns.format(date, "YYYY");
         const month = dateFns.format(date, "MM");
         const day = dateFns.format(date, "DD");
-        fetch(`./api/stats/activities/year/${year}/month/${month}/day/${day}/spentTimeTasksScatter`)
-            .then(response => response.json())
+        http.get(`./api/stats/activities/year/${year}/month/${month}/day/${day}/spentTimeTasksScatter`)
             .then(data => {
                 google.charts.setOnLoadCallback(drawScatterChart(data.productive, 'activities-multitasking-scatter-productive'));
                 google.charts.setOnLoadCallback(drawScatterChart(data.distraction, 'activities-multitasking-scatter-distraction'));
@@ -116,4 +114,4 @@
         };
     }
 
-})(window.app.productivity);
+})(window.app.productivity, window.app.http);

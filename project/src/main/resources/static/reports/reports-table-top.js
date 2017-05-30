@@ -1,4 +1,4 @@
-(function (reports) {
+(function (reports, http) {
     "use strict";
     google.charts.load('current', {'packages': ['corechart']});
 
@@ -12,8 +12,7 @@
         const date = dateFns.parse(reports.$filterDateInput.value);
         const year = dateFns.getYear(date);
         const month = dateFns.getMonth(date) + 1;
-        fetch(`./api/stats/tags/year/${year}/month/${month}/popular`)
-            .then(response => response.json())
+        http.get(`./api/stats/tags/year/${year}/month/${month}/popular`)
             .then(data => {
                 drawTagsTable(data);
             });
@@ -23,8 +22,7 @@
         const date = dateFns.parse(reports.$filterDateInput.value);
         const year = dateFns.getYear(date);
         const month = dateFns.getMonth(date) + 1;
-        fetch(`./api/stats/artists/year/${year}/month/${month}/popular`)
-            .then(response => response.json())
+        http.get(`./api/stats/artists/year/${year}/month/${month}/popular`)
             .then(drawArtistsTable);
     }
 
@@ -62,4 +60,4 @@
         document.querySelector("#table-top-artists tbody").innerHTML = htmlRows.join("");
     }
 
-})(window.app.reports);
+})(window.app.reports, window.app.http);

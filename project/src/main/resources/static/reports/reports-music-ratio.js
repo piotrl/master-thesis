@@ -1,4 +1,4 @@
-(function (reports) {
+(function (reports, http) {
     "use strict";
     google.charts.load('current', {'packages': ['corechart']});
 
@@ -7,7 +7,7 @@
     reports.$filterDateInput.addEventListener('input', initMusicSummary);
     reports.$filterDateInput.addEventListener('input', musicPlayedDuringActivities);
     document.querySelector("[href='#panel-music-ratio']").addEventListener("click", initMusicSummary);
-    document.querySelector("[href='#reports-music-during-activities']").addEventListener("click", musicPlayedDuringActivities);
+    // document.querySelector("[href='#reports-music-during-activities']").addEventListener("click", musicPlayedDuringActivities);
 
 
     function initMusicSummary() {
@@ -15,8 +15,7 @@
         const date = dateFns.parse(reports.$filterDateInput.value);
         const year = dateFns.getYear(date);
         const month = dateFns.getMonth(date) + 1;
-        fetch(`./api/stats/music/year/${year}/month/${month}/summary`)
-            .then(response => response.json())
+        http.get(`./api/stats/music/year/${year}/month/${month}/summary`)
             .then(data => {
                 google.charts.setOnLoadCallback(drawChart(data, 'reports-music-ratio'));
             });
@@ -26,8 +25,7 @@
         const date = dateFns.parse(reports.$filterDateInput.value);
         const year = dateFns.getYear(date);
         const month = dateFns.getMonth(date) + 1;
-        fetch(`./api/stats/music/year/${year}/month/${month}/musicPlayedDuringActivities`)
-            .then(response => response.json())
+        http.get(`./api/stats/music/year/${year}/month/${month}/musicPlayedDuringActivities`)
             .then(data => {
                 google.charts.setOnLoadCallback(drawChart(data, 'reports-music-during-activities'));
             });
@@ -60,4 +58,4 @@
         };
     }
 
-})(window.app.reports);
+})(window.app.reports, window.app.http);

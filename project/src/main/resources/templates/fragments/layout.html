@@ -24,9 +24,11 @@
     <script src="../../static/lib/date_fns.min.js " th:src="@{lib/date_fns.min.js}"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="../../static/main.js" th:src="@{main.js}"></script>
-
 </head>
 <body>
+<div class="loader">
+    <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+</div>
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header is-upgraded">
 
     <!-- Header -->
@@ -96,6 +98,7 @@
         </nav>
     </div>
 
+    <script src="../../static/http.js" th:src="@{http.js}"></script>
     <main class="mdl-layout__content mdl-color--grey-100">
         <div layout:fragment="content"></div>
     </main>
@@ -118,6 +121,5 @@
     ga('send', 'pageview');
 
 </script>
-
 </body>
 </html>
