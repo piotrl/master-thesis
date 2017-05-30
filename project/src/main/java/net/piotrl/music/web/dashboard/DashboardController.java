@@ -1,5 +1,6 @@
 package net.piotrl.music.web.dashboard;
 
+import net.piotrl.music.core.config.ApiUser;
 import net.piotrl.music.web.home.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,19 +20,19 @@ class DashboardController {
     }
 
     @GetMapping("/summary")
-    String summary(Model model, Principal principal) {
-        model.addAttribute("summary", homeService.summary(1L));
+    String summary(Model model, ApiUser apiUser) {
+        model.addAttribute("summary", homeService.summary(apiUser.getId()));
 
         return "home/homeSignedIn";
     }
 
     @GetMapping("/music")
-    String music(Principal principal) {
+    String music() {
         return "dashboard/reports";
     }
 
     @GetMapping("/productivity")
-    String productivity(Principal principal) {
+    String productivity() {
         return "dashboard/productivity";
     }
 }

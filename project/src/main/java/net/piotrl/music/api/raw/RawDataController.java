@@ -1,6 +1,8 @@
 package net.piotrl.music.api.raw;
 
+import net.piotrl.music.core.config.ApiUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,26 +24,26 @@ public class RawDataController {
 
     @RequestMapping("activities/year/{year}/month/{month}")
     public Map<Integer, List<Double>> monthlyActivities(@PathVariable int year,
-                                                      @PathVariable int month,
-                                                      Principal principal) {
-//        Assert.notNull(principal);
-        return rawDataRepository.monthlyActivities(year, month, 1l);
+                                                        @PathVariable int month,
+                                                        ApiUser apiUser) {
+        Assert.notNull(apiUser);
+        return rawDataRepository.monthlyActivities(year, month, apiUser.getId());
     }
 
     @RequestMapping("activities/from/{from}/to/{to}")
     public List<RawActivity> rawActivities(@PathVariable String from,
                                            @PathVariable String to,
-                                           Principal principal) {
-//        Assert.notNull(principal);
-        return rawDataRepository.rawActivities(from, to, 1l);
+                                           ApiUser apiUser) {
+        Assert.notNull(apiUser);
+        return rawDataRepository.rawActivities(from, to, apiUser.getId());
     }
 
     @RequestMapping("scrobbles/from/{from}/to/{to}")
     public List<RawScrobbles> rawScrobbles(@PathVariable String from,
                                            @PathVariable String to,
-                                           Principal principal) {
-//        Assert.notNull(principal);
-        return rawDataRepository.rawScrobbles(from, to, 1l);
+                                           ApiUser apiUser) {
+        Assert.notNull(apiUser);
+        return rawDataRepository.rawScrobbles(from, to, apiUser.getId());
     }
 
 

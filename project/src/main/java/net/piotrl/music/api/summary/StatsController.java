@@ -32,40 +32,40 @@ public class StatsController {
     public List<MusicActivitySalienceSummary> musicProductivitySalienceMonthly(@PathVariable int year,
                                                                                @PathVariable int month,
                                                                                ApiUser apiUser) {
-//        Assert.notNull(apiUser);
-        return statsService.musicProductivitySalienceMonthly(year, month, 1L);
+        Assert.notNull(apiUser);
+        return statsService.musicProductivitySalienceMonthly(year, month, apiUser.getId());
     }
 
     @RequestMapping("music/year/{year}/month/{month}/musicPlayedDuringActivities")
     public List<MusicActivitySalienceSummary> musicPlayedDuringActivities(@PathVariable int year,
                                                                           @PathVariable int month,
                                                                           ApiUser apiUser) {
-//        Assert.notNull(apiUser);
-        return statsService.musicPlayedDuringActivities(year, month, 1L);
+        Assert.notNull(apiUser);
+        return statsService.musicPlayedDuringActivities(year, month, apiUser.getId());
     }
 
     @RequestMapping("music/year/{year}/month/{month}/popular")
     public MostPopularArtistsProductivity topArtistsProductivity(@PathVariable int year,
                                                                  @PathVariable int month,
                                                                  ApiUser apiUser) {
-        // Assert.notNull(apiUser);
-        return statsService.topArtistsProductivity(year, month, 1L);
+         Assert.notNull(apiUser);
+        return statsService.topArtistsProductivity(year, month, apiUser.getId());
     }
 
     @RequestMapping("tags/year/{year}/month/{month}/popular")
     public List<TagSummary> mostPopularTags(@PathVariable int year,
                                             @PathVariable int month,
                                             ApiUser apiUser) {
-//        Assert.notNull(apiUser);
-        return statsService.mostPopularTags(year, month, 1L);
+        Assert.notNull(apiUser);
+        return statsService.mostPopularTags(year, month, apiUser.getId());
     }
 
     @RequestMapping("artists/year/{year}/month/{month}/popular")
     public List<ArtistsSummary> topArtists(@PathVariable int year,
                                            @PathVariable int month,
                                            ApiUser apiUser) {
-//        Assert.notNull(apiUser);
-        return statsService.mostPopularArtists(year, month, 1L);
+        Assert.notNull(apiUser);
+        return statsService.mostPopularArtists(year, month, apiUser.getId());
     }
 
     @RequestMapping("activities/year/{year}/month/{month}/day/{day}/multitasking")
@@ -73,8 +73,8 @@ public class StatsController {
                                                                                  @PathVariable int month,
                                                                                  @PathVariable int day,
                                                                                  ApiUser apiUser) {
-//        Assert.notNull(apiUser);
-        return statsService.activitiesMultitaskingOnProductivity(year, month, day, 1L);
+        Assert.notNull(apiUser);
+        return statsService.activitiesMultitaskingOnProductivity(year, month, day, apiUser.getId());
     }
 
     @RequestMapping("activities/year/{year}/month/{month}/day/{day}/spentTimeTasksScatter")
@@ -82,15 +82,15 @@ public class StatsController {
                                                                                                                  @PathVariable int month,
                                                                                                                  @PathVariable int day,
                                                                                                                  ApiUser apiUser) {
-//        Assert.notNull(apiUser);
-        return statsService.spentTimeAndTasksCorrelationScatterChart(year, month, day, 1L);
+        Assert.notNull(apiUser);
+        return statsService.spentTimeAndTasksCorrelationScatterChart(year, month, day, apiUser.getId());
     }
 
     @RequestMapping("activities/year/{year}/month/{month}/spentTimeTasksScatter")
     public Productivity<List<SpentTimeAndTasksCorrelationScatterChart>> spentTimeAndTasksCorrelationScatterChart(@PathVariable int year,
                                                                                                                  @PathVariable int month,
                                                                                                                  ApiUser apiUser) {
-//        Assert.notNull(apiUser);
-        return statsService.spentTimeAndTasksCorrelationScatterChart(year, month, 1L);
+        Assert.notNull(apiUser);
+        return statsService.spentTimeAndTasksCorrelationScatterChart(year, month, apiUser.getId());
     }
 }
