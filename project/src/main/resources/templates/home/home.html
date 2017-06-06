@@ -16,7 +16,7 @@
                     Czytelniku, <br/>
                     to jest Proof of Concept aplikacji pisanej w ramach mojej <a
                         href="https://github.com/piotrl/master-thesis">pracy magisterskiej</a>.
-                    Ostatnia aktualizacja była dnia: <em>30.05.2017</em>.
+                    Ostatnia aktualizacja była dnia: <em>07.06.2017</em>.
                 </p>
                 <p th:if="${!#authorization.expression('isAuthenticated()')}">
                     Aplikacja jest zabezpieczona, należy się <a href="/signin">zalogować na testowego użytkownika</a> z
@@ -28,41 +28,50 @@
                 Aplikacja nie ma certyfikatu SSL, przeglądarka może potencjalnie oznaczyć stronę logowania jako "Not
                 Secure".
                 </p>
-                <h3>Dane</h3>
                 <p>
                     Mimo nazwy użytkownika <em>test</em> wszystkie dane są prawdziwe, agregowane co godzinę
                     z moich aktywności od 31 stycznia 2017 do
                     <em th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></em>.
                 </p>
-                <h5>Wnioski</h5>
+
+                <h3>Wnioski</h3>
+                <p>Zgodnie z założeniem pracy, udało się stworzyć koncept aplikacji w pełni działający w segmencie:
+                    Pobrania danych, przetworzenia/analizy i wizualizacji.
+                </p>
                 <p>
-                    Mogą być one mało zróżnicowane, ponieważ przez ostatnie pół roku intensywnie pracowałem nad
-                    magisterką, który był dla mnie produktywnym okresem niezależnie od słuchanej muzyki.
+                    Konieczne są dalsze eksperymenty w celu wyszukania sensownych wyników.
+                    Obecne próby nie dostarczają odpowiedzi na pytanie "Czy muzyka wpływa na naszą produktywność?".
+                </p>
+                <p>
+                    Obecnie system zawiera dane jednego użytkownika, dalszym krokiem mogłoby być zagregowanie danych
+                    innych chętnych osób oraz porównanie wyników.
                 </p>
 
                 <h3>Znane problemy</h3>
                 <p>
                     Alikacja posiada pewne niedociągnięcia, które należy poprawić w przyszłości.
                 </p>
-
                 <ul>
-                    <li><em>Wydajność serwera</em> &hyphen; Aplikację hostuję na płatnym (i nienajtańszym) serwerze VPS, ale
-                        wydajność znacząco odbiega od mojego prywatnego laptopa.
-                        Zwłaszcza zapytania SQL sprawiają wrażenie wolnych.
-                        Proszę o trochę cierpliwości podczas ładowania się aplikacji.
+                    <li><em>Nieciekawe dane w maju/czerwcu</em> &hyphen; Od maja RescueTime przestał logować dane stron
+                    internetowych, więc zdecydowana większość od tego momentu była oznaczona jako "Google Chrome".
+                    Przez to wykresy są mało zróżnicowane.
                     </li>
-                    <li><em>User experience filtrowania</em> &hyphen; Korzystam z najnowszych kontrolek HMTL5 (np. datepicker),
-                        które są dostępne tylko w chromie.
+                    <li><em>Wydajność serwera</em> &hyphen; Aplikację hostuję na płatnym serwerze VPS,
+                        ale wydajność odbiega od mojego prywatnego laptopa.
+                    </li>
+                    <li><em>Kompatybilność między przeglądarkami</em> &hyphen; Korzystam z najnowszych kontrolek HMTL5
+                        (np. datepicker), które są dostępne tylko w Google Chrome.
                         Na Firefoksie/Safari datę trzeba wpisać ręcznie (lub korzystać z dostarczonych przeze mnie
                         "strzałek").
                     </li>
-                    <li><em>Certyfikat SSL</em> &hyphen; Fierfox 52+ wyświetla ostrzeżenie przy logowaniu o niebezpiecznej aplikacji.</li>
+                    <li><em>Certyfikat SSL</em> &hyphen; Fierfox 52+ wyświetla ostrzeżenie przy logowaniu o
+                        niebezpiecznej aplikacji.
+                    </li>
                 </ul>
 
                 <h3>Kontakt</h3>
                 <p>
                     Zachęcam do pisania na mail: <a href="mailto:mail@piotrl.net">mail@piotrl.net</a>.<br/>
-                    Chętnie porozmawiam i odpowiem na pytania.
                 </p>
                 <p class="mdl-typography--text-right">
                     Piotr Lewandowski

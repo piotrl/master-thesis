@@ -43,7 +43,8 @@
     <div class="mdl-grid mdl-cell--9-col">
         <div>
             <h4>Postępy w imporcie danych</h4>
-            <p>Możesz tu sprawdzić ostatnie uruchomienia importu danych oraz potencjalne błędy.</p>
+            <p>Możesz tu sprawdzić ostatnie uruchomienia importu danych oraz potencjalne błędy.
+                Kolumna <em>details</em> jest wypełniona błędami napodkanymi podczas importu</p>
         </div>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-cell--12-col">
             <thead>
@@ -59,9 +60,11 @@
             <tr th:each="aggregation : ${summary.aggregationList}">
                 <td class="mdl-data-table__cell--non-numeric" th:text="${aggregation.status}"></td>
                 <td class="mdl-data-table__cell--non-numeric" th:text="${aggregation.type}"></td>
-                <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(aggregation.startTime, 'dd-MM, mm:hh:ss')}"></td>
+                <td class="mdl-data-table__cell--non-numeric"
+                    th:text="${#dates.format(aggregation.startTime, 'dd-MM, mm:hh:ss')}"></td>
                 <!--<td class="mdl-data-table__cell&#45;&#45;non-numeric" th:text="${aggregation.finishTime}"></td>-->
-                <td class="mdl-data-table__cell--non-numeric" th:text="${#dates.format(aggregation.finishTime, 'dd-MM mm:hh:ss')}"></td>
+                <td class="mdl-data-table__cell--non-numeric"
+                    th:text="${#dates.format(aggregation.finishTime, 'dd-MM mm:hh:ss')}"></td>
                 <td class="mdl-data-table__cell--non-numeric" th:text="${aggregation.details}"></td>
             </tr>
             </tbody>
