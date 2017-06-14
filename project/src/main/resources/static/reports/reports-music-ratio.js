@@ -33,7 +33,7 @@
 
     function drawChart(stats, id) {
         stats = stats.map(column => {
-            return [dateFns.format(dateFns.parse(column.timestamp), 'MM-DD'), column.activity, column.music, column.salience];
+            return [dateFns.format(dateFns.parse(column.timestamp), 'MM-DD'), column.activity || 0, column.music || 0, column.salience || 0];
         });
 
         const options = {

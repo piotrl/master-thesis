@@ -37,7 +37,7 @@
 
     function drawChart(stats, id) {
         stats = stats.map(column => {
-            return [dateFns.format(dateFns.parse(column.date), 'HH:mm'), column.activitiesCount, column.productive];
+            return [dateFns.format(dateFns.parse(column.date), 'HH:mm'), column.activitiesCount || 0, column.productive || 0];
         });
 
         const options = {
@@ -58,12 +58,13 @@
                 ['Hours', 'Tasks', 'Productivity'],
                 ...stats
             ]);
-            const chart = new google.visualization.ComboChart(document.getElementById(id));
+            const chart = new google.visualization.ComboChart($el);
             chart.draw(data, options);
         };
     }
 
     function drawScatterChart(stats, id) {
+        var $el = document.getElementById(id);
         var options = {
             vAxis: {title: 'Task switches in 15min', minValue: 0, maxValue: 20},
             hAxis: {title: 'Productive spent [minutes]', minValue: 0, maxValue: 15},
@@ -79,20 +80,30 @@
         };
 
         stats = stats.map(column => {
-            return [column.sumTimeByPeriod / 60.0, column.tasksInPeriod];
+            return [column.sumTimeByPeriod / 60.0, column.tasksInPeriod || 0];
         });
+        if (!stats.length) {
+            stats = [[0, 0]];
+        }
 
         return () => {
             const data = new google.visualization.arrayToDataTable([
                 ['Productive spent', 'Tasks'],
                 ...stats
             ]);
-            const chart = new google.visualization.ScatterChart(document.getElementById(id));
+
+            const chart = new google.visualization.ScatterChart($el);
             chart.draw(data, options);
         };
     }
 
     function drawProductivityDonut(stats, id) {
+        const $el = document.getElementById(id);
+        if (!stats.length) {
+            $el.innerHTML = '<p>There is no activity for this day. Consider different day.</p>';
+            return;
+        }
+
         var options = {
             pieHole: 0.5,
             pieSliceText: 'none'
@@ -105,7 +116,7 @@
                 ['Distractions', calcMinutes(stats.distraction)],
                 ['Neutral', calcMinutes(stats.neutral)]
             ]);
-            const chart = new google.visualization.PieChart(document.getElementById(id));
+            const chart = new google.visualization.PieChart($el);
             chart.draw(data, options);
 
             function calcMinutes(arrayScatter) {

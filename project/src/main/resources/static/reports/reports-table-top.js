@@ -35,12 +35,11 @@
                         <td class="mdl-data-table__cell--non-numeric">${row.name}</td>
                         <td>${row.playedTimes}</td>
                         <td>${(hours > 0) ? hours + "h " + minutes + "min" : minutes + "min"}</td>
-
                     </tr>
             `
         });
 
-        document.querySelector("#table-top-tags tbody").innerHTML = htmlRows.join("");
+        document.querySelector("#table-top-tags tbody").innerHTML = htmlRows.join("") || "<p>No music listened this month</p>";
     }
 
     function drawArtistsTable(rows) {
@@ -57,7 +56,7 @@
             `
         });
 
-        document.querySelector("#table-top-artists tbody").innerHTML = htmlRows.join("");
+        document.querySelector("#table-top-artists tbody").innerHTML = htmlRows.join("") || "<p>No music listened this month</p>";
     }
 
 })(window.app.reports, window.app.http);
